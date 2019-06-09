@@ -1,13 +1,12 @@
-/*
-  #include <Python.h>
+#include <stdio.h>
+#include <stddef.h>
+#include <stdlib.h>
+#include <string.h>
+#include <errno.h>
 
-typedef enum {
-     Int,
-     Float,
-     String
-} Ty;
-
-
+#include <Python.h>
+#define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
+#include <numpy/arrayobject.h>
 
 static PyObject* howdy(PyObject* self, PyObject* args) {
     printf("Howdy\n");
@@ -29,16 +28,12 @@ static struct PyModuleDef myModule = {
 
 PyMODINIT_FUNC PyInit_myModule(void) {
     return PyModule_Create(&myModule);
-    }*/
-
-#include <stdio.h>
-#include <stddef.h>
-#include <stdlib.h>
-#include <string.h>
-#include <errno.h>
+}
 
 #define ZERO_LENGTH_LINE 1
 #define BAD_LINE 2
+#define FAILED_TO_PARSE 3
+#define OUT_OF_MEMORY 4
 
 typedef enum _Ty {
     Int,
@@ -48,30 +43,42 @@ typedef enum _Ty {
 
 typedef struct _Field {
     Ty type;
-    size_t len;
+    int len;
     int (*parse_fn) (void *, const char *, size_t, int);
 } Field;
 
-int parse_float(void *output, const char *str, size_t line_n, int _field_len) {
-    double *foutput = (double *) output;
+int parse_float64(void *output, const char *str, size_t line_n, int _field_len) {
+    npy_float64 *foutput = (npy_float64 *) output;
     int prev = errno;
     errno = 0;
     foutput[line_n] = atof(str);
     if (errno) {
-            return -1;
+        return FAILED_TO_PARSE;
     }
     errno = prev;
     return 0;
 }
 
-int parse_int(void *output, const char *str, size_t line_n, int _field_len) {
-    int *ioutput = (int *) output;
+int parse_float32(void *output, const char *str, size_t line_n, int _field_len) {
+    float *foutput = (float *) output;
+    int prev = errno;
+    errno = 0;
+    foutput[line_n] = atof(str);
+    if (errno) {
+        return FAILED_TO_PARSE;
+    }
+    errno = prev;
+    return 0;
+}
+
+int parse_int64(void *output, const char *str, size_t line_n, int _field_len) {
+    npy_int64 *ioutput = (npy_int64 *) output;
     int prev = errno;
     errno = 0;
     ioutput[line_n] = atoi(str);
     if (errno) {
 	errno = prev;
-        return -1;
+        return FAILED_TO_PARSE;
     }
     errno = prev;
     return 0;
@@ -80,8 +87,12 @@ int parse_int(void *output, const char *str, size_t line_n, int _field_len) {
 int copy_string(void *output, const char *str, size_t line_n, int field_len) {
     char **soutput = (char **) output;
     soutput[line_n] = (char *) malloc(field_len);
-    strcpy(soutput[line_n], str);
-    return 0;
+    if (soutput[line_n]) {
+        strcpy(soutput[line_n], str);
+        return 0;
+    } else {
+	return OUT_OF_MEMORY;
+    }
 }
 
 typedef struct _Result {
@@ -103,7 +114,10 @@ MakeLinesResult make_lines(Field *fields, size_t nfields, const char const *str,
     size_t line_n = 0;
     size_t len;
     const char **lines = (const char **) malloc(sizeof(char*) * (data_len / expected_line_len));
-    
+    if (lines == NULL) {
+        MakeLinesResult r = { .err = OUT_OF_MEMORY, .lines = NULL };
+	return r;
+    }
     const char *current_line_head = str;
     int j = 0;
     while (*str) {
@@ -208,24 +222,47 @@ ParsedResult parse(char **lines, size_t nlines, Field *fields, void **output, si
     return r;
 }
 
+/*
+ * This fn will have to be done in python for now, since ensuring proper GC is not very clear in
+ * any documentation i can find online, and it probably wont impact speed too much.
+ *
+ * It should be done after the lines are parsed, so the proper amount of memory is allocated.
+ *
+ * i.e.
+ *
+ * def parselines(path="test", fmt = ((Float64, 8), (Float32, 4), (Int16, 5), (HexInt16, 4))):
+ *     lines_result = ffi.parselines(path) # Contains .lines, .nlines, and .err
+ *     if lines_result.err:
+ *         raise make_lines_err(lines_result.err) # throw generated error
+ *     
+ *     output = allocate(fmt, lines_result.nlines)
+ *     parse_result = ffi.parse(lines_result.lines, output)
+ *     
+ *     if parse_result.err:
+ *         raise make_parse_err(parse_result.err) # throw
+ *
+ *     return output
+ *
+ */
 void **make_output(Field *fields, size_t nfields, size_t nlines) {
     void **ptrs = (void **) malloc(sizeof(void *) * nfields);
     for (int i = 0; i < nfields; i += 1) {
             switch (fields[i].type) {
         case Int:
-            ptrs[i] = (int *) malloc(sizeof(int) * nlines);
+            ptrs[i] = (npy_int64 *) malloc(sizeof(npy_int64) * nlines);
             break;
         
         case Float:
-            ptrs[i] = (double *) malloc(sizeof(double) * nlines);        
+            ptrs[i] = (npy_float64 *) malloc(sizeof(npy_float64) * nlines);        
             break;
          
         case String:
             ptrs[i] = (char **) malloc(sizeof(char *) * nlines);
             break;
 
-        default: 
-                break;
+        default:
+	    /* unreachable */
+            break;
         }
     }
     return ptrs;
@@ -233,20 +270,20 @@ void **make_output(Field *fields, size_t nfields, size_t nlines) {
 
 void **print_output(void **ptrs, Field *fields, size_t nfields, size_t nlines) {
     
-    int *iptr;
+    npy_int64 *iptr;
     char **sptr;
-    double *dptr;
+    npy_float64 *dptr;
     for (int j = 0; j < nlines; j += 1) {
         for (int i = 0; i < nfields; i += 1) {
             if (i != 0) printf(", ");
 	    switch (fields[i].type) {
             case Int:
-                iptr = (int *) ptrs[i];
+                iptr = (npy_int64 *) ptrs[i];
                 printf("%d", iptr[j]);    
                 break;
             
             case Float:
-                dptr = (double *) ptrs[i];
+                dptr = (npy_float64 *) ptrs[i];
                 printf("%f", dptr[j]);                   
 		break;
              
@@ -281,10 +318,10 @@ int main(int argn, char **argv) {
     str[fsize] = 0;
     
     size_t nfields = 5;
-    Field fields[] = {  { .type = Int, .len = 6, .parse_fn = parse_int },
+    Field fields[] = {  { .type = Int, .len = 6, .parse_fn = parse_int64 },
                         { .type = String, .len = 7, .parse_fn = copy_string },
-                        { .type = Int, .len = 10, .parse_fn = parse_int },
-                        { .type = Float, .len = 9, .parse_fn = parse_float },
+                        { .type = Int, .len = 10, .parse_fn = parse_int64 },
+                        { .type = Float, .len = 9, .parse_fn = parse_float64 },
                         { .type = String, .len = 7, .parse_fn = copy_string}, };
     char** strs;
     MakeLinesResult res = make_lines(fields, 5, str, fsize);
