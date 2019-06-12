@@ -26,7 +26,6 @@ MAX_T = 2
 ctypedef struct Field:
     Ty ty
     int len
-    ParseFn parse_fn
 
 
 cdef (Field *, int) make_fields(list fields):

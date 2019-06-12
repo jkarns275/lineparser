@@ -1,7 +1,7 @@
 from libc.stdlib cimport malloc, free, atoi, atof
-from libc.stdio cimport fseek, fopen, fclose, ferror, ftell, fread, SEEK_END, SEEK_SET, FILE
+from libc.stdio cimport fseek, fopen, fclose, ferror, ftell, fread, SEEK_END, SEEK_SET, FILE, printf
 from libc.string cimport strncpy
-from libc.errno import errno
+from libc.errno cimport errno
 import numpy as np
 from libc.stdint cimport int32_t, int64_t
 
@@ -51,7 +51,7 @@ ctypedef int (*ParseFn)(void *, const char *, long, int)
 cdef ParseFn* parse_fn_map = [parse_f64, parse_i64, parse_string]
 
 ctypedef struct Field:
-    Ty type
+    Ty ty
     int len
 
 ctypedef struct MLErr:
@@ -121,6 +121,7 @@ cdef MakeLinesResult make_lines(Field *fields, int nfields, char *data, long dat
 
     while i < nfields:
         expected_line_len += fields[i].len
+        i += 1
 
     if expected_line_len <= 0:
         return make_err(BAD_FIELDS)
@@ -130,38 +131,41 @@ cdef MakeLinesResult make_lines(Field *fields, int nfields, char *data, long dat
     cdef char **lines = <char **> malloc(sizeof(char *) * (data_len / expected_line_len))
     cdef char *str = data
     cdef char c = 0
+    cdef char *current_line_head = str
 
     if lines == NULL:
         return make_err(OUT_OF_MEMORY)
     while True:
         c = str[0]
-        if c in (CR, LF):
+        print(f"c = {c}")
+        if c == CR or c == LF:
             len = <long> (str - current_line_head)
             
             if len != expected_line_len:
                 free(lines)
                 return make_bad_line_err(current_line_head, len, line_n)
-
+            
+            str += 1
+            
             while True:
                 c = str[0]
-                if c in (CR, LF):
+                if c == CR or c == LF:
                     str += 1
                     continue
                 elif c == 0:
                     lines[line_n] = current_line_head
-                    line_n += 1
-                    
+                    line_n += 1         
                     return make_ok(lines, line_n)
                 else:
                     lines[line_n] = current_line_head
                     current_line_head = str
                     line_n += 1
                     break
-
+            
             continue
+
         elif c == 0:
             len = <long> (str - current_line_head)
-
             if len != expected_line_len:
                 free(lines)
                 return make_bad_line_err(current_line_head, len, line_n)
@@ -171,9 +175,8 @@ cdef MakeLinesResult make_lines(Field *fields, int nfields, char *data, long dat
 
             return make_ok(lines, line_n)
         else:
-            str += 1
-            continue
-    
+            str += 1 
+
     # Unreachable
 
 ctypedef struct ParsedResult:
@@ -239,6 +242,9 @@ cdef ReadWholeFileResult read_whole_file(char *path):
         fclose(f)
         return r
     
+    # Null terminate
+    str[fsize] = 0
+
     fclose(f)
     r.data = str
     r.data_len = fsize
@@ -257,7 +263,6 @@ cdef (Field *, int) make_fields(list fields):
 
     cdef int nfields
     cdef Field *cfields = NULL
-    cdef Field temp_field
     cdef int i = 0
     try:
         nfields = len(fields)
@@ -266,7 +271,6 @@ cdef (Field *, int) make_fields(list fields):
         # Check if allocation failed
         if cfields == NULL:
             return NULL, 0
-
         for (ty, length) in fields:
             if type(length) != int:
                 raise Exception("Expected type int for length, instead got {}".format(type(length)))
@@ -277,9 +281,8 @@ cdef (Field *, int) make_fields(list fields):
                 else:
                     raise Exception("Expected int or Ty for ty field, instead got {}".format(type(ty)))
 
-            temp_field.ty = ty
-            temp_field.len = length
-            cfields[i] = temp_field
+            cfields[i].ty = ty
+            cfields[i].len = length
             i += 1
         return cfields, nfields
     except Exception as e:
@@ -304,12 +307,14 @@ def t(list pyfields, bytes filename):
         return "Failed to parse fields"
     if nfields == 0:
         return "Cannot have zero fields"
+    print("Parsed fields ok.")
 
     # cdef MakeLinesResult make_lines(Field *fields, int nfields, char *data, long data_len):
     cdef MakeLinesResult lines_result = make_lines(fields, nfields, data, data_len)
     cdef char** lines
     free(fields)
     if lines_result.err == 0:
+        print("Made lines ok")
         lines = lines_result.res.ok.lines
         for i in range(0, lines_result.res.ok.nlines):
             print(f"<{lines[i]}>")
