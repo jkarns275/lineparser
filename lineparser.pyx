@@ -304,20 +304,29 @@ def t(list pyfields, bytes filename):
     cdef Field *fields = fields_res[0]
     cdef int nfields = fields_res[1]
     if fields == NULL:
+        free(fields)
         return "Failed to parse fields"
     if nfields == 0:
+        free(fields)
         return "Cannot have zero fields"
     print("Parsed fields ok.")
 
+    cdef int linelen = 0
+    for i in range(nfields):
+        linelen += fields[i].len
+    
     # cdef MakeLinesResult make_lines(Field *fields, int nfields, char *data, long data_len):
     cdef MakeLinesResult lines_result = make_lines(fields, nfields, data, data_len)
-    cdef char** lines
+    cdef char** lines, temp
     free(fields)
     if lines_result.err == 0:
         print("Made lines ok")
         lines = lines_result.res.ok.lines
         for i in range(0, lines_result.res.ok.nlines):
+            temp = lines[i][linelen] 
+            lines[i][linelen] = 0;
             print(f"<{lines[i]}>")
+            lines[i][linelen] = temp
         free(lines)
         free(data)
         return "Ok!"
