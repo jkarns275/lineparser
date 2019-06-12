@@ -289,7 +289,7 @@ cdef (Field *, int) make_fields(list fields):
             cfields = NULL
         return cfields, -1
 
-def test(list pyfields, bytes filename):
+def t(list pyfields, bytes filename):
     cdef ReadWholeFileResult file_res = read_whole_file(filename)
     if file_res.err != 0:
         return f"Failed to read whole file, encountered error {file_res.err}"
@@ -308,10 +308,13 @@ def test(list pyfields, bytes filename):
     # cdef MakeLinesResult make_lines(Field *fields, int nfields, char *data, long data_len):
     cdef MakeLinesResult lines_result = make_lines(fields, nfields, data, data_len)
     cdef char** lines
+    free(fields)
     if lines_result.err == 0:
         lines = lines_result.res.ok.lines
         for i in range(0, lines_result.res.ok.nlines):
             print(f"<{lines[i]}>")
+        free(lines)
+        free(data)
         return "Ok!"
     else:
         return f"Got error {lines_result.err} on line {lines_result.res.err.line_n + 1}"
