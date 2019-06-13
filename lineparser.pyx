@@ -5,6 +5,11 @@ from libc.errno cimport errno
 import numpy as np
 from libc.stdint cimport int32_t, int64_t
 
+"""
+[(lineparser.Int64, 2), (lineparser.Int64, 1), (lineparser.Float64, 12), (lineparser.Float64, 10), (lineparser.Float64, 10), (lineparser.Float64, 5), (lineparser.Float64, 5), (lineparser.Float64, 10),(lineparser.Float64, 4), (lineparser.Float64, 8), (lineparser.String, 15), (lineparser.String, 15), (lineparser.String, 15), (lineparser.String, 15), (lineparser.String, 6), (lineparser.String, 12), (lineparser.String, 1), (lineparser.Float64, 7), (lineparser.Float64, 7)]
+fmt of water table for demo tomorrow
+"""
+
 cdef int OUT_OF_MEMORY = 1
 cdef int BAD_FIELDS = 2
 cdef int BAD_LINE = 3
@@ -22,12 +27,12 @@ cdef int parse_f64(void *output, const char *str, long line_n, int field_len):
     errno = prev
     return 0
 
-cdef int parse_i64(void *output, const char *str, long line_n, int field_len):
+cdef int parse_i64(void *output, const char *st, long line_n, int field_len):
     global errno
     cdef int64_t *ioutput = <int64_t *> output
     cdef int prev = errno
     errno = 0
-    ioutput[line_n] = atoi(str)
+    ioutput[line_n] = atoi(st)
     if errno != 0:
         errno = prev
         return 1
@@ -137,7 +142,7 @@ cdef MakeLinesResult make_lines(Field *fields, int nfields, char *data, long dat
         return make_err(OUT_OF_MEMORY)
     while True:
         c = str[0]
-        print(f"c = {c}")
+        
         if c == CR or c == LF:
             len = <long> (str - current_line_head)
             
@@ -182,10 +187,38 @@ cdef MakeLinesResult make_lines(Field *fields, int nfields, char *data, long dat
 ctypedef struct ParsedResult:
     long line_n
     long field_index
-    char *line
 
 cdef ParsedResult parse(char **lines, long nlines, Field *fields, void **output, long nfields):
-    pass
+    cdef ParsedResult pr
+    cdef long i = 0
+    cdef int j, ty = 0, length = 0
+    cdef char *line
+    cdef char temp
+
+    while i < nlines:
+        line = lines[i]
+        j = 0
+
+        while j < nfields:
+            length = fields[j].len
+            temp = line[length]
+            line[length] = 0
+            ty = fields[j].ty
+            
+            if (parse_fn_map[ty])(output[j], line, i, j) != 0:
+                pr.line_n = i
+                pr.field_index = j
+                return pr
+
+            line[length] = temp
+            line += length
+            j += 1
+
+        i += 1
+
+    pr.line_n = -1
+    pr.field_index = -1
+    return pr
 
 ctypedef struct ReadWholeFileResult:
     long data_len
@@ -309,36 +342,40 @@ def t(list pyfields, bytes filename):
     if nfields == 0:
         free(fields)
         return "Cannot have zero fields"
-    print("Parsed fields ok.")
 
     cdef int linelen = 0
     for i in range(nfields):
         linelen += fields[i].len
-    
     # cdef MakeLinesResult make_lines(Field *fields, int nfields, char *data, long data_len):
     cdef MakeLinesResult lines_result = make_lines(fields, nfields, data, data_len)
+
     cdef char** lines, temp
-    free(fields)
-    if lines_result.err == 0:
-        print("Made lines ok")
-        lines = lines_result.res.ok.lines
-        for i in range(0, lines_result.res.ok.nlines):
-            temp = lines[i][linelen] 
-            lines[i][linelen] = 0;
-            print(f"<{lines[i]}>")
-            lines[i][linelen] = temp
-        free(lines)
-        free(data)
-        return "Ok!"
-    else:
+    if lines_result.err != 0:
         return f"Got error {lines_result.err} on line {lines_result.res.err.line_n + 1}"
+    
+    cdef long nlines = lines_result.res.ok.nlines
+
+    lines = lines_result.res.ok.lines
+    cdef AllocationResult output_obj = allocate_field_outputs(fields, nfields, nlines)
+    if output_obj is None:
+        return "Failed to allocate output"
+    cdef void **ptrs = output_obj.ptrs
+    cdef ParsedResult pr = parse(lines, nlines, fields, output_obj.ptrs, nfields) 
+    if pr.line_n != -1:
+        return "Failed to parse"
+    cdef list py_handles = output_obj.py_handles
+
+    free(lines)
+    free(fields)
+    free(data)
+    return "Ok!"
 
 cdef class AllocationResult:
 
     cdef void **ptrs
     cdef object py_handles
     
-cdef object allocate_field_outputs(Field *fields, int nfields, long nlines):
+cdef AllocationResult allocate_field_outputs(const Field *fields, int nfields, long nlines):
     """
     Allocates output based on the field specifications. The only data type that doesn't get an
     an array for output is string, since c strings don't mix with python very well; so to minimize
@@ -351,24 +388,23 @@ cdef object allocate_field_outputs(Field *fields, int nfields, long nlines):
     cdef list py_handles = []
     cdef void **ptrs = <void**> malloc(sizeof(void*) * nfields)
     cdef int i = 0
-    cdef Field field
     cdef double[:] dptr
     cdef int64_t[:] lptr
     cdef int32_t[:] iptr
-
+    cdef Ty ty
     while i < nfields:
-        field = fields[i]
-        if field.ty == Float64:
+        ty = fields[i].ty
+        if ty == Float64:
             arr = np.zeros(nlines, dtype=np.float64)
             py_handles.append(arr)
             dptr = arr
             ptrs[i] = <void *> &dptr[0]
-        elif field.ty == Int64:
+        elif ty == Int64:
             arr = np.zeros(nlines, dtype=np.int64)
             py_handles.append(arr)
             lptr = arr
             ptrs[i] = <void *> &lptr[0]
-        elif field.ty == String:
+        elif ty == String:
             arr = []
             py_handles.append(arr)
             ptrs[i] = <void *> arr
@@ -383,3 +419,5 @@ cdef object allocate_field_outputs(Field *fields, int nfields, long nlines):
     ar = AllocationResult()
     ar.ptrs = ptrs
     ar.py_handles = py_handles
+
+    return ar
