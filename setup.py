@@ -21,7 +21,7 @@ if USE_CYTHON:
 with open("README.md", "r") as f:
     long_description = f.read()
 
-setup(  name="lineparser-jkarns",
+setup(  name="lineparser",
         version="0.0.0.dev0",
         author="Joshua Karns",
         author_email="jkarns275@gmail.com",
