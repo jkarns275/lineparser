@@ -1050,7 +1050,7 @@ struct __pyx_t_10lineparser_ParsedResult {
   long field_index;
 };
 
-/* "lineparser.pyx":282
+/* "lineparser.pyx":285
  *     return pr
  * 
  * ctypedef struct ReadWholeFileResult:             # <<<<<<<<<<<<<<
@@ -1064,7 +1064,7 @@ struct __pyx_t_10lineparser_ReadWholeFileResult {
   int io_err;
 };
 
-/* "lineparser.pyx":346
+/* "lineparser.pyx":349
  *     return r
  * 
  * cdef (Field *, int) make_fields(list fields):             # <<<<<<<<<<<<<<
@@ -1076,8 +1076,8 @@ struct __pyx_ctuple___dunderpyx_t_10lineparser_Field__ptr__and_int {
   int f1;
 };
 
-/* "lineparser.pyx":469
- *     return "Ok!"
+/* "lineparser.pyx":482
+ *     return py_handles
  * 
  * cdef class AllocationResult:             # <<<<<<<<<<<<<<
  * 
@@ -1548,16 +1548,6 @@ static PyObject* __Pyx_PyUnicode_BuildFromAscii(Py_ssize_t ulength, char* chars,
 /* CIntToPyUnicode.proto */
 static CYTHON_INLINE PyObject* __Pyx_PyUnicode_From_int(int value, Py_ssize_t width, char padding_char, char format_char);
 
-/* CIntToPyUnicode.proto */
-static CYTHON_INLINE PyObject* __Pyx_PyUnicode_From_long(long value, Py_ssize_t width, char padding_char, char format_char);
-
-/* IncludeStringH.proto */
-#include <string.h>
-
-/* JoinPyUnicode.proto */
-static PyObject* __Pyx_PyUnicode_Join(PyObject* value_tuple, Py_ssize_t value_count, Py_ssize_t result_ulength,
-                                      Py_UCS4 max_char);
-
 /* MemviewSliceInit.proto */
 #define __Pyx_BUF_MAX_NDIMS %(BUF_MAX_NDIMS)d
 #define __Pyx_MEMVIEW_DIRECT   1
@@ -1643,6 +1633,9 @@ static PyObject* __Pyx_ImportFrom(PyObject* module, PyObject* name);
 
 /* HasAttr.proto */
 static CYTHON_INLINE int __Pyx_HasAttr(PyObject *, PyObject *);
+
+/* IncludeStringH.proto */
+#include <string.h>
 
 /* BytesEquals.proto */
 static CYTHON_INLINE int __Pyx_PyBytes_Equals(PyObject* s1, PyObject* s2, int equals);
@@ -2038,10 +2031,8 @@ static char *__pyx_f_10lineparser_copy_string(char *, long); /*proto*/
 static __pyx_t_10lineparser_MakeLinesResult __pyx_f_10lineparser_make_bad_line_err(char *, long, int); /*proto*/
 static __pyx_t_10lineparser_MakeLinesResult __pyx_f_10lineparser_make_ok(char **, long); /*proto*/
 static __pyx_t_10lineparser_MakeLinesResult __pyx_f_10lineparser_make_err(int); /*proto*/
-static __pyx_t_10lineparser_MakeLinesResult __pyx_f_10lineparser_make_lines(__pyx_t_10lineparser_Field *, int, char *, long); /*proto*/
-static __pyx_t_10lineparser_ParsedResult __pyx_f_10lineparser_parse(char **, long, __pyx_t_10lineparser_Field *, void **, long); /*proto*/
 static char *__pyx_f_10lineparser_fast_next_line(char *, char *, int); /*proto*/
-static __pyx_t_10lineparser_ParsedResult __pyx_f_10lineparser_fast_parse(char *, long, long, int, __pyx_t_10lineparser_Field *, void **, int); /*proto*/
+static __pyx_t_10lineparser_ParsedResult __pyx_f_10lineparser__fast_parse(char *, long, long, int, __pyx_t_10lineparser_Field *, void **, int); /*proto*/
 static __pyx_t_10lineparser_ReadWholeFileResult __pyx_f_10lineparser_make_io_err(int); /*proto*/
 static __pyx_t_10lineparser_ReadWholeFileResult __pyx_f_10lineparser_read_whole_file(char *); /*proto*/
 static __pyx_ctuple___dunderpyx_t_10lineparser_Field__ptr__and_int __pyx_f_10lineparser_make_fields(PyObject *); /*proto*/
@@ -2098,14 +2089,11 @@ static PyObject *__pyx_builtin_IndexError;
 static const char __pyx_k_O[] = "O";
 static const char __pyx_k_c[] = "c";
 static const char __pyx_k_i[] = "i";
-static const char __pyx_k_t[] = "t";
 static const char __pyx_k_v[] = "v";
-static const char __pyx_k_Ok[] = "Ok!";
 static const char __pyx_k_Ty[] = "Ty";
 static const char __pyx_k_id[] = "id";
 static const char __pyx_k_np[] = "np";
 static const char __pyx_k_pr[] = "pr";
-static const char __pyx_k_t2[] = "t2";
 static const char __pyx_k_cls[] = "cls";
 static const char __pyx_k_dct[] = "dct";
 static const char __pyx_k_doc[] = "__doc__";
@@ -2132,7 +2120,6 @@ static const char __pyx_k_self[] = "self";
 static const char __pyx_k_size[] = "size";
 static const char __pyx_k_step[] = "step";
 static const char __pyx_k_stop[] = "stop";
-static const char __pyx_k_temp[] = "temp";
 static const char __pyx_k_test[] = "__test__";
 static const char __pyx_k_ASCII[] = "ASCII";
 static const char __pyx_k_Int64[] = "Int64";
@@ -2141,8 +2128,8 @@ static const char __pyx_k_dtype[] = "dtype";
 static const char __pyx_k_error[] = "error";
 static const char __pyx_k_flags[] = "flags";
 static const char __pyx_k_int64[] = "int64";
-static const char __pyx_k_lines[] = "lines";
 static const char __pyx_k_numpy[] = "numpy";
+static const char __pyx_k_parse[] = "parse";
 static const char __pyx_k_print[] = "print";
 static const char __pyx_k_range[] = "range";
 static const char __pyx_k_s_s_d[] = "<%s.%s: %d>";
@@ -2160,6 +2147,7 @@ static const char __pyx_k_name_2[] = "__name__";
 static const char __pyx_k_nlines[] = "nlines";
 static const char __pyx_k_pickle[] = "pickle";
 static const char __pyx_k_reduce[] = "__reduce__";
+static const char __pyx_k_resize[] = "resize";
 static const char __pyx_k_struct[] = "struct";
 static const char __pyx_k_unpack[] = "unpack";
 static const char __pyx_k_update[] = "update";
@@ -2172,7 +2160,6 @@ static const char __pyx_k_linelen[] = "linelen";
 static const char __pyx_k_members[] = "__members__";
 static const char __pyx_k_memview[] = "memview";
 static const char __pyx_k_nfields[] = "nfields";
-static const char __pyx_k_on_line[] = " on line ";
 static const char __pyx_k_parents[] = "parents";
 static const char __pyx_k_prepare[] = "__prepare__";
 static const char __pyx_k_Ellipsis[] = "Ellipsis";
@@ -2187,7 +2174,6 @@ static const char __pyx_k_pyfields[] = "pyfields";
 static const char __pyx_k_pyx_type[] = "__pyx_type";
 static const char __pyx_k_qualname[] = "__qualname__";
 static const char __pyx_k_setstate[] = "__setstate__";
-static const char __pyx_k_Got_error[] = "Got error ";
 static const char __pyx_k_TypeError[] = "TypeError";
 static const char __pyx_k_enumerate[] = "enumerate";
 static const char __pyx_k_max_lines[] = "max_lines";
@@ -2207,7 +2193,6 @@ static const char __pyx_k_OrderedDict[] = "OrderedDict";
 static const char __pyx_k_PickleError[] = "PickleError";
 static const char __pyx_k_collections[] = "collections";
 static const char __pyx_k_Pyx_EnumBase[] = "__Pyx_EnumBase";
-static const char __pyx_k_lines_result[] = "lines_result";
 static const char __pyx_k_pyx_checksum[] = "__pyx_checksum";
 static const char __pyx_k_stringsource[] = "stringsource";
 static const char __pyx_k_Got_exception[] = "Got exception ";
@@ -2280,7 +2265,6 @@ static PyObject *__pyx_kp_s_Failed_to_parse;
 static PyObject *__pyx_kp_s_Failed_to_parse_fields;
 static PyObject *__pyx_kp_u_Failed_to_read_whole_file_encoun;
 static PyObject *__pyx_n_s_Float64;
-static PyObject *__pyx_kp_u_Got_error;
 static PyObject *__pyx_kp_u_Got_exception;
 static PyObject *__pyx_kp_s_Incompatible_checksums_s_vs_0xb0;
 static PyObject *__pyx_kp_s_Incompatible_checksums_s_vs_0xd4;
@@ -2295,7 +2279,6 @@ static PyObject *__pyx_n_s_MemoryError;
 static PyObject *__pyx_kp_s_MemoryView_of_r_at_0x_x;
 static PyObject *__pyx_kp_s_MemoryView_of_r_object;
 static PyObject *__pyx_n_b_O;
-static PyObject *__pyx_kp_s_Ok;
 static PyObject *__pyx_n_s_OrderedDict;
 static PyObject *__pyx_kp_s_Out_of_bounds_on_buffer_access_a;
 static PyObject *__pyx_n_s_PickleError;
@@ -2354,8 +2337,6 @@ static PyObject *__pyx_kp_s_itemsize_0_for_cython_array;
 static PyObject *__pyx_n_s_linelen;
 static PyObject *__pyx_n_s_lineparser;
 static PyObject *__pyx_kp_s_lineparser_pyx;
-static PyObject *__pyx_n_s_lines;
-static PyObject *__pyx_n_s_lines_result;
 static PyObject *__pyx_n_s_main;
 static PyObject *__pyx_n_s_max_lines;
 static PyObject *__pyx_n_s_members;
@@ -2373,10 +2354,10 @@ static PyObject *__pyx_kp_s_no_default___reduce___due_to_non;
 static PyObject *__pyx_n_s_np;
 static PyObject *__pyx_n_s_numpy;
 static PyObject *__pyx_n_s_obj;
-static PyObject *__pyx_kp_u_on_line;
 static PyObject *__pyx_n_s_output_obj;
 static PyObject *__pyx_n_s_pack;
 static PyObject *__pyx_n_s_parents;
+static PyObject *__pyx_n_s_parse;
 static PyObject *__pyx_n_s_pickle;
 static PyObject *__pyx_n_s_pr;
 static PyObject *__pyx_n_s_prepare;
@@ -2400,6 +2381,7 @@ static PyObject *__pyx_n_s_reduce_cython;
 static PyObject *__pyx_n_s_reduce_ex;
 static PyObject *__pyx_n_s_repr;
 static PyObject *__pyx_n_s_res;
+static PyObject *__pyx_n_s_resize;
 static PyObject *__pyx_kp_s_s_s;
 static PyObject *__pyx_kp_s_s_s_d;
 static PyObject *__pyx_n_s_self;
@@ -2417,9 +2399,6 @@ static PyObject *__pyx_kp_s_strided_and_direct_or_indirect;
 static PyObject *__pyx_kp_s_strided_and_indirect;
 static PyObject *__pyx_kp_s_stringsource;
 static PyObject *__pyx_n_s_struct;
-static PyObject *__pyx_n_s_t;
-static PyObject *__pyx_n_s_t2;
-static PyObject *__pyx_n_s_temp;
 static PyObject *__pyx_n_s_test;
 static PyObject *__pyx_kp_s_unable_to_allocate_array_data;
 static PyObject *__pyx_kp_s_unable_to_allocate_shape_and_str;
@@ -2429,8 +2408,7 @@ static PyObject *__pyx_n_s_v;
 static PyObject *__pyx_n_s_value;
 static PyObject *__pyx_n_s_values;
 static PyObject *__pyx_n_s_zeros;
-static PyObject *__pyx_pf_10lineparser_t(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_pyfields, PyObject *__pyx_v_filename); /* proto */
-static PyObject *__pyx_pf_10lineparser_2t2(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_pyfields, PyObject *__pyx_v_filename); /* proto */
+static PyObject *__pyx_pf_10lineparser_parse(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_pyfields, PyObject *__pyx_v_filename); /* proto */
 static PyObject *__pyx_pf_10lineparser_16AllocationResult___reduce_cython__(CYTHON_UNUSED struct __pyx_obj_10lineparser_AllocationResult *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_10lineparser_16AllocationResult_2__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_10lineparser_AllocationResult *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
 static int __pyx_pf_8EnumBase_14__Pyx_EnumMeta___init__(struct __pyx_obj___Pyx_EnumMeta *__pyx_v_cls, PyObject *__pyx_v_name, PyObject *__pyx_v_parents, PyObject *__pyx_v_dct); /* proto */
@@ -2518,23 +2496,21 @@ static PyObject *__pyx_tuple__20;
 static PyObject *__pyx_tuple__21;
 static PyObject *__pyx_tuple__23;
 static PyObject *__pyx_tuple__25;
-static PyObject *__pyx_tuple__27;
+static PyObject *__pyx_tuple__26;
 static PyObject *__pyx_tuple__28;
 static PyObject *__pyx_tuple__30;
 static PyObject *__pyx_tuple__32;
+static PyObject *__pyx_tuple__33;
 static PyObject *__pyx_tuple__34;
 static PyObject *__pyx_tuple__35;
 static PyObject *__pyx_tuple__36;
 static PyObject *__pyx_tuple__37;
-static PyObject *__pyx_tuple__38;
-static PyObject *__pyx_tuple__39;
 static PyObject *__pyx_codeobj__22;
 static PyObject *__pyx_codeobj__24;
-static PyObject *__pyx_codeobj__26;
+static PyObject *__pyx_codeobj__27;
 static PyObject *__pyx_codeobj__29;
 static PyObject *__pyx_codeobj__31;
-static PyObject *__pyx_codeobj__33;
-static PyObject *__pyx_codeobj__40;
+static PyObject *__pyx_codeobj__38;
 /* Late includes */
 
 /* "lineparser.pyx":14
@@ -2806,7 +2782,7 @@ static CYTHON_INLINE int __pyx_f_10lineparser_parse_string(void *__pyx_v_output,
  * cdef inline int parse_string(void *output, const char *str, long line_n, int field_len):
  *     cdef list loutput = <list> output             # <<<<<<<<<<<<<<
  *     cdef bytes copy = <bytes> str
- *     loutput.append(copy)
+ *     list.append(loutput, copy)
  */
   __pyx_t_1 = ((PyObject *)__pyx_v_output);
   __Pyx_INCREF(__pyx_t_1);
@@ -2817,7 +2793,7 @@ static CYTHON_INLINE int __pyx_f_10lineparser_parse_string(void *__pyx_v_output,
  * cdef inline int parse_string(void *output, const char *str, long line_n, int field_len):
  *     cdef list loutput = <list> output
  *     cdef bytes copy = <bytes> str             # <<<<<<<<<<<<<<
- *     loutput.append(copy)
+ *     list.append(loutput, copy)
  *     return 0
  */
   __pyx_t_1 = __Pyx_PyBytes_FromString(__pyx_v_str); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 40, __pyx_L1_error)
@@ -2831,19 +2807,19 @@ static CYTHON_INLINE int __pyx_f_10lineparser_parse_string(void *__pyx_v_output,
   /* "lineparser.pyx":41
  *     cdef list loutput = <list> output
  *     cdef bytes copy = <bytes> str
- *     loutput.append(copy)             # <<<<<<<<<<<<<<
+ *     list.append(loutput, copy)             # <<<<<<<<<<<<<<
  *     return 0
  * 
  */
   if (unlikely(__pyx_v_loutput == Py_None)) {
-    PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "append");
+    PyErr_Format(PyExc_TypeError, "descriptor '%s' requires a '%s' object but received a 'NoneType'", "append", "list");
     __PYX_ERR(0, 41, __pyx_L1_error)
   }
   __pyx_t_3 = __Pyx_PyList_Append(__pyx_v_loutput, __pyx_v_copy); if (unlikely(__pyx_t_3 == ((int)-1))) __PYX_ERR(0, 41, __pyx_L1_error)
 
   /* "lineparser.pyx":42
  *     cdef bytes copy = <bytes> str
- *     loutput.append(copy)
+ *     list.append(loutput, copy)
  *     return 0             # <<<<<<<<<<<<<<
  * 
  * cpdef enum Ty:
@@ -3722,12 +3698,12 @@ static __pyx_t_10lineparser_MakeLinesResult __pyx_f_10lineparser_make_lines(__py
 /* "lineparser.pyx":187
  *     long field_index
  * 
- * cdef ParsedResult parse(char **lines, long nlines, Field *fields, void **output, long nfields):             # <<<<<<<<<<<<<<
+ * cdef ParsedResult _parse(char **lines, long nlines, Field *fields, void **output, long nfields):             # <<<<<<<<<<<<<<
  *     cdef ParsedResult pr
  *     cdef long i = 0
  */
 
-static __pyx_t_10lineparser_ParsedResult __pyx_f_10lineparser_parse(char **__pyx_v_lines, long __pyx_v_nlines, __pyx_t_10lineparser_Field *__pyx_v_fields, void **__pyx_v_output, long __pyx_v_nfields) {
+static __pyx_t_10lineparser_ParsedResult __pyx_f_10lineparser__parse(char **__pyx_v_lines, long __pyx_v_nlines, __pyx_t_10lineparser_Field *__pyx_v_fields, void **__pyx_v_output, long __pyx_v_nfields) {
   __pyx_t_10lineparser_ParsedResult __pyx_v_pr;
   long __pyx_v_i;
   int __pyx_v_j;
@@ -3741,10 +3717,10 @@ static __pyx_t_10lineparser_ParsedResult __pyx_f_10lineparser_parse(char **__pyx
   int __pyx_t_1;
   int __pyx_t_2;
   enum __pyx_t_10lineparser_Ty __pyx_t_3;
-  __Pyx_RefNannySetupContext("parse", 0);
+  __Pyx_RefNannySetupContext("_parse", 0);
 
   /* "lineparser.pyx":189
- * cdef ParsedResult parse(char **lines, long nlines, Field *fields, void **output, long nfields):
+ * cdef ParsedResult _parse(char **lines, long nlines, Field *fields, void **output, long nfields):
  *     cdef ParsedResult pr
  *     cdef long i = 0             # <<<<<<<<<<<<<<
  *     cdef int j, ty = 0, length = 0
@@ -4024,7 +4000,7 @@ static __pyx_t_10lineparser_ParsedResult __pyx_f_10lineparser_parse(char **__pyx
   /* "lineparser.pyx":187
  *     long field_index
  * 
- * cdef ParsedResult parse(char **lines, long nlines, Field *fields, void **output, long nfields):             # <<<<<<<<<<<<<<
+ * cdef ParsedResult _parse(char **lines, long nlines, Field *fields, void **output, long nfields):             # <<<<<<<<<<<<<<
  *     cdef ParsedResult pr
  *     cdef long i = 0
  */
@@ -4179,7 +4155,7 @@ static char *__pyx_f_10lineparser_fast_next_line(char *__pyx_v_current_position,
  *         else:
  *             return new_pos             # <<<<<<<<<<<<<<
  * 
- * cdef ParsedResult fast_parse(char *data, long data_len, long max_nlines, int line_len, Field *fields, void **output, int nfields):
+ * cdef ParsedResult _fast_parse(char *data, long data_len, long max_nlines, int line_len, Field *fields, void **output, int nfields):
  */
     /*else*/ {
       __pyx_r = __pyx_v_new_pos;
@@ -4206,15 +4182,16 @@ static char *__pyx_f_10lineparser_fast_next_line(char *__pyx_v_current_position,
 /* "lineparser.pyx":244
  *             return new_pos
  * 
- * cdef ParsedResult fast_parse(char *data, long data_len, long max_nlines, int line_len, Field *fields, void **output, int nfields):             # <<<<<<<<<<<<<<
+ * cdef ParsedResult _fast_parse(char *data, long data_len, long max_nlines, int line_len, Field *fields, void **output, int nfields):             # <<<<<<<<<<<<<<
  *     cdef long line_n = 0
  *     cdef char *end = data + data_len
  */
 
-static __pyx_t_10lineparser_ParsedResult __pyx_f_10lineparser_fast_parse(char *__pyx_v_data, long __pyx_v_data_len, CYTHON_UNUSED long __pyx_v_max_nlines, int __pyx_v_line_len, __pyx_t_10lineparser_Field *__pyx_v_fields, void **__pyx_v_output, int __pyx_v_nfields) {
+static __pyx_t_10lineparser_ParsedResult __pyx_f_10lineparser__fast_parse(char *__pyx_v_data, long __pyx_v_data_len, CYTHON_UNUSED long __pyx_v_max_nlines, int __pyx_v_line_len, __pyx_t_10lineparser_Field *__pyx_v_fields, void **__pyx_v_output, int __pyx_v_nfields) {
   long __pyx_v_line_n;
   char *__pyx_v_end;
   char *__pyx_v_line;
+  char *__pyx_v_t;
   int __pyx_v_length;
   int __pyx_v_j;
   CYTHON_UNUSED char __pyx_v_temp;
@@ -4224,13 +4201,12 @@ static __pyx_t_10lineparser_ParsedResult __pyx_f_10lineparser_fast_parse(char *_
   __pyx_t_10lineparser_ParsedResult __pyx_r;
   __Pyx_RefNannyDeclarations
   int __pyx_t_1;
-  int __pyx_t_2;
-  enum __pyx_t_10lineparser_Ty __pyx_t_3;
-  __Pyx_RefNannySetupContext("fast_parse", 0);
+  enum __pyx_t_10lineparser_Ty __pyx_t_2;
+  __Pyx_RefNannySetupContext("_fast_parse", 0);
 
   /* "lineparser.pyx":245
  * 
- * cdef ParsedResult fast_parse(char *data, long data_len, long max_nlines, int line_len, Field *fields, void **output, int nfields):
+ * cdef ParsedResult _fast_parse(char *data, long data_len, long max_nlines, int line_len, Field *fields, void **output, int nfields):
  *     cdef long line_n = 0             # <<<<<<<<<<<<<<
  *     cdef char *end = data + data_len
  *     cdef char *line = data
@@ -4238,11 +4214,11 @@ static __pyx_t_10lineparser_ParsedResult __pyx_f_10lineparser_fast_parse(char *_
   __pyx_v_line_n = 0;
 
   /* "lineparser.pyx":246
- * cdef ParsedResult fast_parse(char *data, long data_len, long max_nlines, int line_len, Field *fields, void **output, int nfields):
+ * cdef ParsedResult _fast_parse(char *data, long data_len, long max_nlines, int line_len, Field *fields, void **output, int nfields):
  *     cdef long line_n = 0
  *     cdef char *end = data + data_len             # <<<<<<<<<<<<<<
  *     cdef char *line = data
- *     cdef int length, j = 0
+ *     cdef char *t = NULL
  */
   __pyx_v_end = (__pyx_v_data + __pyx_v_data_len);
 
@@ -4250,31 +4226,41 @@ static __pyx_t_10lineparser_ParsedResult __pyx_f_10lineparser_fast_parse(char *_
  *     cdef long line_n = 0
  *     cdef char *end = data + data_len
  *     cdef char *line = data             # <<<<<<<<<<<<<<
- *     cdef int length, j = 0
- *     cdef char temp = 0
+ *     cdef char *t = NULL
+ *     cdef int length = 0, j = 0
  */
   __pyx_v_line = __pyx_v_data;
 
   /* "lineparser.pyx":248
  *     cdef char *end = data + data_len
  *     cdef char *line = data
- *     cdef int length, j = 0             # <<<<<<<<<<<<<<
+ *     cdef char *t = NULL             # <<<<<<<<<<<<<<
+ *     cdef int length = 0, j = 0
  *     cdef char temp = 0
- *     cdef int res = 0
  */
-  __pyx_v_j = 0;
+  __pyx_v_t = NULL;
 
   /* "lineparser.pyx":249
  *     cdef char *line = data
- *     cdef int length, j = 0
+ *     cdef char *t = NULL
+ *     cdef int length = 0, j = 0             # <<<<<<<<<<<<<<
+ *     cdef char temp = 0
+ *     cdef int res = 0
+ */
+  __pyx_v_length = 0;
+  __pyx_v_j = 0;
+
+  /* "lineparser.pyx":250
+ *     cdef char *t = NULL
+ *     cdef int length = 0, j = 0
  *     cdef char temp = 0             # <<<<<<<<<<<<<<
  *     cdef int res = 0
  *     cdef ParsedResult pr
  */
   __pyx_v_temp = 0;
 
-  /* "lineparser.pyx":250
- *     cdef int length, j = 0
+  /* "lineparser.pyx":251
+ *     cdef int length = 0, j = 0
  *     cdef char temp = 0
  *     cdef int res = 0             # <<<<<<<<<<<<<<
  *     cdef ParsedResult pr
@@ -4282,58 +4268,75 @@ static __pyx_t_10lineparser_ParsedResult __pyx_f_10lineparser_fast_parse(char *_
  */
   __pyx_v_res = 0;
 
-  /* "lineparser.pyx":253
+  /* "lineparser.pyx":254
  *     cdef ParsedResult pr
  * 
  *     while line != NULL:             # <<<<<<<<<<<<<<
  *         j = 0
- *         while j < nfields:
+ *         length = 0
  */
   while (1) {
     __pyx_t_1 = ((__pyx_v_line != NULL) != 0);
     if (!__pyx_t_1) break;
 
-    /* "lineparser.pyx":254
+    /* "lineparser.pyx":255
  * 
  *     while line != NULL:
  *         j = 0             # <<<<<<<<<<<<<<
+ *         length = 0
  *         while j < nfields:
- *             length = fields[j].len
  */
     __pyx_v_j = 0;
 
-    /* "lineparser.pyx":255
+    /* "lineparser.pyx":256
  *     while line != NULL:
  *         j = 0
+ *         length = 0             # <<<<<<<<<<<<<<
+ *         while j < nfields:
+ *             t = &line[length]
+ */
+    __pyx_v_length = 0;
+
+    /* "lineparser.pyx":257
+ *         j = 0
+ *         length = 0
  *         while j < nfields:             # <<<<<<<<<<<<<<
- *             length = fields[j].len
- *             temp = line[length]
+ *             t = &line[length]
+ *             length += fields[j].len
  */
     while (1) {
       __pyx_t_1 = ((__pyx_v_j < __pyx_v_nfields) != 0);
       if (!__pyx_t_1) break;
 
-      /* "lineparser.pyx":256
- *         j = 0
+      /* "lineparser.pyx":258
+ *         length = 0
  *         while j < nfields:
- *             length = fields[j].len             # <<<<<<<<<<<<<<
+ *             t = &line[length]             # <<<<<<<<<<<<<<
+ *             length += fields[j].len
+ *             temp = line[length]
+ */
+      __pyx_v_t = (&(__pyx_v_line[__pyx_v_length]));
+
+      /* "lineparser.pyx":259
+ *         while j < nfields:
+ *             t = &line[length]
+ *             length += fields[j].len             # <<<<<<<<<<<<<<
  *             temp = line[length]
  *             line[length] = 0
  */
-      __pyx_t_2 = (__pyx_v_fields[__pyx_v_j]).len;
-      __pyx_v_length = __pyx_t_2;
+      __pyx_v_length = (__pyx_v_length + (__pyx_v_fields[__pyx_v_j]).len);
 
-      /* "lineparser.pyx":257
- *         while j < nfields:
- *             length = fields[j].len
+      /* "lineparser.pyx":260
+ *             t = &line[length]
+ *             length += fields[j].len
  *             temp = line[length]             # <<<<<<<<<<<<<<
  *             line[length] = 0
  *             ty = fields[j].ty
  */
       __pyx_v_temp = (__pyx_v_line[__pyx_v_length]);
 
-      /* "lineparser.pyx":258
- *             length = fields[j].len
+      /* "lineparser.pyx":261
+ *             length += fields[j].len
  *             temp = line[length]
  *             line[length] = 0             # <<<<<<<<<<<<<<
  *             ty = fields[j].ty
@@ -4341,86 +4344,86 @@ static __pyx_t_10lineparser_ParsedResult __pyx_f_10lineparser_fast_parse(char *_
  */
       (__pyx_v_line[__pyx_v_length]) = 0;
 
-      /* "lineparser.pyx":259
+      /* "lineparser.pyx":262
  *             temp = line[length]
  *             line[length] = 0
  *             ty = fields[j].ty             # <<<<<<<<<<<<<<
  * 
  *             if ty == Float64:
  */
-      __pyx_t_3 = (__pyx_v_fields[__pyx_v_j]).ty;
-      __pyx_v_ty = __pyx_t_3;
+      __pyx_t_2 = (__pyx_v_fields[__pyx_v_j]).ty;
+      __pyx_v_ty = __pyx_t_2;
 
-      /* "lineparser.pyx":261
+      /* "lineparser.pyx":264
  *             ty = fields[j].ty
  * 
  *             if ty == Float64:             # <<<<<<<<<<<<<<
- *                 res = parse_f64(output[j], line, line_n, j)
+ *                 res = parse_f64(output[j], t, line_n, j)
  *             elif ty == Int64:
  */
       switch (__pyx_v_ty) {
         case __pyx_e_10lineparser_Float64:
 
-        /* "lineparser.pyx":262
+        /* "lineparser.pyx":265
  * 
  *             if ty == Float64:
- *                 res = parse_f64(output[j], line, line_n, j)             # <<<<<<<<<<<<<<
+ *                 res = parse_f64(output[j], t, line_n, j)             # <<<<<<<<<<<<<<
  *             elif ty == Int64:
- *                 res = parse_i64(output[j], line, line_n, j)
+ *                 res = parse_i64(output[j], t, line_n, j)
  */
-        __pyx_v_res = __pyx_f_10lineparser_parse_f64((__pyx_v_output[__pyx_v_j]), __pyx_v_line, __pyx_v_line_n, __pyx_v_j);
+        __pyx_v_res = __pyx_f_10lineparser_parse_f64((__pyx_v_output[__pyx_v_j]), __pyx_v_t, __pyx_v_line_n, __pyx_v_j);
 
-        /* "lineparser.pyx":261
+        /* "lineparser.pyx":264
  *             ty = fields[j].ty
  * 
  *             if ty == Float64:             # <<<<<<<<<<<<<<
- *                 res = parse_f64(output[j], line, line_n, j)
+ *                 res = parse_f64(output[j], t, line_n, j)
  *             elif ty == Int64:
  */
         break;
         case __pyx_e_10lineparser_Int64:
 
-        /* "lineparser.pyx":264
- *                 res = parse_f64(output[j], line, line_n, j)
+        /* "lineparser.pyx":267
+ *                 res = parse_f64(output[j], t, line_n, j)
  *             elif ty == Int64:
- *                 res = parse_i64(output[j], line, line_n, j)             # <<<<<<<<<<<<<<
+ *                 res = parse_i64(output[j], t, line_n, j)             # <<<<<<<<<<<<<<
  *             elif ty == String:
- *                 res = parse_string(output[j], line, line_n, j)
+ *                 res = parse_string(output[j], t, line_n, j)
  */
-        __pyx_v_res = __pyx_f_10lineparser_parse_i64((__pyx_v_output[__pyx_v_j]), __pyx_v_line, __pyx_v_line_n, __pyx_v_j);
+        __pyx_v_res = __pyx_f_10lineparser_parse_i64((__pyx_v_output[__pyx_v_j]), __pyx_v_t, __pyx_v_line_n, __pyx_v_j);
 
-        /* "lineparser.pyx":263
+        /* "lineparser.pyx":266
  *             if ty == Float64:
- *                 res = parse_f64(output[j], line, line_n, j)
+ *                 res = parse_f64(output[j], t, line_n, j)
  *             elif ty == Int64:             # <<<<<<<<<<<<<<
- *                 res = parse_i64(output[j], line, line_n, j)
+ *                 res = parse_i64(output[j], t, line_n, j)
  *             elif ty == String:
  */
         break;
         case __pyx_e_10lineparser_String:
 
-        /* "lineparser.pyx":266
- *                 res = parse_i64(output[j], line, line_n, j)
+        /* "lineparser.pyx":269
+ *                 res = parse_i64(output[j], t, line_n, j)
  *             elif ty == String:
- *                 res = parse_string(output[j], line, line_n, j)             # <<<<<<<<<<<<<<
+ *                 res = parse_string(output[j], t, line_n, j)             # <<<<<<<<<<<<<<
  * 
  *             if res != 0:
  */
-        __pyx_v_res = __pyx_f_10lineparser_parse_string((__pyx_v_output[__pyx_v_j]), __pyx_v_line, __pyx_v_line_n, __pyx_v_j);
+        __pyx_v_res = __pyx_f_10lineparser_parse_string((__pyx_v_output[__pyx_v_j]), __pyx_v_t, __pyx_v_line_n, __pyx_v_j);
 
-        /* "lineparser.pyx":265
+        /* "lineparser.pyx":268
  *             elif ty == Int64:
- *                 res = parse_i64(output[j], line, line_n, j)
+ *                 res = parse_i64(output[j], t, line_n, j)
  *             elif ty == String:             # <<<<<<<<<<<<<<
- *                 res = parse_string(output[j], line, line_n, j)
+ *                 res = parse_string(output[j], t, line_n, j)
  * 
  */
         break;
         default: break;
       }
 
-      /* "lineparser.pyx":268
- *                 res = parse_string(output[j], line, line_n, j)
+      /* "lineparser.pyx":271
+ *                 res = parse_string(output[j], t, line_n, j)
  * 
  *             if res != 0:             # <<<<<<<<<<<<<<
  *                 pr.line_n = line_n
@@ -4429,7 +4432,7 @@ static __pyx_t_10lineparser_ParsedResult __pyx_f_10lineparser_fast_parse(char *_
       __pyx_t_1 = ((__pyx_v_res != 0) != 0);
       if (__pyx_t_1) {
 
-        /* "lineparser.pyx":269
+        /* "lineparser.pyx":272
  * 
  *             if res != 0:
  *                 pr.line_n = line_n             # <<<<<<<<<<<<<<
@@ -4438,7 +4441,7 @@ static __pyx_t_10lineparser_ParsedResult __pyx_f_10lineparser_fast_parse(char *_
  */
         __pyx_v_pr.line_n = __pyx_v_line_n;
 
-        /* "lineparser.pyx":270
+        /* "lineparser.pyx":273
  *             if res != 0:
  *                 pr.line_n = line_n
  *                 pr.field_index = j             # <<<<<<<<<<<<<<
@@ -4447,7 +4450,7 @@ static __pyx_t_10lineparser_ParsedResult __pyx_f_10lineparser_fast_parse(char *_
  */
         __pyx_v_pr.field_index = __pyx_v_j;
 
-        /* "lineparser.pyx":271
+        /* "lineparser.pyx":274
  *                 pr.line_n = line_n
  *                 pr.field_index = j
  *                 return pr             # <<<<<<<<<<<<<<
@@ -4457,8 +4460,8 @@ static __pyx_t_10lineparser_ParsedResult __pyx_f_10lineparser_fast_parse(char *_
         __pyx_r = __pyx_v_pr;
         goto __pyx_L0;
 
-        /* "lineparser.pyx":268
- *                 res = parse_string(output[j], line, line_n, j)
+        /* "lineparser.pyx":271
+ *                 res = parse_string(output[j], t, line_n, j)
  * 
  *             if res != 0:             # <<<<<<<<<<<<<<
  *                 pr.line_n = line_n
@@ -4466,7 +4469,7 @@ static __pyx_t_10lineparser_ParsedResult __pyx_f_10lineparser_fast_parse(char *_
  */
       }
 
-      /* "lineparser.pyx":273
+      /* "lineparser.pyx":276
  *                 return pr
  * 
  *             j += 1             # <<<<<<<<<<<<<<
@@ -4476,7 +4479,7 @@ static __pyx_t_10lineparser_ParsedResult __pyx_f_10lineparser_fast_parse(char *_
       __pyx_v_j = (__pyx_v_j + 1);
     }
 
-    /* "lineparser.pyx":275
+    /* "lineparser.pyx":278
  *             j += 1
  * 
  *         line = fast_next_line(line, end, line_len)             # <<<<<<<<<<<<<<
@@ -4485,36 +4488,36 @@ static __pyx_t_10lineparser_ParsedResult __pyx_f_10lineparser_fast_parse(char *_
  */
     __pyx_v_line = __pyx_f_10lineparser_fast_next_line(__pyx_v_line, __pyx_v_end, __pyx_v_line_len);
 
-    /* "lineparser.pyx":276
+    /* "lineparser.pyx":279
  * 
  *         line = fast_next_line(line, end, line_len)
  *         line_n += 1             # <<<<<<<<<<<<<<
  * 
- *     pr.line_n = line_n
+ *     pr.line_n = line_n - 1
  */
     __pyx_v_line_n = (__pyx_v_line_n + 1);
   }
 
-  /* "lineparser.pyx":278
+  /* "lineparser.pyx":281
  *         line_n += 1
  * 
- *     pr.line_n = line_n             # <<<<<<<<<<<<<<
+ *     pr.line_n = line_n - 1             # <<<<<<<<<<<<<<
  *     pr.field_index = -1
  *     return pr
  */
-  __pyx_v_pr.line_n = __pyx_v_line_n;
+  __pyx_v_pr.line_n = (__pyx_v_line_n - 1);
 
-  /* "lineparser.pyx":279
+  /* "lineparser.pyx":282
  * 
- *     pr.line_n = line_n
+ *     pr.line_n = line_n - 1
  *     pr.field_index = -1             # <<<<<<<<<<<<<<
  *     return pr
  * 
  */
   __pyx_v_pr.field_index = -1L;
 
-  /* "lineparser.pyx":280
- *     pr.line_n = line_n
+  /* "lineparser.pyx":283
+ *     pr.line_n = line_n - 1
  *     pr.field_index = -1
  *     return pr             # <<<<<<<<<<<<<<
  * 
@@ -4526,7 +4529,7 @@ static __pyx_t_10lineparser_ParsedResult __pyx_f_10lineparser_fast_parse(char *_
   /* "lineparser.pyx":244
  *             return new_pos
  * 
- * cdef ParsedResult fast_parse(char *data, long data_len, long max_nlines, int line_len, Field *fields, void **output, int nfields):             # <<<<<<<<<<<<<<
+ * cdef ParsedResult _fast_parse(char *data, long data_len, long max_nlines, int line_len, Field *fields, void **output, int nfields):             # <<<<<<<<<<<<<<
  *     cdef long line_n = 0
  *     cdef char *end = data + data_len
  */
@@ -4537,7 +4540,7 @@ static __pyx_t_10lineparser_ParsedResult __pyx_f_10lineparser_fast_parse(char *_
   return __pyx_r;
 }
 
-/* "lineparser.pyx":288
+/* "lineparser.pyx":291
  *     int io_err
  * 
  * cdef ReadWholeFileResult make_io_err(int io_err):             # <<<<<<<<<<<<<<
@@ -4551,7 +4554,7 @@ static __pyx_t_10lineparser_ReadWholeFileResult __pyx_f_10lineparser_make_io_err
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("make_io_err", 0);
 
-  /* "lineparser.pyx":290
+  /* "lineparser.pyx":293
  * cdef ReadWholeFileResult make_io_err(int io_err):
  *     cdef ReadWholeFileResult r
  *     r.data_len = 0             # <<<<<<<<<<<<<<
@@ -4560,7 +4563,7 @@ static __pyx_t_10lineparser_ReadWholeFileResult __pyx_f_10lineparser_make_io_err
  */
   __pyx_v_r.data_len = 0;
 
-  /* "lineparser.pyx":291
+  /* "lineparser.pyx":294
  *     cdef ReadWholeFileResult r
  *     r.data_len = 0
  *     r.data = NULL             # <<<<<<<<<<<<<<
@@ -4569,7 +4572,7 @@ static __pyx_t_10lineparser_ReadWholeFileResult __pyx_f_10lineparser_make_io_err
  */
   __pyx_v_r.data = NULL;
 
-  /* "lineparser.pyx":292
+  /* "lineparser.pyx":295
  *     r.data_len = 0
  *     r.data = NULL
  *     r.err = IO_ERROR             # <<<<<<<<<<<<<<
@@ -4578,7 +4581,7 @@ static __pyx_t_10lineparser_ReadWholeFileResult __pyx_f_10lineparser_make_io_err
  */
   __pyx_v_r.err = __pyx_v_10lineparser_IO_ERROR;
 
-  /* "lineparser.pyx":293
+  /* "lineparser.pyx":296
  *     r.data = NULL
  *     r.err = IO_ERROR
  *     r.io_err = io_err             # <<<<<<<<<<<<<<
@@ -4587,7 +4590,7 @@ static __pyx_t_10lineparser_ReadWholeFileResult __pyx_f_10lineparser_make_io_err
  */
   __pyx_v_r.io_err = __pyx_v_io_err;
 
-  /* "lineparser.pyx":294
+  /* "lineparser.pyx":297
  *     r.err = IO_ERROR
  *     r.io_err = io_err
  *     return r             # <<<<<<<<<<<<<<
@@ -4597,7 +4600,7 @@ static __pyx_t_10lineparser_ReadWholeFileResult __pyx_f_10lineparser_make_io_err
   __pyx_r = __pyx_v_r;
   goto __pyx_L0;
 
-  /* "lineparser.pyx":288
+  /* "lineparser.pyx":291
  *     int io_err
  * 
  * cdef ReadWholeFileResult make_io_err(int io_err):             # <<<<<<<<<<<<<<
@@ -4611,7 +4614,7 @@ static __pyx_t_10lineparser_ReadWholeFileResult __pyx_f_10lineparser_make_io_err
   return __pyx_r;
 }
 
-/* "lineparser.pyx":296
+/* "lineparser.pyx":299
  *     return r
  * 
  * cdef ReadWholeFileResult read_whole_file(char *path):             # <<<<<<<<<<<<<<
@@ -4630,7 +4633,7 @@ static __pyx_t_10lineparser_ReadWholeFileResult __pyx_f_10lineparser_read_whole_
   int __pyx_t_1;
   __Pyx_RefNannySetupContext("read_whole_file", 0);
 
-  /* "lineparser.pyx":298
+  /* "lineparser.pyx":301
  * cdef ReadWholeFileResult read_whole_file(char *path):
  *     global errno
  *     cdef int prev = errno             # <<<<<<<<<<<<<<
@@ -4639,7 +4642,7 @@ static __pyx_t_10lineparser_ReadWholeFileResult __pyx_f_10lineparser_read_whole_
  */
   __pyx_v_prev = errno;
 
-  /* "lineparser.pyx":301
+  /* "lineparser.pyx":304
  *     cdef ReadWholeFileResult r
  * 
  *     cdef FILE *f = fopen(path, "rb")             # <<<<<<<<<<<<<<
@@ -4648,7 +4651,7 @@ static __pyx_t_10lineparser_ReadWholeFileResult __pyx_f_10lineparser_read_whole_
  */
   __pyx_v_f = fopen(__pyx_v_path, ((char const *)"rb"));
 
-  /* "lineparser.pyx":304
+  /* "lineparser.pyx":307
  * 
  *     # file couldnt be opened
  *     if f == NULL:             # <<<<<<<<<<<<<<
@@ -4658,7 +4661,7 @@ static __pyx_t_10lineparser_ReadWholeFileResult __pyx_f_10lineparser_read_whole_
   __pyx_t_1 = ((__pyx_v_f == NULL) != 0);
   if (__pyx_t_1) {
 
-    /* "lineparser.pyx":305
+    /* "lineparser.pyx":308
  *     # file couldnt be opened
  *     if f == NULL:
  *         r = make_io_err(errno)             # <<<<<<<<<<<<<<
@@ -4667,7 +4670,7 @@ static __pyx_t_10lineparser_ReadWholeFileResult __pyx_f_10lineparser_read_whole_
  */
     __pyx_v_r = __pyx_f_10lineparser_make_io_err(errno);
 
-    /* "lineparser.pyx":306
+    /* "lineparser.pyx":309
  *     if f == NULL:
  *         r = make_io_err(errno)
  *         errno = prev             # <<<<<<<<<<<<<<
@@ -4676,7 +4679,7 @@ static __pyx_t_10lineparser_ReadWholeFileResult __pyx_f_10lineparser_read_whole_
  */
     errno = __pyx_v_prev;
 
-    /* "lineparser.pyx":307
+    /* "lineparser.pyx":310
  *         r = make_io_err(errno)
  *         errno = prev
  *         return r             # <<<<<<<<<<<<<<
@@ -4686,7 +4689,7 @@ static __pyx_t_10lineparser_ReadWholeFileResult __pyx_f_10lineparser_read_whole_
     __pyx_r = __pyx_v_r;
     goto __pyx_L0;
 
-    /* "lineparser.pyx":304
+    /* "lineparser.pyx":307
  * 
  *     # file couldnt be opened
  *     if f == NULL:             # <<<<<<<<<<<<<<
@@ -4695,7 +4698,7 @@ static __pyx_t_10lineparser_ReadWholeFileResult __pyx_f_10lineparser_read_whole_
  */
   }
 
-  /* "lineparser.pyx":308
+  /* "lineparser.pyx":311
  *         errno = prev
  *         return r
  *     errno = prev             # <<<<<<<<<<<<<<
@@ -4704,7 +4707,7 @@ static __pyx_t_10lineparser_ReadWholeFileResult __pyx_f_10lineparser_read_whole_
  */
   errno = __pyx_v_prev;
 
-  /* "lineparser.pyx":310
+  /* "lineparser.pyx":313
  *     errno = prev
  * 
  *     if fseek(f, 0, SEEK_END) != 0:             # <<<<<<<<<<<<<<
@@ -4714,7 +4717,7 @@ static __pyx_t_10lineparser_ReadWholeFileResult __pyx_f_10lineparser_read_whole_
   __pyx_t_1 = ((fseek(__pyx_v_f, 0, SEEK_END) != 0) != 0);
   if (__pyx_t_1) {
 
-    /* "lineparser.pyx":311
+    /* "lineparser.pyx":314
  * 
  *     if fseek(f, 0, SEEK_END) != 0:
  *         r = make_io_err(ferror(f))             # <<<<<<<<<<<<<<
@@ -4723,7 +4726,7 @@ static __pyx_t_10lineparser_ReadWholeFileResult __pyx_f_10lineparser_read_whole_
  */
     __pyx_v_r = __pyx_f_10lineparser_make_io_err(ferror(__pyx_v_f));
 
-    /* "lineparser.pyx":312
+    /* "lineparser.pyx":315
  *     if fseek(f, 0, SEEK_END) != 0:
  *         r = make_io_err(ferror(f))
  *         fclose(f)             # <<<<<<<<<<<<<<
@@ -4732,7 +4735,7 @@ static __pyx_t_10lineparser_ReadWholeFileResult __pyx_f_10lineparser_read_whole_
  */
     (void)(fclose(__pyx_v_f));
 
-    /* "lineparser.pyx":313
+    /* "lineparser.pyx":316
  *         r = make_io_err(ferror(f))
  *         fclose(f)
  *         return r             # <<<<<<<<<<<<<<
@@ -4742,7 +4745,7 @@ static __pyx_t_10lineparser_ReadWholeFileResult __pyx_f_10lineparser_read_whole_
     __pyx_r = __pyx_v_r;
     goto __pyx_L0;
 
-    /* "lineparser.pyx":310
+    /* "lineparser.pyx":313
  *     errno = prev
  * 
  *     if fseek(f, 0, SEEK_END) != 0:             # <<<<<<<<<<<<<<
@@ -4751,7 +4754,7 @@ static __pyx_t_10lineparser_ReadWholeFileResult __pyx_f_10lineparser_read_whole_
  */
   }
 
-  /* "lineparser.pyx":315
+  /* "lineparser.pyx":318
  *         return r
  * 
  *     cdef long fsize = ftell(f)             # <<<<<<<<<<<<<<
@@ -4760,7 +4763,7 @@ static __pyx_t_10lineparser_ReadWholeFileResult __pyx_f_10lineparser_read_whole_
  */
   __pyx_v_fsize = ftell(__pyx_v_f);
 
-  /* "lineparser.pyx":316
+  /* "lineparser.pyx":319
  * 
  *     cdef long fsize = ftell(f)
  *     if fseek(f, 0, SEEK_SET) != 0:             # <<<<<<<<<<<<<<
@@ -4770,7 +4773,7 @@ static __pyx_t_10lineparser_ReadWholeFileResult __pyx_f_10lineparser_read_whole_
   __pyx_t_1 = ((fseek(__pyx_v_f, 0, SEEK_SET) != 0) != 0);
   if (__pyx_t_1) {
 
-    /* "lineparser.pyx":317
+    /* "lineparser.pyx":320
  *     cdef long fsize = ftell(f)
  *     if fseek(f, 0, SEEK_SET) != 0:
  *         r = make_io_err(ferror(f))             # <<<<<<<<<<<<<<
@@ -4779,7 +4782,7 @@ static __pyx_t_10lineparser_ReadWholeFileResult __pyx_f_10lineparser_read_whole_
  */
     __pyx_v_r = __pyx_f_10lineparser_make_io_err(ferror(__pyx_v_f));
 
-    /* "lineparser.pyx":318
+    /* "lineparser.pyx":321
  *     if fseek(f, 0, SEEK_SET) != 0:
  *         r = make_io_err(ferror(f))
  *         fclose(f)             # <<<<<<<<<<<<<<
@@ -4788,7 +4791,7 @@ static __pyx_t_10lineparser_ReadWholeFileResult __pyx_f_10lineparser_read_whole_
  */
     (void)(fclose(__pyx_v_f));
 
-    /* "lineparser.pyx":319
+    /* "lineparser.pyx":322
  *         r = make_io_err(ferror(f))
  *         fclose(f)
  *         return r             # <<<<<<<<<<<<<<
@@ -4798,7 +4801,7 @@ static __pyx_t_10lineparser_ReadWholeFileResult __pyx_f_10lineparser_read_whole_
     __pyx_r = __pyx_v_r;
     goto __pyx_L0;
 
-    /* "lineparser.pyx":316
+    /* "lineparser.pyx":319
  * 
  *     cdef long fsize = ftell(f)
  *     if fseek(f, 0, SEEK_SET) != 0:             # <<<<<<<<<<<<<<
@@ -4807,7 +4810,7 @@ static __pyx_t_10lineparser_ReadWholeFileResult __pyx_f_10lineparser_read_whole_
  */
   }
 
-  /* "lineparser.pyx":321
+  /* "lineparser.pyx":324
  *         return r
  * 
  *     cdef char *str = <char *> malloc(fsize + 1)             # <<<<<<<<<<<<<<
@@ -4816,7 +4819,7 @@ static __pyx_t_10lineparser_ReadWholeFileResult __pyx_f_10lineparser_read_whole_
  */
   __pyx_v_str = ((char *)malloc((__pyx_v_fsize + 1)));
 
-  /* "lineparser.pyx":322
+  /* "lineparser.pyx":325
  * 
  *     cdef char *str = <char *> malloc(fsize + 1)
  *     if str == NULL:             # <<<<<<<<<<<<<<
@@ -4826,7 +4829,7 @@ static __pyx_t_10lineparser_ReadWholeFileResult __pyx_f_10lineparser_read_whole_
   __pyx_t_1 = ((__pyx_v_str == NULL) != 0);
   if (__pyx_t_1) {
 
-    /* "lineparser.pyx":323
+    /* "lineparser.pyx":326
  *     cdef char *str = <char *> malloc(fsize + 1)
  *     if str == NULL:
  *         fclose(f)             # <<<<<<<<<<<<<<
@@ -4835,7 +4838,7 @@ static __pyx_t_10lineparser_ReadWholeFileResult __pyx_f_10lineparser_read_whole_
  */
     (void)(fclose(__pyx_v_f));
 
-    /* "lineparser.pyx":324
+    /* "lineparser.pyx":327
  *     if str == NULL:
  *         fclose(f)
  *         r.data = NULL             # <<<<<<<<<<<<<<
@@ -4844,7 +4847,7 @@ static __pyx_t_10lineparser_ReadWholeFileResult __pyx_f_10lineparser_read_whole_
  */
     __pyx_v_r.data = NULL;
 
-    /* "lineparser.pyx":325
+    /* "lineparser.pyx":328
  *         fclose(f)
  *         r.data = NULL
  *         r.data_len = 0             # <<<<<<<<<<<<<<
@@ -4853,7 +4856,7 @@ static __pyx_t_10lineparser_ReadWholeFileResult __pyx_f_10lineparser_read_whole_
  */
     __pyx_v_r.data_len = 0;
 
-    /* "lineparser.pyx":326
+    /* "lineparser.pyx":329
  *         r.data = NULL
  *         r.data_len = 0
  *         r.err = OUT_OF_MEMORY             # <<<<<<<<<<<<<<
@@ -4862,7 +4865,7 @@ static __pyx_t_10lineparser_ReadWholeFileResult __pyx_f_10lineparser_read_whole_
  */
     __pyx_v_r.err = __pyx_v_10lineparser_OUT_OF_MEMORY;
 
-    /* "lineparser.pyx":327
+    /* "lineparser.pyx":330
  *         r.data_len = 0
  *         r.err = OUT_OF_MEMORY
  *         return r             # <<<<<<<<<<<<<<
@@ -4872,7 +4875,7 @@ static __pyx_t_10lineparser_ReadWholeFileResult __pyx_f_10lineparser_read_whole_
     __pyx_r = __pyx_v_r;
     goto __pyx_L0;
 
-    /* "lineparser.pyx":322
+    /* "lineparser.pyx":325
  * 
  *     cdef char *str = <char *> malloc(fsize + 1)
  *     if str == NULL:             # <<<<<<<<<<<<<<
@@ -4881,7 +4884,7 @@ static __pyx_t_10lineparser_ReadWholeFileResult __pyx_f_10lineparser_read_whole_
  */
   }
 
-  /* "lineparser.pyx":331
+  /* "lineparser.pyx":334
  *     # Either premature EOF or error; almost certainly NOT EOF though since we just checked
  *     # the length of the file
  *     if fread(str, 1, fsize, f) != fsize:             # <<<<<<<<<<<<<<
@@ -4891,7 +4894,7 @@ static __pyx_t_10lineparser_ReadWholeFileResult __pyx_f_10lineparser_read_whole_
   __pyx_t_1 = ((fread(__pyx_v_str, 1, __pyx_v_fsize, __pyx_v_f) != __pyx_v_fsize) != 0);
   if (__pyx_t_1) {
 
-    /* "lineparser.pyx":332
+    /* "lineparser.pyx":335
  *     # the length of the file
  *     if fread(str, 1, fsize, f) != fsize:
  *         free(str)             # <<<<<<<<<<<<<<
@@ -4900,7 +4903,7 @@ static __pyx_t_10lineparser_ReadWholeFileResult __pyx_f_10lineparser_read_whole_
  */
     free(__pyx_v_str);
 
-    /* "lineparser.pyx":333
+    /* "lineparser.pyx":336
  *     if fread(str, 1, fsize, f) != fsize:
  *         free(str)
  *         r = make_io_err(ferror(f))             # <<<<<<<<<<<<<<
@@ -4909,7 +4912,7 @@ static __pyx_t_10lineparser_ReadWholeFileResult __pyx_f_10lineparser_read_whole_
  */
     __pyx_v_r = __pyx_f_10lineparser_make_io_err(ferror(__pyx_v_f));
 
-    /* "lineparser.pyx":334
+    /* "lineparser.pyx":337
  *         free(str)
  *         r = make_io_err(ferror(f))
  *         fclose(f)             # <<<<<<<<<<<<<<
@@ -4918,7 +4921,7 @@ static __pyx_t_10lineparser_ReadWholeFileResult __pyx_f_10lineparser_read_whole_
  */
     (void)(fclose(__pyx_v_f));
 
-    /* "lineparser.pyx":335
+    /* "lineparser.pyx":338
  *         r = make_io_err(ferror(f))
  *         fclose(f)
  *         return r             # <<<<<<<<<<<<<<
@@ -4928,7 +4931,7 @@ static __pyx_t_10lineparser_ReadWholeFileResult __pyx_f_10lineparser_read_whole_
     __pyx_r = __pyx_v_r;
     goto __pyx_L0;
 
-    /* "lineparser.pyx":331
+    /* "lineparser.pyx":334
  *     # Either premature EOF or error; almost certainly NOT EOF though since we just checked
  *     # the length of the file
  *     if fread(str, 1, fsize, f) != fsize:             # <<<<<<<<<<<<<<
@@ -4937,7 +4940,7 @@ static __pyx_t_10lineparser_ReadWholeFileResult __pyx_f_10lineparser_read_whole_
  */
   }
 
-  /* "lineparser.pyx":338
+  /* "lineparser.pyx":341
  * 
  *     # Null terminate
  *     str[fsize] = 0             # <<<<<<<<<<<<<<
@@ -4946,7 +4949,7 @@ static __pyx_t_10lineparser_ReadWholeFileResult __pyx_f_10lineparser_read_whole_
  */
   (__pyx_v_str[__pyx_v_fsize]) = 0;
 
-  /* "lineparser.pyx":340
+  /* "lineparser.pyx":343
  *     str[fsize] = 0
  * 
  *     fclose(f)             # <<<<<<<<<<<<<<
@@ -4955,7 +4958,7 @@ static __pyx_t_10lineparser_ReadWholeFileResult __pyx_f_10lineparser_read_whole_
  */
   (void)(fclose(__pyx_v_f));
 
-  /* "lineparser.pyx":341
+  /* "lineparser.pyx":344
  * 
  *     fclose(f)
  *     r.data = str             # <<<<<<<<<<<<<<
@@ -4964,7 +4967,7 @@ static __pyx_t_10lineparser_ReadWholeFileResult __pyx_f_10lineparser_read_whole_
  */
   __pyx_v_r.data = __pyx_v_str;
 
-  /* "lineparser.pyx":342
+  /* "lineparser.pyx":345
  *     fclose(f)
  *     r.data = str
  *     r.data_len = fsize             # <<<<<<<<<<<<<<
@@ -4973,7 +4976,7 @@ static __pyx_t_10lineparser_ReadWholeFileResult __pyx_f_10lineparser_read_whole_
  */
   __pyx_v_r.data_len = __pyx_v_fsize;
 
-  /* "lineparser.pyx":343
+  /* "lineparser.pyx":346
  *     r.data = str
  *     r.data_len = fsize
  *     r.err = 0             # <<<<<<<<<<<<<<
@@ -4982,7 +4985,7 @@ static __pyx_t_10lineparser_ReadWholeFileResult __pyx_f_10lineparser_read_whole_
  */
   __pyx_v_r.err = 0;
 
-  /* "lineparser.pyx":344
+  /* "lineparser.pyx":347
  *     r.data_len = fsize
  *     r.err = 0
  *     return r             # <<<<<<<<<<<<<<
@@ -4992,7 +4995,7 @@ static __pyx_t_10lineparser_ReadWholeFileResult __pyx_f_10lineparser_read_whole_
   __pyx_r = __pyx_v_r;
   goto __pyx_L0;
 
-  /* "lineparser.pyx":296
+  /* "lineparser.pyx":299
  *     return r
  * 
  * cdef ReadWholeFileResult read_whole_file(char *path):             # <<<<<<<<<<<<<<
@@ -5006,7 +5009,7 @@ static __pyx_t_10lineparser_ReadWholeFileResult __pyx_f_10lineparser_read_whole_
   return __pyx_r;
 }
 
-/* "lineparser.pyx":346
+/* "lineparser.pyx":349
  *     return r
  * 
  * cdef (Field *, int) make_fields(list fields):             # <<<<<<<<<<<<<<
@@ -5040,7 +5043,7 @@ static __pyx_ctuple___dunderpyx_t_10lineparser_Field__ptr__and_int __pyx_f_10lin
   int __pyx_t_15;
   __Pyx_RefNannySetupContext("make_fields", 0);
 
-  /* "lineparser.pyx":357
+  /* "lineparser.pyx":360
  * 
  *     cdef int nfields
  *     cdef Field *cfields = NULL             # <<<<<<<<<<<<<<
@@ -5049,7 +5052,7 @@ static __pyx_ctuple___dunderpyx_t_10lineparser_Field__ptr__and_int __pyx_f_10lin
  */
   __pyx_v_cfields = NULL;
 
-  /* "lineparser.pyx":358
+  /* "lineparser.pyx":361
  *     cdef int nfields
  *     cdef Field *cfields = NULL
  *     cdef int i = 0             # <<<<<<<<<<<<<<
@@ -5058,7 +5061,7 @@ static __pyx_ctuple___dunderpyx_t_10lineparser_Field__ptr__and_int __pyx_f_10lin
  */
   __pyx_v_i = 0;
 
-  /* "lineparser.pyx":359
+  /* "lineparser.pyx":362
  *     cdef Field *cfields = NULL
  *     cdef int i = 0
  *     try:             # <<<<<<<<<<<<<<
@@ -5074,7 +5077,7 @@ static __pyx_ctuple___dunderpyx_t_10lineparser_Field__ptr__and_int __pyx_f_10lin
     __Pyx_XGOTREF(__pyx_t_3);
     /*try:*/ {
 
-      /* "lineparser.pyx":360
+      /* "lineparser.pyx":363
  *     cdef int i = 0
  *     try:
  *         nfields = len(fields)             # <<<<<<<<<<<<<<
@@ -5083,12 +5086,12 @@ static __pyx_ctuple___dunderpyx_t_10lineparser_Field__ptr__and_int __pyx_f_10lin
  */
       if (unlikely(__pyx_v_fields == Py_None)) {
         PyErr_SetString(PyExc_TypeError, "object of type 'NoneType' has no len()");
-        __PYX_ERR(0, 360, __pyx_L3_error)
+        __PYX_ERR(0, 363, __pyx_L3_error)
       }
-      __pyx_t_4 = PyList_GET_SIZE(__pyx_v_fields); if (unlikely(__pyx_t_4 == ((Py_ssize_t)-1))) __PYX_ERR(0, 360, __pyx_L3_error)
+      __pyx_t_4 = PyList_GET_SIZE(__pyx_v_fields); if (unlikely(__pyx_t_4 == ((Py_ssize_t)-1))) __PYX_ERR(0, 363, __pyx_L3_error)
       __pyx_v_nfields = __pyx_t_4;
 
-      /* "lineparser.pyx":361
+      /* "lineparser.pyx":364
  *     try:
  *         nfields = len(fields)
  *         cfields = <Field *> malloc(sizeof(Field) * nfields)             # <<<<<<<<<<<<<<
@@ -5097,7 +5100,7 @@ static __pyx_ctuple___dunderpyx_t_10lineparser_Field__ptr__and_int __pyx_f_10lin
  */
       __pyx_v_cfields = ((__pyx_t_10lineparser_Field *)malloc(((sizeof(__pyx_t_10lineparser_Field)) * __pyx_v_nfields)));
 
-      /* "lineparser.pyx":364
+      /* "lineparser.pyx":367
  * 
  *         # Check if allocation failed
  *         if cfields == NULL:             # <<<<<<<<<<<<<<
@@ -5107,7 +5110,7 @@ static __pyx_ctuple___dunderpyx_t_10lineparser_Field__ptr__and_int __pyx_f_10lin
       __pyx_t_5 = ((__pyx_v_cfields == NULL) != 0);
       if (__pyx_t_5) {
 
-        /* "lineparser.pyx":365
+        /* "lineparser.pyx":368
  *         # Check if allocation failed
  *         if cfields == NULL:
  *             return NULL, 0             # <<<<<<<<<<<<<<
@@ -5119,7 +5122,7 @@ static __pyx_ctuple___dunderpyx_t_10lineparser_Field__ptr__and_int __pyx_f_10lin
         __pyx_r = __pyx_t_6;
         goto __pyx_L7_try_return;
 
-        /* "lineparser.pyx":364
+        /* "lineparser.pyx":367
  * 
  *         # Check if allocation failed
  *         if cfields == NULL:             # <<<<<<<<<<<<<<
@@ -5128,7 +5131,7 @@ static __pyx_ctuple___dunderpyx_t_10lineparser_Field__ptr__and_int __pyx_f_10lin
  */
       }
 
-      /* "lineparser.pyx":366
+      /* "lineparser.pyx":369
  *         if cfields == NULL:
  *             return NULL, 0
  *         for (ty, length) in fields:             # <<<<<<<<<<<<<<
@@ -5137,15 +5140,15 @@ static __pyx_ctuple___dunderpyx_t_10lineparser_Field__ptr__and_int __pyx_f_10lin
  */
       if (unlikely(__pyx_v_fields == Py_None)) {
         PyErr_SetString(PyExc_TypeError, "'NoneType' object is not iterable");
-        __PYX_ERR(0, 366, __pyx_L3_error)
+        __PYX_ERR(0, 369, __pyx_L3_error)
       }
       __pyx_t_7 = __pyx_v_fields; __Pyx_INCREF(__pyx_t_7); __pyx_t_4 = 0;
       for (;;) {
         if (__pyx_t_4 >= PyList_GET_SIZE(__pyx_t_7)) break;
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_8 = PyList_GET_ITEM(__pyx_t_7, __pyx_t_4); __Pyx_INCREF(__pyx_t_8); __pyx_t_4++; if (unlikely(0 < 0)) __PYX_ERR(0, 366, __pyx_L3_error)
+        __pyx_t_8 = PyList_GET_ITEM(__pyx_t_7, __pyx_t_4); __Pyx_INCREF(__pyx_t_8); __pyx_t_4++; if (unlikely(0 < 0)) __PYX_ERR(0, 369, __pyx_L3_error)
         #else
-        __pyx_t_8 = PySequence_ITEM(__pyx_t_7, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 366, __pyx_L3_error)
+        __pyx_t_8 = PySequence_ITEM(__pyx_t_7, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 369, __pyx_L3_error)
         __Pyx_GOTREF(__pyx_t_8);
         #endif
         if ((likely(PyTuple_CheckExact(__pyx_t_8))) || (PyList_CheckExact(__pyx_t_8))) {
@@ -5154,7 +5157,7 @@ static __pyx_ctuple___dunderpyx_t_10lineparser_Field__ptr__and_int __pyx_f_10lin
           if (unlikely(size != 2)) {
             if (size > 2) __Pyx_RaiseTooManyValuesError(2);
             else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
-            __PYX_ERR(0, 366, __pyx_L3_error)
+            __PYX_ERR(0, 369, __pyx_L3_error)
           }
           #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
           if (likely(PyTuple_CheckExact(sequence))) {
@@ -5167,15 +5170,15 @@ static __pyx_ctuple___dunderpyx_t_10lineparser_Field__ptr__and_int __pyx_f_10lin
           __Pyx_INCREF(__pyx_t_9);
           __Pyx_INCREF(__pyx_t_10);
           #else
-          __pyx_t_9 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 366, __pyx_L3_error)
+          __pyx_t_9 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 369, __pyx_L3_error)
           __Pyx_GOTREF(__pyx_t_9);
-          __pyx_t_10 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 366, __pyx_L3_error)
+          __pyx_t_10 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 369, __pyx_L3_error)
           __Pyx_GOTREF(__pyx_t_10);
           #endif
           __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
         } else {
           Py_ssize_t index = -1;
-          __pyx_t_11 = PyObject_GetIter(__pyx_t_8); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 366, __pyx_L3_error)
+          __pyx_t_11 = PyObject_GetIter(__pyx_t_8); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 369, __pyx_L3_error)
           __Pyx_GOTREF(__pyx_t_11);
           __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
           __pyx_t_12 = Py_TYPE(__pyx_t_11)->tp_iternext;
@@ -5183,7 +5186,7 @@ static __pyx_ctuple___dunderpyx_t_10lineparser_Field__ptr__and_int __pyx_f_10lin
           __Pyx_GOTREF(__pyx_t_9);
           index = 1; __pyx_t_10 = __pyx_t_12(__pyx_t_11); if (unlikely(!__pyx_t_10)) goto __pyx_L12_unpacking_failed;
           __Pyx_GOTREF(__pyx_t_10);
-          if (__Pyx_IternextUnpackEndCheck(__pyx_t_12(__pyx_t_11), 2) < 0) __PYX_ERR(0, 366, __pyx_L3_error)
+          if (__Pyx_IternextUnpackEndCheck(__pyx_t_12(__pyx_t_11), 2) < 0) __PYX_ERR(0, 369, __pyx_L3_error)
           __pyx_t_12 = NULL;
           __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
           goto __pyx_L13_unpacking_done;
@@ -5191,7 +5194,7 @@ static __pyx_ctuple___dunderpyx_t_10lineparser_Field__ptr__and_int __pyx_f_10lin
           __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
           __pyx_t_12 = NULL;
           if (__Pyx_IterFinish() == 0) __Pyx_RaiseNeedMoreValuesError(index);
-          __PYX_ERR(0, 366, __pyx_L3_error)
+          __PYX_ERR(0, 369, __pyx_L3_error)
           __pyx_L13_unpacking_done:;
         }
         __Pyx_XDECREF_SET(__pyx_v_ty, __pyx_t_9);
@@ -5199,26 +5202,26 @@ static __pyx_ctuple___dunderpyx_t_10lineparser_Field__ptr__and_int __pyx_f_10lin
         __Pyx_XDECREF_SET(__pyx_v_length, __pyx_t_10);
         __pyx_t_10 = 0;
 
-        /* "lineparser.pyx":367
+        /* "lineparser.pyx":370
  *             return NULL, 0
  *         for (ty, length) in fields:
  *             if type(length) != int:             # <<<<<<<<<<<<<<
  *                 raise Exception("Expected type int for length, instead got {}".format(type(length)))
  *             if type(ty) != Ty:
  */
-        __pyx_t_8 = PyObject_RichCompare(((PyObject *)Py_TYPE(__pyx_v_length)), ((PyObject *)(&PyInt_Type)), Py_NE); __Pyx_XGOTREF(__pyx_t_8); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 367, __pyx_L3_error)
-        __pyx_t_5 = __Pyx_PyObject_IsTrue(__pyx_t_8); if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(0, 367, __pyx_L3_error)
+        __pyx_t_8 = PyObject_RichCompare(((PyObject *)Py_TYPE(__pyx_v_length)), ((PyObject *)(&PyInt_Type)), Py_NE); __Pyx_XGOTREF(__pyx_t_8); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 370, __pyx_L3_error)
+        __pyx_t_5 = __Pyx_PyObject_IsTrue(__pyx_t_8); if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(0, 370, __pyx_L3_error)
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
         if (unlikely(__pyx_t_5)) {
 
-          /* "lineparser.pyx":368
+          /* "lineparser.pyx":371
  *         for (ty, length) in fields:
  *             if type(length) != int:
  *                 raise Exception("Expected type int for length, instead got {}".format(type(length)))             # <<<<<<<<<<<<<<
  *             if type(ty) != Ty:
  *                 if type(ty) == int:
  */
-          __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_Expected_type_int_for_length_ins, __pyx_n_s_format); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 368, __pyx_L3_error)
+          __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_Expected_type_int_for_length_ins, __pyx_n_s_format); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 371, __pyx_L3_error)
           __Pyx_GOTREF(__pyx_t_10);
           __pyx_t_9 = NULL;
           if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_10))) {
@@ -5232,17 +5235,17 @@ static __pyx_ctuple___dunderpyx_t_10lineparser_Field__ptr__and_int __pyx_f_10lin
           }
           __pyx_t_8 = (__pyx_t_9) ? __Pyx_PyObject_Call2Args(__pyx_t_10, __pyx_t_9, ((PyObject *)Py_TYPE(__pyx_v_length))) : __Pyx_PyObject_CallOneArg(__pyx_t_10, ((PyObject *)Py_TYPE(__pyx_v_length)));
           __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
-          if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 368, __pyx_L3_error)
+          if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 371, __pyx_L3_error)
           __Pyx_GOTREF(__pyx_t_8);
           __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-          __pyx_t_10 = __Pyx_PyObject_CallOneArg(((PyObject *)(&((PyTypeObject*)PyExc_Exception)[0])), __pyx_t_8); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 368, __pyx_L3_error)
+          __pyx_t_10 = __Pyx_PyObject_CallOneArg(((PyObject *)(&((PyTypeObject*)PyExc_Exception)[0])), __pyx_t_8); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 371, __pyx_L3_error)
           __Pyx_GOTREF(__pyx_t_10);
           __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
           __Pyx_Raise(__pyx_t_10, 0, 0, 0);
           __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-          __PYX_ERR(0, 368, __pyx_L3_error)
+          __PYX_ERR(0, 371, __pyx_L3_error)
 
-          /* "lineparser.pyx":367
+          /* "lineparser.pyx":370
  *             return NULL, 0
  *         for (ty, length) in fields:
  *             if type(length) != int:             # <<<<<<<<<<<<<<
@@ -5251,66 +5254,66 @@ static __pyx_ctuple___dunderpyx_t_10lineparser_Field__ptr__and_int __pyx_f_10lin
  */
         }
 
-        /* "lineparser.pyx":369
+        /* "lineparser.pyx":372
  *             if type(length) != int:
  *                 raise Exception("Expected type int for length, instead got {}".format(type(length)))
  *             if type(ty) != Ty:             # <<<<<<<<<<<<<<
  *                 if type(ty) == int:
  *                     if ty > MAX_T or ty < 0:
  */
-        __Pyx_GetModuleGlobalName(__pyx_t_10, __pyx_n_s_Ty); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 369, __pyx_L3_error)
+        __Pyx_GetModuleGlobalName(__pyx_t_10, __pyx_n_s_Ty); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 372, __pyx_L3_error)
         __Pyx_GOTREF(__pyx_t_10);
-        __pyx_t_8 = PyObject_RichCompare(((PyObject *)Py_TYPE(__pyx_v_ty)), __pyx_t_10, Py_NE); __Pyx_XGOTREF(__pyx_t_8); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 369, __pyx_L3_error)
+        __pyx_t_8 = PyObject_RichCompare(((PyObject *)Py_TYPE(__pyx_v_ty)), __pyx_t_10, Py_NE); __Pyx_XGOTREF(__pyx_t_8); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 372, __pyx_L3_error)
         __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-        __pyx_t_5 = __Pyx_PyObject_IsTrue(__pyx_t_8); if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(0, 369, __pyx_L3_error)
+        __pyx_t_5 = __Pyx_PyObject_IsTrue(__pyx_t_8); if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(0, 372, __pyx_L3_error)
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
         if (__pyx_t_5) {
 
-          /* "lineparser.pyx":370
+          /* "lineparser.pyx":373
  *                 raise Exception("Expected type int for length, instead got {}".format(type(length)))
  *             if type(ty) != Ty:
  *                 if type(ty) == int:             # <<<<<<<<<<<<<<
  *                     if ty > MAX_T or ty < 0:
  *                         raise Exception("Invalid ty id {}".format(ty))
  */
-          __pyx_t_8 = PyObject_RichCompare(((PyObject *)Py_TYPE(__pyx_v_ty)), ((PyObject *)(&PyInt_Type)), Py_EQ); __Pyx_XGOTREF(__pyx_t_8); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 370, __pyx_L3_error)
-          __pyx_t_5 = __Pyx_PyObject_IsTrue(__pyx_t_8); if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(0, 370, __pyx_L3_error)
+          __pyx_t_8 = PyObject_RichCompare(((PyObject *)Py_TYPE(__pyx_v_ty)), ((PyObject *)(&PyInt_Type)), Py_EQ); __Pyx_XGOTREF(__pyx_t_8); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 373, __pyx_L3_error)
+          __pyx_t_5 = __Pyx_PyObject_IsTrue(__pyx_t_8); if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(0, 373, __pyx_L3_error)
           __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
           if (likely(__pyx_t_5)) {
 
-            /* "lineparser.pyx":371
+            /* "lineparser.pyx":374
  *             if type(ty) != Ty:
  *                 if type(ty) == int:
  *                     if ty > MAX_T or ty < 0:             # <<<<<<<<<<<<<<
  *                         raise Exception("Invalid ty id {}".format(ty))
  *                 else:
  */
-            __pyx_t_8 = __Pyx_PyInt_From_int(__pyx_v_10lineparser_MAX_T); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 371, __pyx_L3_error)
+            __pyx_t_8 = __Pyx_PyInt_From_int(__pyx_v_10lineparser_MAX_T); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 374, __pyx_L3_error)
             __Pyx_GOTREF(__pyx_t_8);
-            __pyx_t_10 = PyObject_RichCompare(__pyx_v_ty, __pyx_t_8, Py_GT); __Pyx_XGOTREF(__pyx_t_10); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 371, __pyx_L3_error)
+            __pyx_t_10 = PyObject_RichCompare(__pyx_v_ty, __pyx_t_8, Py_GT); __Pyx_XGOTREF(__pyx_t_10); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 374, __pyx_L3_error)
             __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-            __pyx_t_13 = __Pyx_PyObject_IsTrue(__pyx_t_10); if (unlikely(__pyx_t_13 < 0)) __PYX_ERR(0, 371, __pyx_L3_error)
+            __pyx_t_13 = __Pyx_PyObject_IsTrue(__pyx_t_10); if (unlikely(__pyx_t_13 < 0)) __PYX_ERR(0, 374, __pyx_L3_error)
             __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
             if (!__pyx_t_13) {
             } else {
               __pyx_t_5 = __pyx_t_13;
               goto __pyx_L18_bool_binop_done;
             }
-            __pyx_t_10 = PyObject_RichCompare(__pyx_v_ty, __pyx_int_0, Py_LT); __Pyx_XGOTREF(__pyx_t_10); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 371, __pyx_L3_error)
-            __pyx_t_13 = __Pyx_PyObject_IsTrue(__pyx_t_10); if (unlikely(__pyx_t_13 < 0)) __PYX_ERR(0, 371, __pyx_L3_error)
+            __pyx_t_10 = PyObject_RichCompare(__pyx_v_ty, __pyx_int_0, Py_LT); __Pyx_XGOTREF(__pyx_t_10); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 374, __pyx_L3_error)
+            __pyx_t_13 = __Pyx_PyObject_IsTrue(__pyx_t_10); if (unlikely(__pyx_t_13 < 0)) __PYX_ERR(0, 374, __pyx_L3_error)
             __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
             __pyx_t_5 = __pyx_t_13;
             __pyx_L18_bool_binop_done:;
             if (unlikely(__pyx_t_5)) {
 
-              /* "lineparser.pyx":372
+              /* "lineparser.pyx":375
  *                 if type(ty) == int:
  *                     if ty > MAX_T or ty < 0:
  *                         raise Exception("Invalid ty id {}".format(ty))             # <<<<<<<<<<<<<<
  *                 else:
  *                     raise Exception("Expected int or Ty for ty field, instead got {}".format(type(ty)))
  */
-              __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_Invalid_ty_id, __pyx_n_s_format); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 372, __pyx_L3_error)
+              __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_Invalid_ty_id, __pyx_n_s_format); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 375, __pyx_L3_error)
               __Pyx_GOTREF(__pyx_t_8);
               __pyx_t_9 = NULL;
               if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_8))) {
@@ -5324,17 +5327,17 @@ static __pyx_ctuple___dunderpyx_t_10lineparser_Field__ptr__and_int __pyx_f_10lin
               }
               __pyx_t_10 = (__pyx_t_9) ? __Pyx_PyObject_Call2Args(__pyx_t_8, __pyx_t_9, __pyx_v_ty) : __Pyx_PyObject_CallOneArg(__pyx_t_8, __pyx_v_ty);
               __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
-              if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 372, __pyx_L3_error)
+              if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 375, __pyx_L3_error)
               __Pyx_GOTREF(__pyx_t_10);
               __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-              __pyx_t_8 = __Pyx_PyObject_CallOneArg(((PyObject *)(&((PyTypeObject*)PyExc_Exception)[0])), __pyx_t_10); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 372, __pyx_L3_error)
+              __pyx_t_8 = __Pyx_PyObject_CallOneArg(((PyObject *)(&((PyTypeObject*)PyExc_Exception)[0])), __pyx_t_10); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 375, __pyx_L3_error)
               __Pyx_GOTREF(__pyx_t_8);
               __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
               __Pyx_Raise(__pyx_t_8, 0, 0, 0);
               __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-              __PYX_ERR(0, 372, __pyx_L3_error)
+              __PYX_ERR(0, 375, __pyx_L3_error)
 
-              /* "lineparser.pyx":371
+              /* "lineparser.pyx":374
  *             if type(ty) != Ty:
  *                 if type(ty) == int:
  *                     if ty > MAX_T or ty < 0:             # <<<<<<<<<<<<<<
@@ -5343,7 +5346,7 @@ static __pyx_ctuple___dunderpyx_t_10lineparser_Field__ptr__and_int __pyx_f_10lin
  */
             }
 
-            /* "lineparser.pyx":370
+            /* "lineparser.pyx":373
  *                 raise Exception("Expected type int for length, instead got {}".format(type(length)))
  *             if type(ty) != Ty:
  *                 if type(ty) == int:             # <<<<<<<<<<<<<<
@@ -5353,7 +5356,7 @@ static __pyx_ctuple___dunderpyx_t_10lineparser_Field__ptr__and_int __pyx_f_10lin
             goto __pyx_L16;
           }
 
-          /* "lineparser.pyx":374
+          /* "lineparser.pyx":377
  *                         raise Exception("Invalid ty id {}".format(ty))
  *                 else:
  *                     raise Exception("Expected int or Ty for ty field, instead got {}".format(type(ty)))             # <<<<<<<<<<<<<<
@@ -5361,7 +5364,7 @@ static __pyx_ctuple___dunderpyx_t_10lineparser_Field__ptr__and_int __pyx_f_10lin
  *             cfields[i].ty = ty
  */
           /*else*/ {
-            __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_Expected_int_or_Ty_for_ty_field, __pyx_n_s_format); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 374, __pyx_L3_error)
+            __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_Expected_int_or_Ty_for_ty_field, __pyx_n_s_format); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 377, __pyx_L3_error)
             __Pyx_GOTREF(__pyx_t_10);
             __pyx_t_9 = NULL;
             if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_10))) {
@@ -5375,19 +5378,19 @@ static __pyx_ctuple___dunderpyx_t_10lineparser_Field__ptr__and_int __pyx_f_10lin
             }
             __pyx_t_8 = (__pyx_t_9) ? __Pyx_PyObject_Call2Args(__pyx_t_10, __pyx_t_9, ((PyObject *)Py_TYPE(__pyx_v_ty))) : __Pyx_PyObject_CallOneArg(__pyx_t_10, ((PyObject *)Py_TYPE(__pyx_v_ty)));
             __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
-            if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 374, __pyx_L3_error)
+            if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 377, __pyx_L3_error)
             __Pyx_GOTREF(__pyx_t_8);
             __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-            __pyx_t_10 = __Pyx_PyObject_CallOneArg(((PyObject *)(&((PyTypeObject*)PyExc_Exception)[0])), __pyx_t_8); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 374, __pyx_L3_error)
+            __pyx_t_10 = __Pyx_PyObject_CallOneArg(((PyObject *)(&((PyTypeObject*)PyExc_Exception)[0])), __pyx_t_8); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 377, __pyx_L3_error)
             __Pyx_GOTREF(__pyx_t_10);
             __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
             __Pyx_Raise(__pyx_t_10, 0, 0, 0);
             __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-            __PYX_ERR(0, 374, __pyx_L3_error)
+            __PYX_ERR(0, 377, __pyx_L3_error)
           }
           __pyx_L16:;
 
-          /* "lineparser.pyx":369
+          /* "lineparser.pyx":372
  *             if type(length) != int:
  *                 raise Exception("Expected type int for length, instead got {}".format(type(length)))
  *             if type(ty) != Ty:             # <<<<<<<<<<<<<<
@@ -5396,27 +5399,27 @@ static __pyx_ctuple___dunderpyx_t_10lineparser_Field__ptr__and_int __pyx_f_10lin
  */
         }
 
-        /* "lineparser.pyx":376
+        /* "lineparser.pyx":379
  *                     raise Exception("Expected int or Ty for ty field, instead got {}".format(type(ty)))
  * 
  *             cfields[i].ty = ty             # <<<<<<<<<<<<<<
  *             cfields[i].len = length
  *             i += 1
  */
-        __pyx_t_14 = ((enum __pyx_t_10lineparser_Ty)__Pyx_PyInt_As_enum____pyx_t_10lineparser_Ty(__pyx_v_ty)); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 376, __pyx_L3_error)
+        __pyx_t_14 = ((enum __pyx_t_10lineparser_Ty)__Pyx_PyInt_As_enum____pyx_t_10lineparser_Ty(__pyx_v_ty)); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 379, __pyx_L3_error)
         (__pyx_v_cfields[__pyx_v_i]).ty = __pyx_t_14;
 
-        /* "lineparser.pyx":377
+        /* "lineparser.pyx":380
  * 
  *             cfields[i].ty = ty
  *             cfields[i].len = length             # <<<<<<<<<<<<<<
  *             i += 1
  *         return cfields, nfields
  */
-        __pyx_t_15 = __Pyx_PyInt_As_int(__pyx_v_length); if (unlikely((__pyx_t_15 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 377, __pyx_L3_error)
+        __pyx_t_15 = __Pyx_PyInt_As_int(__pyx_v_length); if (unlikely((__pyx_t_15 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 380, __pyx_L3_error)
         (__pyx_v_cfields[__pyx_v_i]).len = __pyx_t_15;
 
-        /* "lineparser.pyx":378
+        /* "lineparser.pyx":381
  *             cfields[i].ty = ty
  *             cfields[i].len = length
  *             i += 1             # <<<<<<<<<<<<<<
@@ -5425,7 +5428,7 @@ static __pyx_ctuple___dunderpyx_t_10lineparser_Field__ptr__and_int __pyx_f_10lin
  */
         __pyx_v_i = (__pyx_v_i + 1);
 
-        /* "lineparser.pyx":366
+        /* "lineparser.pyx":369
  *         if cfields == NULL:
  *             return NULL, 0
  *         for (ty, length) in fields:             # <<<<<<<<<<<<<<
@@ -5435,7 +5438,7 @@ static __pyx_ctuple___dunderpyx_t_10lineparser_Field__ptr__and_int __pyx_f_10lin
       }
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-      /* "lineparser.pyx":379
+      /* "lineparser.pyx":382
  *             cfields[i].len = length
  *             i += 1
  *         return cfields, nfields             # <<<<<<<<<<<<<<
@@ -5447,7 +5450,7 @@ static __pyx_ctuple___dunderpyx_t_10lineparser_Field__ptr__and_int __pyx_f_10lin
       __pyx_r = __pyx_t_6;
       goto __pyx_L7_try_return;
 
-      /* "lineparser.pyx":359
+      /* "lineparser.pyx":362
  *     cdef Field *cfields = NULL
  *     cdef int i = 0
  *     try:             # <<<<<<<<<<<<<<
@@ -5462,7 +5465,7 @@ static __pyx_ctuple___dunderpyx_t_10lineparser_Field__ptr__and_int __pyx_f_10lin
     __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
     __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
 
-    /* "lineparser.pyx":380
+    /* "lineparser.pyx":383
  *             i += 1
  *         return cfields, nfields
  *     except Exception as e:             # <<<<<<<<<<<<<<
@@ -5472,29 +5475,29 @@ static __pyx_ctuple___dunderpyx_t_10lineparser_Field__ptr__and_int __pyx_f_10lin
     __pyx_t_15 = __Pyx_PyErr_ExceptionMatches(((PyObject *)(&((PyTypeObject*)PyExc_Exception)[0])));
     if (__pyx_t_15) {
       __Pyx_AddTraceback("lineparser.make_fields", __pyx_clineno, __pyx_lineno, __pyx_filename);
-      if (__Pyx_GetException(&__pyx_t_7, &__pyx_t_10, &__pyx_t_8) < 0) __PYX_ERR(0, 380, __pyx_L5_except_error)
+      if (__Pyx_GetException(&__pyx_t_7, &__pyx_t_10, &__pyx_t_8) < 0) __PYX_ERR(0, 383, __pyx_L5_except_error)
       __Pyx_GOTREF(__pyx_t_7);
       __Pyx_GOTREF(__pyx_t_10);
       __Pyx_GOTREF(__pyx_t_8);
       __Pyx_INCREF(__pyx_t_10);
       __pyx_v_e = __pyx_t_10;
 
-      /* "lineparser.pyx":381
+      /* "lineparser.pyx":384
  *         return cfields, nfields
  *     except Exception as e:
  *         print(f"Got exception {e}")             # <<<<<<<<<<<<<<
  *         if cfields != NULL:
  *             free(cfields)
  */
-      __pyx_t_9 = __Pyx_PyObject_FormatSimple(__pyx_v_e, __pyx_empty_unicode); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 381, __pyx_L5_except_error)
+      __pyx_t_9 = __Pyx_PyObject_FormatSimple(__pyx_v_e, __pyx_empty_unicode); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 384, __pyx_L5_except_error)
       __Pyx_GOTREF(__pyx_t_9);
-      __pyx_t_11 = __Pyx_PyUnicode_Concat(__pyx_kp_u_Got_exception, __pyx_t_9); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 381, __pyx_L5_except_error)
+      __pyx_t_11 = __Pyx_PyUnicode_Concat(__pyx_kp_u_Got_exception, __pyx_t_9); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 384, __pyx_L5_except_error)
       __Pyx_GOTREF(__pyx_t_11);
       __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-      if (__Pyx_PrintOne(0, __pyx_t_11) < 0) __PYX_ERR(0, 381, __pyx_L5_except_error)
+      if (__Pyx_PrintOne(0, __pyx_t_11) < 0) __PYX_ERR(0, 384, __pyx_L5_except_error)
       __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
 
-      /* "lineparser.pyx":382
+      /* "lineparser.pyx":385
  *     except Exception as e:
  *         print(f"Got exception {e}")
  *         if cfields != NULL:             # <<<<<<<<<<<<<<
@@ -5504,7 +5507,7 @@ static __pyx_ctuple___dunderpyx_t_10lineparser_Field__ptr__and_int __pyx_f_10lin
       __pyx_t_5 = ((__pyx_v_cfields != NULL) != 0);
       if (__pyx_t_5) {
 
-        /* "lineparser.pyx":383
+        /* "lineparser.pyx":386
  *         print(f"Got exception {e}")
  *         if cfields != NULL:
  *             free(cfields)             # <<<<<<<<<<<<<<
@@ -5513,7 +5516,7 @@ static __pyx_ctuple___dunderpyx_t_10lineparser_Field__ptr__and_int __pyx_f_10lin
  */
         free(__pyx_v_cfields);
 
-        /* "lineparser.pyx":384
+        /* "lineparser.pyx":387
  *         if cfields != NULL:
  *             free(cfields)
  *             cfields = NULL             # <<<<<<<<<<<<<<
@@ -5522,7 +5525,7 @@ static __pyx_ctuple___dunderpyx_t_10lineparser_Field__ptr__and_int __pyx_f_10lin
  */
         __pyx_v_cfields = NULL;
 
-        /* "lineparser.pyx":382
+        /* "lineparser.pyx":385
  *     except Exception as e:
  *         print(f"Got exception {e}")
  *         if cfields != NULL:             # <<<<<<<<<<<<<<
@@ -5531,12 +5534,12 @@ static __pyx_ctuple___dunderpyx_t_10lineparser_Field__ptr__and_int __pyx_f_10lin
  */
       }
 
-      /* "lineparser.pyx":385
+      /* "lineparser.pyx":388
  *             free(cfields)
  *             cfields = NULL
  *         return cfields, -1             # <<<<<<<<<<<<<<
  * 
- * def t(list pyfields, bytes filename):
+ * """
  */
       __pyx_t_6.f0 = __pyx_v_cfields;
       __pyx_t_6.f1 = -1;
@@ -5549,7 +5552,7 @@ static __pyx_ctuple___dunderpyx_t_10lineparser_Field__ptr__and_int __pyx_f_10lin
     goto __pyx_L5_except_error;
     __pyx_L5_except_error:;
 
-    /* "lineparser.pyx":359
+    /* "lineparser.pyx":362
  *     cdef Field *cfields = NULL
  *     cdef int i = 0
  *     try:             # <<<<<<<<<<<<<<
@@ -5575,7 +5578,7 @@ static __pyx_ctuple___dunderpyx_t_10lineparser_Field__ptr__and_int __pyx_f_10lin
     goto __pyx_L0;
   }
 
-  /* "lineparser.pyx":346
+  /* "lineparser.pyx":349
  *     return r
  * 
  * cdef (Field *, int) make_fields(list fields):             # <<<<<<<<<<<<<<
@@ -5600,23 +5603,23 @@ static __pyx_ctuple___dunderpyx_t_10lineparser_Field__ptr__and_int __pyx_f_10lin
   return __pyx_r;
 }
 
-/* "lineparser.pyx":387
- *         return cfields, -1
+/* "lineparser.pyx":437
+ * """
  * 
- * def t(list pyfields, bytes filename):             # <<<<<<<<<<<<<<
+ * def parse(list pyfields, bytes filename):             # <<<<<<<<<<<<<<
  *     cdef ReadWholeFileResult file_res = read_whole_file(filename)
  *     if file_res.err != 0:
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_10lineparser_1t(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyMethodDef __pyx_mdef_10lineparser_1t = {"t", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_10lineparser_1t, METH_VARARGS|METH_KEYWORDS, 0};
-static PyObject *__pyx_pw_10lineparser_1t(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_10lineparser_1parse(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyMethodDef __pyx_mdef_10lineparser_1parse = {"parse", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_10lineparser_1parse, METH_VARARGS|METH_KEYWORDS, 0};
+static PyObject *__pyx_pw_10lineparser_1parse(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_pyfields = 0;
   PyObject *__pyx_v_filename = 0;
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("t (wrapper)", 0);
+  __Pyx_RefNannySetupContext("parse (wrapper)", 0);
   {
     static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_pyfields,&__pyx_n_s_filename,0};
     PyObject* values[2] = {0,0};
@@ -5640,11 +5643,11 @@ static PyObject *__pyx_pw_10lineparser_1t(PyObject *__pyx_self, PyObject *__pyx_
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_filename)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("t", 1, 2, 2, 1); __PYX_ERR(0, 387, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("parse", 1, 2, 2, 1); __PYX_ERR(0, 437, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "t") < 0)) __PYX_ERR(0, 387, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "parse") < 0)) __PYX_ERR(0, 437, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -5657,15 +5660,15 @@ static PyObject *__pyx_pw_10lineparser_1t(PyObject *__pyx_self, PyObject *__pyx_
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("t", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 387, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("parse", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 437, __pyx_L3_error)
   __pyx_L3_error:;
-  __Pyx_AddTraceback("lineparser.t", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("lineparser.parse", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_pyfields), (&PyList_Type), 1, "pyfields", 1))) __PYX_ERR(0, 387, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_filename), (&PyBytes_Type), 1, "filename", 1))) __PYX_ERR(0, 387, __pyx_L1_error)
-  __pyx_r = __pyx_pf_10lineparser_t(__pyx_self, __pyx_v_pyfields, __pyx_v_filename);
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_pyfields), (&PyList_Type), 1, "pyfields", 1))) __PYX_ERR(0, 437, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_filename), (&PyBytes_Type), 1, "filename", 1))) __PYX_ERR(0, 437, __pyx_L1_error)
+  __pyx_r = __pyx_pf_10lineparser_parse(__pyx_self, __pyx_v_pyfields, __pyx_v_filename);
 
   /* function exit code */
   goto __pyx_L0;
@@ -5676,579 +5679,7 @@ static PyObject *__pyx_pw_10lineparser_1t(PyObject *__pyx_self, PyObject *__pyx_
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_10lineparser_t(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_pyfields, PyObject *__pyx_v_filename) {
-  __pyx_t_10lineparser_ReadWholeFileResult __pyx_v_file_res;
-  char *__pyx_v_data;
-  long __pyx_v_data_len;
-  __pyx_ctuple___dunderpyx_t_10lineparser_Field__ptr__and_int __pyx_v_fields_res;
-  __pyx_t_10lineparser_Field *__pyx_v_fields;
-  int __pyx_v_nfields;
-  int __pyx_v_linelen;
-  int __pyx_v_i;
-  __pyx_t_10lineparser_MakeLinesResult __pyx_v_lines_result;
-  char **__pyx_v_lines;
-  long __pyx_v_nlines;
-  struct __pyx_obj_10lineparser_AllocationResult *__pyx_v_output_obj = 0;
-  CYTHON_UNUSED void **__pyx_v_ptrs;
-  __pyx_t_10lineparser_ParsedResult __pyx_v_pr;
-  CYTHON_UNUSED PyObject *__pyx_v_py_handles = 0;
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  char *__pyx_t_1;
-  int __pyx_t_2;
-  PyObject *__pyx_t_3 = NULL;
-  PyObject *__pyx_t_4 = NULL;
-  long __pyx_t_5;
-  int __pyx_t_6;
-  int __pyx_t_7;
-  int __pyx_t_8;
-  Py_ssize_t __pyx_t_9;
-  Py_UCS4 __pyx_t_10;
-  char **__pyx_t_11;
-  int __pyx_t_12;
-  void **__pyx_t_13;
-  __Pyx_RefNannySetupContext("t", 0);
-
-  /* "lineparser.pyx":388
- * 
- * def t(list pyfields, bytes filename):
- *     cdef ReadWholeFileResult file_res = read_whole_file(filename)             # <<<<<<<<<<<<<<
- *     if file_res.err != 0:
- *         return f"Failed to read whole file, encountered error {file_res.err}"
- */
-  if (unlikely(__pyx_v_filename == Py_None)) {
-    PyErr_SetString(PyExc_TypeError, "expected bytes, NoneType found");
-    __PYX_ERR(0, 388, __pyx_L1_error)
-  }
-  __pyx_t_1 = __Pyx_PyBytes_AsWritableString(__pyx_v_filename); if (unlikely((!__pyx_t_1) && PyErr_Occurred())) __PYX_ERR(0, 388, __pyx_L1_error)
-  __pyx_v_file_res = __pyx_f_10lineparser_read_whole_file(__pyx_t_1);
-
-  /* "lineparser.pyx":389
- * def t(list pyfields, bytes filename):
- *     cdef ReadWholeFileResult file_res = read_whole_file(filename)
- *     if file_res.err != 0:             # <<<<<<<<<<<<<<
- *         return f"Failed to read whole file, encountered error {file_res.err}"
- * 
- */
-  __pyx_t_2 = ((__pyx_v_file_res.err != 0) != 0);
-  if (__pyx_t_2) {
-
-    /* "lineparser.pyx":390
- *     cdef ReadWholeFileResult file_res = read_whole_file(filename)
- *     if file_res.err != 0:
- *         return f"Failed to read whole file, encountered error {file_res.err}"             # <<<<<<<<<<<<<<
- * 
- *     cdef char *data = file_res.data
- */
-    __Pyx_XDECREF(__pyx_r);
-    __pyx_t_3 = __Pyx_PyUnicode_From_int(__pyx_v_file_res.err, 0, ' ', 'd'); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 390, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_4 = __Pyx_PyUnicode_Concat(__pyx_kp_u_Failed_to_read_whole_file_encoun, __pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 390, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_r = __pyx_t_4;
-    __pyx_t_4 = 0;
-    goto __pyx_L0;
-
-    /* "lineparser.pyx":389
- * def t(list pyfields, bytes filename):
- *     cdef ReadWholeFileResult file_res = read_whole_file(filename)
- *     if file_res.err != 0:             # <<<<<<<<<<<<<<
- *         return f"Failed to read whole file, encountered error {file_res.err}"
- * 
- */
-  }
-
-  /* "lineparser.pyx":392
- *         return f"Failed to read whole file, encountered error {file_res.err}"
- * 
- *     cdef char *data = file_res.data             # <<<<<<<<<<<<<<
- *     cdef long data_len = file_res.data_len
- * 
- */
-  __pyx_t_1 = __pyx_v_file_res.data;
-  __pyx_v_data = __pyx_t_1;
-
-  /* "lineparser.pyx":393
- * 
- *     cdef char *data = file_res.data
- *     cdef long data_len = file_res.data_len             # <<<<<<<<<<<<<<
- * 
- *     cdef (Field *, int) fields_res = make_fields(pyfields)
- */
-  __pyx_t_5 = __pyx_v_file_res.data_len;
-  __pyx_v_data_len = __pyx_t_5;
-
-  /* "lineparser.pyx":395
- *     cdef long data_len = file_res.data_len
- * 
- *     cdef (Field *, int) fields_res = make_fields(pyfields)             # <<<<<<<<<<<<<<
- *     cdef Field *fields = fields_res[0]
- *     cdef int nfields = fields_res[1]
- */
-  __pyx_v_fields_res = __pyx_f_10lineparser_make_fields(__pyx_v_pyfields);
-
-  /* "lineparser.pyx":396
- * 
- *     cdef (Field *, int) fields_res = make_fields(pyfields)
- *     cdef Field *fields = fields_res[0]             # <<<<<<<<<<<<<<
- *     cdef int nfields = fields_res[1]
- *     if fields == NULL:
- */
-  __pyx_v_fields = __pyx_v_fields_res.f0;
-
-  /* "lineparser.pyx":397
- *     cdef (Field *, int) fields_res = make_fields(pyfields)
- *     cdef Field *fields = fields_res[0]
- *     cdef int nfields = fields_res[1]             # <<<<<<<<<<<<<<
- *     if fields == NULL:
- *         free(fields)
- */
-  __pyx_v_nfields = __pyx_v_fields_res.f1;
-
-  /* "lineparser.pyx":398
- *     cdef Field *fields = fields_res[0]
- *     cdef int nfields = fields_res[1]
- *     if fields == NULL:             # <<<<<<<<<<<<<<
- *         free(fields)
- *         return "Failed to parse fields"
- */
-  __pyx_t_2 = ((__pyx_v_fields == NULL) != 0);
-  if (__pyx_t_2) {
-
-    /* "lineparser.pyx":399
- *     cdef int nfields = fields_res[1]
- *     if fields == NULL:
- *         free(fields)             # <<<<<<<<<<<<<<
- *         return "Failed to parse fields"
- *     if nfields == 0:
- */
-    free(__pyx_v_fields);
-
-    /* "lineparser.pyx":400
- *     if fields == NULL:
- *         free(fields)
- *         return "Failed to parse fields"             # <<<<<<<<<<<<<<
- *     if nfields == 0:
- *         free(fields)
- */
-    __Pyx_XDECREF(__pyx_r);
-    __Pyx_INCREF(__pyx_kp_s_Failed_to_parse_fields);
-    __pyx_r = __pyx_kp_s_Failed_to_parse_fields;
-    goto __pyx_L0;
-
-    /* "lineparser.pyx":398
- *     cdef Field *fields = fields_res[0]
- *     cdef int nfields = fields_res[1]
- *     if fields == NULL:             # <<<<<<<<<<<<<<
- *         free(fields)
- *         return "Failed to parse fields"
- */
-  }
-
-  /* "lineparser.pyx":401
- *         free(fields)
- *         return "Failed to parse fields"
- *     if nfields == 0:             # <<<<<<<<<<<<<<
- *         free(fields)
- *         return "Cannot have zero fields"
- */
-  __pyx_t_2 = ((__pyx_v_nfields == 0) != 0);
-  if (__pyx_t_2) {
-
-    /* "lineparser.pyx":402
- *         return "Failed to parse fields"
- *     if nfields == 0:
- *         free(fields)             # <<<<<<<<<<<<<<
- *         return "Cannot have zero fields"
- * 
- */
-    free(__pyx_v_fields);
-
-    /* "lineparser.pyx":403
- *     if nfields == 0:
- *         free(fields)
- *         return "Cannot have zero fields"             # <<<<<<<<<<<<<<
- * 
- *     cdef int linelen = 0
- */
-    __Pyx_XDECREF(__pyx_r);
-    __Pyx_INCREF(__pyx_kp_s_Cannot_have_zero_fields);
-    __pyx_r = __pyx_kp_s_Cannot_have_zero_fields;
-    goto __pyx_L0;
-
-    /* "lineparser.pyx":401
- *         free(fields)
- *         return "Failed to parse fields"
- *     if nfields == 0:             # <<<<<<<<<<<<<<
- *         free(fields)
- *         return "Cannot have zero fields"
- */
-  }
-
-  /* "lineparser.pyx":405
- *         return "Cannot have zero fields"
- * 
- *     cdef int linelen = 0             # <<<<<<<<<<<<<<
- *     for i in range(nfields):
- *         linelen += fields[i].len
- */
-  __pyx_v_linelen = 0;
-
-  /* "lineparser.pyx":406
- * 
- *     cdef int linelen = 0
- *     for i in range(nfields):             # <<<<<<<<<<<<<<
- *         linelen += fields[i].len
- *     # cdef MakeLinesResult make_lines(Field *fields, int nfields, char *data, long data_len):
- */
-  __pyx_t_6 = __pyx_v_nfields;
-  __pyx_t_7 = __pyx_t_6;
-  for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_7; __pyx_t_8+=1) {
-    __pyx_v_i = __pyx_t_8;
-
-    /* "lineparser.pyx":407
- *     cdef int linelen = 0
- *     for i in range(nfields):
- *         linelen += fields[i].len             # <<<<<<<<<<<<<<
- *     # cdef MakeLinesResult make_lines(Field *fields, int nfields, char *data, long data_len):
- *     cdef MakeLinesResult lines_result = make_lines(fields, nfields, data, data_len)
- */
-    __pyx_v_linelen = (__pyx_v_linelen + (__pyx_v_fields[__pyx_v_i]).len);
-  }
-
-  /* "lineparser.pyx":409
- *         linelen += fields[i].len
- *     # cdef MakeLinesResult make_lines(Field *fields, int nfields, char *data, long data_len):
- *     cdef MakeLinesResult lines_result = make_lines(fields, nfields, data, data_len)             # <<<<<<<<<<<<<<
- * 
- *     cdef char** lines, temp
- */
-  __pyx_v_lines_result = __pyx_f_10lineparser_make_lines(__pyx_v_fields, __pyx_v_nfields, __pyx_v_data, __pyx_v_data_len);
-
-  /* "lineparser.pyx":412
- * 
- *     cdef char** lines, temp
- *     if lines_result.err != 0:             # <<<<<<<<<<<<<<
- *         return f"Got error {lines_result.err} on line {lines_result.res.err.line_n + 1}"
- * 
- */
-  __pyx_t_2 = ((__pyx_v_lines_result.err != 0) != 0);
-  if (__pyx_t_2) {
-
-    /* "lineparser.pyx":413
- *     cdef char** lines, temp
- *     if lines_result.err != 0:
- *         return f"Got error {lines_result.err} on line {lines_result.res.err.line_n + 1}"             # <<<<<<<<<<<<<<
- * 
- *     cdef long nlines = lines_result.res.ok.nlines
- */
-    __Pyx_XDECREF(__pyx_r);
-    __pyx_t_4 = PyTuple_New(4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 413, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_9 = 0;
-    __pyx_t_10 = 127;
-    __Pyx_INCREF(__pyx_kp_u_Got_error);
-    __pyx_t_9 += 10;
-    __Pyx_GIVEREF(__pyx_kp_u_Got_error);
-    PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_kp_u_Got_error);
-    __pyx_t_3 = __Pyx_PyUnicode_From_int(__pyx_v_lines_result.err, 0, ' ', 'd'); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 413, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_9 += __Pyx_PyUnicode_GET_LENGTH(__pyx_t_3);
-    __Pyx_GIVEREF(__pyx_t_3);
-    PyTuple_SET_ITEM(__pyx_t_4, 1, __pyx_t_3);
-    __pyx_t_3 = 0;
-    __Pyx_INCREF(__pyx_kp_u_on_line);
-    __pyx_t_9 += 9;
-    __Pyx_GIVEREF(__pyx_kp_u_on_line);
-    PyTuple_SET_ITEM(__pyx_t_4, 2, __pyx_kp_u_on_line);
-    __pyx_t_3 = __Pyx_PyUnicode_From_long((__pyx_v_lines_result.res.err.line_n + 1), 0, ' ', 'd'); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 413, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_9 += __Pyx_PyUnicode_GET_LENGTH(__pyx_t_3);
-    __Pyx_GIVEREF(__pyx_t_3);
-    PyTuple_SET_ITEM(__pyx_t_4, 3, __pyx_t_3);
-    __pyx_t_3 = 0;
-    __pyx_t_3 = __Pyx_PyUnicode_Join(__pyx_t_4, 4, __pyx_t_9, __pyx_t_10); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 413, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __pyx_r = __pyx_t_3;
-    __pyx_t_3 = 0;
-    goto __pyx_L0;
-
-    /* "lineparser.pyx":412
- * 
- *     cdef char** lines, temp
- *     if lines_result.err != 0:             # <<<<<<<<<<<<<<
- *         return f"Got error {lines_result.err} on line {lines_result.res.err.line_n + 1}"
- * 
- */
-  }
-
-  /* "lineparser.pyx":415
- *         return f"Got error {lines_result.err} on line {lines_result.res.err.line_n + 1}"
- * 
- *     cdef long nlines = lines_result.res.ok.nlines             # <<<<<<<<<<<<<<
- * 
- *     lines = lines_result.res.ok.lines
- */
-  __pyx_t_5 = __pyx_v_lines_result.res.ok.nlines;
-  __pyx_v_nlines = __pyx_t_5;
-
-  /* "lineparser.pyx":417
- *     cdef long nlines = lines_result.res.ok.nlines
- * 
- *     lines = lines_result.res.ok.lines             # <<<<<<<<<<<<<<
- *     cdef AllocationResult output_obj = allocate_field_outputs(fields, nfields, nlines)
- *     if output_obj is None:
- */
-  __pyx_t_11 = __pyx_v_lines_result.res.ok.lines;
-  __pyx_v_lines = __pyx_t_11;
-
-  /* "lineparser.pyx":418
- * 
- *     lines = lines_result.res.ok.lines
- *     cdef AllocationResult output_obj = allocate_field_outputs(fields, nfields, nlines)             # <<<<<<<<<<<<<<
- *     if output_obj is None:
- *         return "Failed to allocate output"
- */
-  __pyx_t_3 = ((PyObject *)__pyx_f_10lineparser_allocate_field_outputs(__pyx_v_fields, __pyx_v_nfields, __pyx_v_nlines)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 418, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __pyx_v_output_obj = ((struct __pyx_obj_10lineparser_AllocationResult *)__pyx_t_3);
-  __pyx_t_3 = 0;
-
-  /* "lineparser.pyx":419
- *     lines = lines_result.res.ok.lines
- *     cdef AllocationResult output_obj = allocate_field_outputs(fields, nfields, nlines)
- *     if output_obj is None:             # <<<<<<<<<<<<<<
- *         return "Failed to allocate output"
- *     cdef void **ptrs = output_obj.ptrs
- */
-  __pyx_t_2 = (((PyObject *)__pyx_v_output_obj) == Py_None);
-  __pyx_t_12 = (__pyx_t_2 != 0);
-  if (__pyx_t_12) {
-
-    /* "lineparser.pyx":420
- *     cdef AllocationResult output_obj = allocate_field_outputs(fields, nfields, nlines)
- *     if output_obj is None:
- *         return "Failed to allocate output"             # <<<<<<<<<<<<<<
- *     cdef void **ptrs = output_obj.ptrs
- *     cdef ParsedResult pr = parse(lines, nlines, fields, output_obj.ptrs, nfields)
- */
-    __Pyx_XDECREF(__pyx_r);
-    __Pyx_INCREF(__pyx_kp_s_Failed_to_allocate_output);
-    __pyx_r = __pyx_kp_s_Failed_to_allocate_output;
-    goto __pyx_L0;
-
-    /* "lineparser.pyx":419
- *     lines = lines_result.res.ok.lines
- *     cdef AllocationResult output_obj = allocate_field_outputs(fields, nfields, nlines)
- *     if output_obj is None:             # <<<<<<<<<<<<<<
- *         return "Failed to allocate output"
- *     cdef void **ptrs = output_obj.ptrs
- */
-  }
-
-  /* "lineparser.pyx":421
- *     if output_obj is None:
- *         return "Failed to allocate output"
- *     cdef void **ptrs = output_obj.ptrs             # <<<<<<<<<<<<<<
- *     cdef ParsedResult pr = parse(lines, nlines, fields, output_obj.ptrs, nfields)
- *     if pr.line_n != -1:
- */
-  __pyx_t_13 = __pyx_v_output_obj->ptrs;
-  __pyx_v_ptrs = __pyx_t_13;
-
-  /* "lineparser.pyx":422
- *         return "Failed to allocate output"
- *     cdef void **ptrs = output_obj.ptrs
- *     cdef ParsedResult pr = parse(lines, nlines, fields, output_obj.ptrs, nfields)             # <<<<<<<<<<<<<<
- *     if pr.line_n != -1:
- *         return "Failed to parse"
- */
-  __pyx_v_pr = __pyx_f_10lineparser_parse(__pyx_v_lines, __pyx_v_nlines, __pyx_v_fields, __pyx_v_output_obj->ptrs, __pyx_v_nfields);
-
-  /* "lineparser.pyx":423
- *     cdef void **ptrs = output_obj.ptrs
- *     cdef ParsedResult pr = parse(lines, nlines, fields, output_obj.ptrs, nfields)
- *     if pr.line_n != -1:             # <<<<<<<<<<<<<<
- *         return "Failed to parse"
- *     cdef list py_handles = output_obj.py_handles
- */
-  __pyx_t_12 = ((__pyx_v_pr.line_n != -1L) != 0);
-  if (__pyx_t_12) {
-
-    /* "lineparser.pyx":424
- *     cdef ParsedResult pr = parse(lines, nlines, fields, output_obj.ptrs, nfields)
- *     if pr.line_n != -1:
- *         return "Failed to parse"             # <<<<<<<<<<<<<<
- *     cdef list py_handles = output_obj.py_handles
- * 
- */
-    __Pyx_XDECREF(__pyx_r);
-    __Pyx_INCREF(__pyx_kp_s_Failed_to_parse);
-    __pyx_r = __pyx_kp_s_Failed_to_parse;
-    goto __pyx_L0;
-
-    /* "lineparser.pyx":423
- *     cdef void **ptrs = output_obj.ptrs
- *     cdef ParsedResult pr = parse(lines, nlines, fields, output_obj.ptrs, nfields)
- *     if pr.line_n != -1:             # <<<<<<<<<<<<<<
- *         return "Failed to parse"
- *     cdef list py_handles = output_obj.py_handles
- */
-  }
-
-  /* "lineparser.pyx":425
- *     if pr.line_n != -1:
- *         return "Failed to parse"
- *     cdef list py_handles = output_obj.py_handles             # <<<<<<<<<<<<<<
- * 
- *     free(lines)
- */
-  if (!(likely(PyList_CheckExact(__pyx_v_output_obj->py_handles))||((__pyx_v_output_obj->py_handles) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "list", Py_TYPE(__pyx_v_output_obj->py_handles)->tp_name), 0))) __PYX_ERR(0, 425, __pyx_L1_error)
-  __pyx_t_3 = __pyx_v_output_obj->py_handles;
-  __Pyx_INCREF(__pyx_t_3);
-  __pyx_v_py_handles = ((PyObject*)__pyx_t_3);
-  __pyx_t_3 = 0;
-
-  /* "lineparser.pyx":427
- *     cdef list py_handles = output_obj.py_handles
- * 
- *     free(lines)             # <<<<<<<<<<<<<<
- *     free(fields)
- *     free(data)
- */
-  free(__pyx_v_lines);
-
-  /* "lineparser.pyx":428
- * 
- *     free(lines)
- *     free(fields)             # <<<<<<<<<<<<<<
- *     free(data)
- *     return "Ok!"
- */
-  free(__pyx_v_fields);
-
-  /* "lineparser.pyx":429
- *     free(lines)
- *     free(fields)
- *     free(data)             # <<<<<<<<<<<<<<
- *     return "Ok!"
- * 
- */
-  free(__pyx_v_data);
-
-  /* "lineparser.pyx":430
- *     free(fields)
- *     free(data)
- *     return "Ok!"             # <<<<<<<<<<<<<<
- * 
- * def t2(list pyfields, bytes filename):
- */
-  __Pyx_XDECREF(__pyx_r);
-  __Pyx_INCREF(__pyx_kp_s_Ok);
-  __pyx_r = __pyx_kp_s_Ok;
-  goto __pyx_L0;
-
-  /* "lineparser.pyx":387
- *         return cfields, -1
- * 
- * def t(list pyfields, bytes filename):             # <<<<<<<<<<<<<<
- *     cdef ReadWholeFileResult file_res = read_whole_file(filename)
- *     if file_res.err != 0:
- */
-
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_4);
-  __Pyx_AddTraceback("lineparser.t", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = NULL;
-  __pyx_L0:;
-  __Pyx_XDECREF((PyObject *)__pyx_v_output_obj);
-  __Pyx_XDECREF(__pyx_v_py_handles);
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "lineparser.pyx":432
- *     return "Ok!"
- * 
- * def t2(list pyfields, bytes filename):             # <<<<<<<<<<<<<<
- *     cdef ReadWholeFileResult file_res = read_whole_file(filename)
- *     if file_res.err != 0:
- */
-
-/* Python wrapper */
-static PyObject *__pyx_pw_10lineparser_3t2(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyMethodDef __pyx_mdef_10lineparser_3t2 = {"t2", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_10lineparser_3t2, METH_VARARGS|METH_KEYWORDS, 0};
-static PyObject *__pyx_pw_10lineparser_3t2(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
-  PyObject *__pyx_v_pyfields = 0;
-  PyObject *__pyx_v_filename = 0;
-  PyObject *__pyx_r = 0;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("t2 (wrapper)", 0);
-  {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_pyfields,&__pyx_n_s_filename,0};
-    PyObject* values[2] = {0,0};
-    if (unlikely(__pyx_kwds)) {
-      Py_ssize_t kw_args;
-      const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
-      switch (pos_args) {
-        case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
-        CYTHON_FALLTHROUGH;
-        case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
-        CYTHON_FALLTHROUGH;
-        case  0: break;
-        default: goto __pyx_L5_argtuple_error;
-      }
-      kw_args = PyDict_Size(__pyx_kwds);
-      switch (pos_args) {
-        case  0:
-        if (likely((values[0] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_pyfields)) != 0)) kw_args--;
-        else goto __pyx_L5_argtuple_error;
-        CYTHON_FALLTHROUGH;
-        case  1:
-        if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_filename)) != 0)) kw_args--;
-        else {
-          __Pyx_RaiseArgtupleInvalid("t2", 1, 2, 2, 1); __PYX_ERR(0, 432, __pyx_L3_error)
-        }
-      }
-      if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "t2") < 0)) __PYX_ERR(0, 432, __pyx_L3_error)
-      }
-    } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
-      goto __pyx_L5_argtuple_error;
-    } else {
-      values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
-      values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
-    }
-    __pyx_v_pyfields = ((PyObject*)values[0]);
-    __pyx_v_filename = ((PyObject*)values[1]);
-  }
-  goto __pyx_L4_argument_unpacking_done;
-  __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("t2", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 432, __pyx_L3_error)
-  __pyx_L3_error:;
-  __Pyx_AddTraceback("lineparser.t2", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __Pyx_RefNannyFinishContext();
-  return NULL;
-  __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_pyfields), (&PyList_Type), 1, "pyfields", 1))) __PYX_ERR(0, 432, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_filename), (&PyBytes_Type), 1, "filename", 1))) __PYX_ERR(0, 432, __pyx_L1_error)
-  __pyx_r = __pyx_pf_10lineparser_2t2(__pyx_self, __pyx_v_pyfields, __pyx_v_filename);
-
-  /* function exit code */
-  goto __pyx_L0;
-  __pyx_L1_error:;
-  __pyx_r = NULL;
-  __pyx_L0:;
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static PyObject *__pyx_pf_10lineparser_2t2(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_pyfields, PyObject *__pyx_v_filename) {
+static PyObject *__pyx_pf_10lineparser_parse(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_pyfields, PyObject *__pyx_v_filename) {
   __pyx_t_10lineparser_ReadWholeFileResult __pyx_v_file_res;
   char *__pyx_v_data;
   long __pyx_v_data_len;
@@ -6261,7 +5692,8 @@ static PyObject *__pyx_pf_10lineparser_2t2(CYTHON_UNUSED PyObject *__pyx_self, P
   struct __pyx_obj_10lineparser_AllocationResult *__pyx_v_output_obj = 0;
   CYTHON_UNUSED void **__pyx_v_ptrs;
   __pyx_t_10lineparser_ParsedResult __pyx_v_pr;
-  CYTHON_UNUSED PyObject *__pyx_v_py_handles = 0;
+  PyObject *__pyx_v_py_handles = 0;
+  long __pyx_v_nlines;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   char *__pyx_t_1;
@@ -6274,24 +5706,27 @@ static PyObject *__pyx_pf_10lineparser_2t2(CYTHON_UNUSED PyObject *__pyx_self, P
   int __pyx_t_8;
   int __pyx_t_9;
   void **__pyx_t_10;
-  __Pyx_RefNannySetupContext("t2", 0);
+  enum __pyx_t_10lineparser_Ty __pyx_t_11;
+  PyObject *__pyx_t_12 = NULL;
+  PyObject *__pyx_t_13 = NULL;
+  __Pyx_RefNannySetupContext("parse", 0);
 
-  /* "lineparser.pyx":433
+  /* "lineparser.pyx":438
  * 
- * def t2(list pyfields, bytes filename):
+ * def parse(list pyfields, bytes filename):
  *     cdef ReadWholeFileResult file_res = read_whole_file(filename)             # <<<<<<<<<<<<<<
  *     if file_res.err != 0:
  *         return f"Failed to read whole file, encountered error {file_res.err}"
  */
   if (unlikely(__pyx_v_filename == Py_None)) {
     PyErr_SetString(PyExc_TypeError, "expected bytes, NoneType found");
-    __PYX_ERR(0, 433, __pyx_L1_error)
+    __PYX_ERR(0, 438, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_PyBytes_AsWritableString(__pyx_v_filename); if (unlikely((!__pyx_t_1) && PyErr_Occurred())) __PYX_ERR(0, 433, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyBytes_AsWritableString(__pyx_v_filename); if (unlikely((!__pyx_t_1) && PyErr_Occurred())) __PYX_ERR(0, 438, __pyx_L1_error)
   __pyx_v_file_res = __pyx_f_10lineparser_read_whole_file(__pyx_t_1);
 
-  /* "lineparser.pyx":434
- * def t2(list pyfields, bytes filename):
+  /* "lineparser.pyx":439
+ * def parse(list pyfields, bytes filename):
  *     cdef ReadWholeFileResult file_res = read_whole_file(filename)
  *     if file_res.err != 0:             # <<<<<<<<<<<<<<
  *         return f"Failed to read whole file, encountered error {file_res.err}"
@@ -6300,7 +5735,7 @@ static PyObject *__pyx_pf_10lineparser_2t2(CYTHON_UNUSED PyObject *__pyx_self, P
   __pyx_t_2 = ((__pyx_v_file_res.err != 0) != 0);
   if (__pyx_t_2) {
 
-    /* "lineparser.pyx":435
+    /* "lineparser.pyx":440
  *     cdef ReadWholeFileResult file_res = read_whole_file(filename)
  *     if file_res.err != 0:
  *         return f"Failed to read whole file, encountered error {file_res.err}"             # <<<<<<<<<<<<<<
@@ -6308,17 +5743,17 @@ static PyObject *__pyx_pf_10lineparser_2t2(CYTHON_UNUSED PyObject *__pyx_self, P
  *     cdef char *data = file_res.data
  */
     __Pyx_XDECREF(__pyx_r);
-    __pyx_t_3 = __Pyx_PyUnicode_From_int(__pyx_v_file_res.err, 0, ' ', 'd'); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 435, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyUnicode_From_int(__pyx_v_file_res.err, 0, ' ', 'd'); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 440, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_4 = __Pyx_PyUnicode_Concat(__pyx_kp_u_Failed_to_read_whole_file_encoun, __pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 435, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyUnicode_Concat(__pyx_kp_u_Failed_to_read_whole_file_encoun, __pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 440, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __pyx_r = __pyx_t_4;
     __pyx_t_4 = 0;
     goto __pyx_L0;
 
-    /* "lineparser.pyx":434
- * def t2(list pyfields, bytes filename):
+    /* "lineparser.pyx":439
+ * def parse(list pyfields, bytes filename):
  *     cdef ReadWholeFileResult file_res = read_whole_file(filename)
  *     if file_res.err != 0:             # <<<<<<<<<<<<<<
  *         return f"Failed to read whole file, encountered error {file_res.err}"
@@ -6326,7 +5761,7 @@ static PyObject *__pyx_pf_10lineparser_2t2(CYTHON_UNUSED PyObject *__pyx_self, P
  */
   }
 
-  /* "lineparser.pyx":437
+  /* "lineparser.pyx":442
  *         return f"Failed to read whole file, encountered error {file_res.err}"
  * 
  *     cdef char *data = file_res.data             # <<<<<<<<<<<<<<
@@ -6336,7 +5771,7 @@ static PyObject *__pyx_pf_10lineparser_2t2(CYTHON_UNUSED PyObject *__pyx_self, P
   __pyx_t_1 = __pyx_v_file_res.data;
   __pyx_v_data = __pyx_t_1;
 
-  /* "lineparser.pyx":438
+  /* "lineparser.pyx":443
  * 
  *     cdef char *data = file_res.data
  *     cdef long data_len = file_res.data_len             # <<<<<<<<<<<<<<
@@ -6346,7 +5781,7 @@ static PyObject *__pyx_pf_10lineparser_2t2(CYTHON_UNUSED PyObject *__pyx_self, P
   __pyx_t_5 = __pyx_v_file_res.data_len;
   __pyx_v_data_len = __pyx_t_5;
 
-  /* "lineparser.pyx":440
+  /* "lineparser.pyx":445
  *     cdef long data_len = file_res.data_len
  * 
  *     cdef (Field *, int) fields_res = make_fields(pyfields)             # <<<<<<<<<<<<<<
@@ -6355,7 +5790,7 @@ static PyObject *__pyx_pf_10lineparser_2t2(CYTHON_UNUSED PyObject *__pyx_self, P
  */
   __pyx_v_fields_res = __pyx_f_10lineparser_make_fields(__pyx_v_pyfields);
 
-  /* "lineparser.pyx":441
+  /* "lineparser.pyx":446
  * 
  *     cdef (Field *, int) fields_res = make_fields(pyfields)
  *     cdef Field *fields = fields_res[0]             # <<<<<<<<<<<<<<
@@ -6364,7 +5799,7 @@ static PyObject *__pyx_pf_10lineparser_2t2(CYTHON_UNUSED PyObject *__pyx_self, P
  */
   __pyx_v_fields = __pyx_v_fields_res.f0;
 
-  /* "lineparser.pyx":442
+  /* "lineparser.pyx":447
  *     cdef (Field *, int) fields_res = make_fields(pyfields)
  *     cdef Field *fields = fields_res[0]
  *     cdef int nfields = fields_res[1]             # <<<<<<<<<<<<<<
@@ -6373,7 +5808,7 @@ static PyObject *__pyx_pf_10lineparser_2t2(CYTHON_UNUSED PyObject *__pyx_self, P
  */
   __pyx_v_nfields = __pyx_v_fields_res.f1;
 
-  /* "lineparser.pyx":443
+  /* "lineparser.pyx":448
  *     cdef Field *fields = fields_res[0]
  *     cdef int nfields = fields_res[1]
  *     if fields == NULL:             # <<<<<<<<<<<<<<
@@ -6383,7 +5818,7 @@ static PyObject *__pyx_pf_10lineparser_2t2(CYTHON_UNUSED PyObject *__pyx_self, P
   __pyx_t_2 = ((__pyx_v_fields == NULL) != 0);
   if (__pyx_t_2) {
 
-    /* "lineparser.pyx":444
+    /* "lineparser.pyx":449
  *     cdef int nfields = fields_res[1]
  *     if fields == NULL:
  *         free(fields)             # <<<<<<<<<<<<<<
@@ -6392,7 +5827,7 @@ static PyObject *__pyx_pf_10lineparser_2t2(CYTHON_UNUSED PyObject *__pyx_self, P
  */
     free(__pyx_v_fields);
 
-    /* "lineparser.pyx":445
+    /* "lineparser.pyx":450
  *     if fields == NULL:
  *         free(fields)
  *         return "Failed to parse fields"             # <<<<<<<<<<<<<<
@@ -6404,7 +5839,7 @@ static PyObject *__pyx_pf_10lineparser_2t2(CYTHON_UNUSED PyObject *__pyx_self, P
     __pyx_r = __pyx_kp_s_Failed_to_parse_fields;
     goto __pyx_L0;
 
-    /* "lineparser.pyx":443
+    /* "lineparser.pyx":448
  *     cdef Field *fields = fields_res[0]
  *     cdef int nfields = fields_res[1]
  *     if fields == NULL:             # <<<<<<<<<<<<<<
@@ -6413,7 +5848,7 @@ static PyObject *__pyx_pf_10lineparser_2t2(CYTHON_UNUSED PyObject *__pyx_self, P
  */
   }
 
-  /* "lineparser.pyx":446
+  /* "lineparser.pyx":451
  *         free(fields)
  *         return "Failed to parse fields"
  *     if nfields == 0:             # <<<<<<<<<<<<<<
@@ -6423,7 +5858,7 @@ static PyObject *__pyx_pf_10lineparser_2t2(CYTHON_UNUSED PyObject *__pyx_self, P
   __pyx_t_2 = ((__pyx_v_nfields == 0) != 0);
   if (__pyx_t_2) {
 
-    /* "lineparser.pyx":447
+    /* "lineparser.pyx":452
  *         return "Failed to parse fields"
  *     if nfields == 0:
  *         free(fields)             # <<<<<<<<<<<<<<
@@ -6432,7 +5867,7 @@ static PyObject *__pyx_pf_10lineparser_2t2(CYTHON_UNUSED PyObject *__pyx_self, P
  */
     free(__pyx_v_fields);
 
-    /* "lineparser.pyx":448
+    /* "lineparser.pyx":453
  *     if nfields == 0:
  *         free(fields)
  *         return "Cannot have zero fields"             # <<<<<<<<<<<<<<
@@ -6444,7 +5879,7 @@ static PyObject *__pyx_pf_10lineparser_2t2(CYTHON_UNUSED PyObject *__pyx_self, P
     __pyx_r = __pyx_kp_s_Cannot_have_zero_fields;
     goto __pyx_L0;
 
-    /* "lineparser.pyx":446
+    /* "lineparser.pyx":451
  *         free(fields)
  *         return "Failed to parse fields"
  *     if nfields == 0:             # <<<<<<<<<<<<<<
@@ -6453,7 +5888,7 @@ static PyObject *__pyx_pf_10lineparser_2t2(CYTHON_UNUSED PyObject *__pyx_self, P
  */
   }
 
-  /* "lineparser.pyx":450
+  /* "lineparser.pyx":455
  *         return "Cannot have zero fields"
  * 
  *     cdef int linelen = 0             # <<<<<<<<<<<<<<
@@ -6462,7 +5897,7 @@ static PyObject *__pyx_pf_10lineparser_2t2(CYTHON_UNUSED PyObject *__pyx_self, P
  */
   __pyx_v_linelen = 0;
 
-  /* "lineparser.pyx":451
+  /* "lineparser.pyx":456
  * 
  *     cdef int linelen = 0
  *     for i in range(nfields):             # <<<<<<<<<<<<<<
@@ -6474,7 +5909,7 @@ static PyObject *__pyx_pf_10lineparser_2t2(CYTHON_UNUSED PyObject *__pyx_self, P
   for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_7; __pyx_t_8+=1) {
     __pyx_v_i = __pyx_t_8;
 
-    /* "lineparser.pyx":452
+    /* "lineparser.pyx":457
  *     cdef int linelen = 0
  *     for i in range(nfields):
  *         linelen += fields[i].len             # <<<<<<<<<<<<<<
@@ -6484,7 +5919,7 @@ static PyObject *__pyx_pf_10lineparser_2t2(CYTHON_UNUSED PyObject *__pyx_self, P
     __pyx_v_linelen = (__pyx_v_linelen + (__pyx_v_fields[__pyx_v_i]).len);
   }
 
-  /* "lineparser.pyx":454
+  /* "lineparser.pyx":459
  *         linelen += fields[i].len
  * 
  *     cdef long max_lines = data_len / linelen             # <<<<<<<<<<<<<<
@@ -6493,19 +5928,19 @@ static PyObject *__pyx_pf_10lineparser_2t2(CYTHON_UNUSED PyObject *__pyx_self, P
  */
   __pyx_v_max_lines = (__pyx_v_data_len / __pyx_v_linelen);
 
-  /* "lineparser.pyx":456
+  /* "lineparser.pyx":461
  *     cdef long max_lines = data_len / linelen
  * 
  *     cdef AllocationResult output_obj = allocate_field_outputs(fields, nfields, max_lines)             # <<<<<<<<<<<<<<
  *     if output_obj is None:
  *         return "Failed to allocate output"
  */
-  __pyx_t_4 = ((PyObject *)__pyx_f_10lineparser_allocate_field_outputs(__pyx_v_fields, __pyx_v_nfields, __pyx_v_max_lines)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 456, __pyx_L1_error)
+  __pyx_t_4 = ((PyObject *)__pyx_f_10lineparser_allocate_field_outputs(__pyx_v_fields, __pyx_v_nfields, __pyx_v_max_lines)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 461, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __pyx_v_output_obj = ((struct __pyx_obj_10lineparser_AllocationResult *)__pyx_t_4);
   __pyx_t_4 = 0;
 
-  /* "lineparser.pyx":457
+  /* "lineparser.pyx":462
  * 
  *     cdef AllocationResult output_obj = allocate_field_outputs(fields, nfields, max_lines)
  *     if output_obj is None:             # <<<<<<<<<<<<<<
@@ -6516,19 +5951,19 @@ static PyObject *__pyx_pf_10lineparser_2t2(CYTHON_UNUSED PyObject *__pyx_self, P
   __pyx_t_9 = (__pyx_t_2 != 0);
   if (__pyx_t_9) {
 
-    /* "lineparser.pyx":458
+    /* "lineparser.pyx":463
  *     cdef AllocationResult output_obj = allocate_field_outputs(fields, nfields, max_lines)
  *     if output_obj is None:
  *         return "Failed to allocate output"             # <<<<<<<<<<<<<<
  *     cdef void **ptrs = output_obj.ptrs
- *     cdef ParsedResult pr = fast_parse(data, data_len, max_lines, linelen, fields, output_obj.ptrs, nfields)
+ *     cdef ParsedResult pr = _fast_parse(data, data_len, max_lines, linelen, fields, output_obj.ptrs, nfields)
  */
     __Pyx_XDECREF(__pyx_r);
     __Pyx_INCREF(__pyx_kp_s_Failed_to_allocate_output);
     __pyx_r = __pyx_kp_s_Failed_to_allocate_output;
     goto __pyx_L0;
 
-    /* "lineparser.pyx":457
+    /* "lineparser.pyx":462
  * 
  *     cdef AllocationResult output_obj = allocate_field_outputs(fields, nfields, max_lines)
  *     if output_obj is None:             # <<<<<<<<<<<<<<
@@ -6537,28 +5972,28 @@ static PyObject *__pyx_pf_10lineparser_2t2(CYTHON_UNUSED PyObject *__pyx_self, P
  */
   }
 
-  /* "lineparser.pyx":459
+  /* "lineparser.pyx":464
  *     if output_obj is None:
  *         return "Failed to allocate output"
  *     cdef void **ptrs = output_obj.ptrs             # <<<<<<<<<<<<<<
- *     cdef ParsedResult pr = fast_parse(data, data_len, max_lines, linelen, fields, output_obj.ptrs, nfields)
+ *     cdef ParsedResult pr = _fast_parse(data, data_len, max_lines, linelen, fields, output_obj.ptrs, nfields)
  *     if pr.field_index != -1:
  */
   __pyx_t_10 = __pyx_v_output_obj->ptrs;
   __pyx_v_ptrs = __pyx_t_10;
 
-  /* "lineparser.pyx":460
+  /* "lineparser.pyx":465
  *         return "Failed to allocate output"
  *     cdef void **ptrs = output_obj.ptrs
- *     cdef ParsedResult pr = fast_parse(data, data_len, max_lines, linelen, fields, output_obj.ptrs, nfields)             # <<<<<<<<<<<<<<
+ *     cdef ParsedResult pr = _fast_parse(data, data_len, max_lines, linelen, fields, output_obj.ptrs, nfields)             # <<<<<<<<<<<<<<
  *     if pr.field_index != -1:
  *         return "Failed to parse"
  */
-  __pyx_v_pr = __pyx_f_10lineparser_fast_parse(__pyx_v_data, __pyx_v_data_len, __pyx_v_max_lines, __pyx_v_linelen, __pyx_v_fields, __pyx_v_output_obj->ptrs, __pyx_v_nfields);
+  __pyx_v_pr = __pyx_f_10lineparser__fast_parse(__pyx_v_data, __pyx_v_data_len, __pyx_v_max_lines, __pyx_v_linelen, __pyx_v_fields, __pyx_v_output_obj->ptrs, __pyx_v_nfields);
 
-  /* "lineparser.pyx":461
+  /* "lineparser.pyx":466
  *     cdef void **ptrs = output_obj.ptrs
- *     cdef ParsedResult pr = fast_parse(data, data_len, max_lines, linelen, fields, output_obj.ptrs, nfields)
+ *     cdef ParsedResult pr = _fast_parse(data, data_len, max_lines, linelen, fields, output_obj.ptrs, nfields)
  *     if pr.field_index != -1:             # <<<<<<<<<<<<<<
  *         return "Failed to parse"
  *     cdef list py_handles = output_obj.py_handles
@@ -6566,8 +6001,8 @@ static PyObject *__pyx_pf_10lineparser_2t2(CYTHON_UNUSED PyObject *__pyx_self, P
   __pyx_t_9 = ((__pyx_v_pr.field_index != -1L) != 0);
   if (__pyx_t_9) {
 
-    /* "lineparser.pyx":462
- *     cdef ParsedResult pr = fast_parse(data, data_len, max_lines, linelen, fields, output_obj.ptrs, nfields)
+    /* "lineparser.pyx":467
+ *     cdef ParsedResult pr = _fast_parse(data, data_len, max_lines, linelen, fields, output_obj.ptrs, nfields)
  *     if pr.field_index != -1:
  *         return "Failed to parse"             # <<<<<<<<<<<<<<
  *     cdef list py_handles = output_obj.py_handles
@@ -6578,62 +6013,156 @@ static PyObject *__pyx_pf_10lineparser_2t2(CYTHON_UNUSED PyObject *__pyx_self, P
     __pyx_r = __pyx_kp_s_Failed_to_parse;
     goto __pyx_L0;
 
-    /* "lineparser.pyx":461
+    /* "lineparser.pyx":466
  *     cdef void **ptrs = output_obj.ptrs
- *     cdef ParsedResult pr = fast_parse(data, data_len, max_lines, linelen, fields, output_obj.ptrs, nfields)
+ *     cdef ParsedResult pr = _fast_parse(data, data_len, max_lines, linelen, fields, output_obj.ptrs, nfields)
  *     if pr.field_index != -1:             # <<<<<<<<<<<<<<
  *         return "Failed to parse"
  *     cdef list py_handles = output_obj.py_handles
  */
   }
 
-  /* "lineparser.pyx":463
+  /* "lineparser.pyx":468
  *     if pr.field_index != -1:
  *         return "Failed to parse"
  *     cdef list py_handles = output_obj.py_handles             # <<<<<<<<<<<<<<
  * 
- *     free(fields)
+ *     nlines = pr.line_n
  */
-  if (!(likely(PyList_CheckExact(__pyx_v_output_obj->py_handles))||((__pyx_v_output_obj->py_handles) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "list", Py_TYPE(__pyx_v_output_obj->py_handles)->tp_name), 0))) __PYX_ERR(0, 463, __pyx_L1_error)
+  if (!(likely(PyList_CheckExact(__pyx_v_output_obj->py_handles))||((__pyx_v_output_obj->py_handles) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "list", Py_TYPE(__pyx_v_output_obj->py_handles)->tp_name), 0))) __PYX_ERR(0, 468, __pyx_L1_error)
   __pyx_t_4 = __pyx_v_output_obj->py_handles;
   __Pyx_INCREF(__pyx_t_4);
   __pyx_v_py_handles = ((PyObject*)__pyx_t_4);
   __pyx_t_4 = 0;
 
-  /* "lineparser.pyx":465
+  /* "lineparser.pyx":470
  *     cdef list py_handles = output_obj.py_handles
+ * 
+ *     nlines = pr.line_n             # <<<<<<<<<<<<<<
+ * 
+ *     for i in range(nfields):
+ */
+  __pyx_t_5 = __pyx_v_pr.line_n;
+  __pyx_v_nlines = __pyx_t_5;
+
+  /* "lineparser.pyx":472
+ *     nlines = pr.line_n
+ * 
+ *     for i in range(nfields):             # <<<<<<<<<<<<<<
+ *         if fields[i].ty in (Float64, Int64):
+ *             py_handles[i].resize(nlines)
+ */
+  __pyx_t_6 = __pyx_v_nfields;
+  __pyx_t_7 = __pyx_t_6;
+  for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_7; __pyx_t_8+=1) {
+    __pyx_v_i = __pyx_t_8;
+
+    /* "lineparser.pyx":473
+ * 
+ *     for i in range(nfields):
+ *         if fields[i].ty in (Float64, Int64):             # <<<<<<<<<<<<<<
+ *             py_handles[i].resize(nlines)
+ * 
+ */
+    __pyx_t_11 = (__pyx_v_fields[__pyx_v_i]).ty;
+    __pyx_t_2 = ((__pyx_t_11 == __pyx_e_10lineparser_Float64) != 0);
+    if (!__pyx_t_2) {
+    } else {
+      __pyx_t_9 = __pyx_t_2;
+      goto __pyx_L13_bool_binop_done;
+    }
+    __pyx_t_2 = ((__pyx_t_11 == __pyx_e_10lineparser_Int64) != 0);
+    __pyx_t_9 = __pyx_t_2;
+    __pyx_L13_bool_binop_done:;
+    __pyx_t_2 = (__pyx_t_9 != 0);
+    if (__pyx_t_2) {
+
+      /* "lineparser.pyx":474
+ *     for i in range(nfields):
+ *         if fields[i].ty in (Float64, Int64):
+ *             py_handles[i].resize(nlines)             # <<<<<<<<<<<<<<
+ * 
+ *     free(fields)
+ */
+      if (unlikely(__pyx_v_py_handles == Py_None)) {
+        PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+        __PYX_ERR(0, 474, __pyx_L1_error)
+      }
+      __pyx_t_3 = __Pyx_PyObject_GetAttrStr(PyList_GET_ITEM(__pyx_v_py_handles, __pyx_v_i), __pyx_n_s_resize); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 474, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_3);
+      __pyx_t_12 = __Pyx_PyInt_From_long(__pyx_v_nlines); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 474, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_12);
+      __pyx_t_13 = NULL;
+      if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_3))) {
+        __pyx_t_13 = PyMethod_GET_SELF(__pyx_t_3);
+        if (likely(__pyx_t_13)) {
+          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
+          __Pyx_INCREF(__pyx_t_13);
+          __Pyx_INCREF(function);
+          __Pyx_DECREF_SET(__pyx_t_3, function);
+        }
+      }
+      __pyx_t_4 = (__pyx_t_13) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_13, __pyx_t_12) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_12);
+      __Pyx_XDECREF(__pyx_t_13); __pyx_t_13 = 0;
+      __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
+      if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 474, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_4);
+      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+
+      /* "lineparser.pyx":473
+ * 
+ *     for i in range(nfields):
+ *         if fields[i].ty in (Float64, Int64):             # <<<<<<<<<<<<<<
+ *             py_handles[i].resize(nlines)
+ * 
+ */
+    }
+  }
+
+  /* "lineparser.pyx":476
+ *             py_handles[i].resize(nlines)
  * 
  *     free(fields)             # <<<<<<<<<<<<<<
  *     free(data)
- *     return "Ok!"
+ *     free(output_obj.ptrs)
  */
   free(__pyx_v_fields);
 
-  /* "lineparser.pyx":466
+  /* "lineparser.pyx":477
  * 
  *     free(fields)
  *     free(data)             # <<<<<<<<<<<<<<
- *     return "Ok!"
+ *     free(output_obj.ptrs)
  * 
  */
   free(__pyx_v_data);
 
-  /* "lineparser.pyx":467
+  /* "lineparser.pyx":478
  *     free(fields)
  *     free(data)
- *     return "Ok!"             # <<<<<<<<<<<<<<
+ *     free(output_obj.ptrs)             # <<<<<<<<<<<<<<
+ * 
+ *     return py_handles
+ */
+  free(__pyx_v_output_obj->ptrs);
+
+  /* "lineparser.pyx":480
+ *     free(output_obj.ptrs)
+ * 
+ *     return py_handles             # <<<<<<<<<<<<<<
  * 
  * cdef class AllocationResult:
  */
   __Pyx_XDECREF(__pyx_r);
-  __Pyx_INCREF(__pyx_kp_s_Ok);
-  __pyx_r = __pyx_kp_s_Ok;
+  __Pyx_INCREF(__pyx_v_py_handles);
+  __pyx_r = __pyx_v_py_handles;
   goto __pyx_L0;
 
-  /* "lineparser.pyx":432
- *     return "Ok!"
+  /* "lineparser.pyx":437
+ * """
  * 
- * def t2(list pyfields, bytes filename):             # <<<<<<<<<<<<<<
+ * def parse(list pyfields, bytes filename):             # <<<<<<<<<<<<<<
  *     cdef ReadWholeFileResult file_res = read_whole_file(filename)
  *     if file_res.err != 0:
  */
@@ -6642,7 +6171,9 @@ static PyObject *__pyx_pf_10lineparser_2t2(CYTHON_UNUSED PyObject *__pyx_self, P
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_3);
   __Pyx_XDECREF(__pyx_t_4);
-  __Pyx_AddTraceback("lineparser.t2", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_XDECREF(__pyx_t_12);
+  __Pyx_XDECREF(__pyx_t_13);
+  __Pyx_AddTraceback("lineparser.parse", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XDECREF((PyObject *)__pyx_v_output_obj);
@@ -6759,7 +6290,7 @@ static PyObject *__pyx_pf_10lineparser_16AllocationResult_2__setstate_cython__(C
   return __pyx_r;
 }
 
-/* "lineparser.pyx":474
+/* "lineparser.pyx":487
  *     cdef object py_handles
  * 
  * cdef AllocationResult allocate_field_outputs(const Field *fields, int nfields, long nlines):             # <<<<<<<<<<<<<<
@@ -6792,19 +6323,19 @@ static struct __pyx_obj_10lineparser_AllocationResult *__pyx_f_10lineparser_allo
   Py_ssize_t __pyx_t_12;
   __Pyx_RefNannySetupContext("allocate_field_outputs", 0);
 
-  /* "lineparser.pyx":484
+  /* "lineparser.pyx":497
  *     and <ptrs> is a c array of pointers to the output containers
  *     """
  *     cdef list py_handles = []             # <<<<<<<<<<<<<<
  *     cdef void **ptrs = <void**> malloc(sizeof(void*) * nfields)
  *     cdef int i = 0
  */
-  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 484, __pyx_L1_error)
+  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 497, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_py_handles = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "lineparser.pyx":485
+  /* "lineparser.pyx":498
  *     """
  *     cdef list py_handles = []
  *     cdef void **ptrs = <void**> malloc(sizeof(void*) * nfields)             # <<<<<<<<<<<<<<
@@ -6813,7 +6344,7 @@ static struct __pyx_obj_10lineparser_AllocationResult *__pyx_f_10lineparser_allo
  */
   __pyx_v_ptrs = ((void **)malloc(((sizeof(void *)) * __pyx_v_nfields)));
 
-  /* "lineparser.pyx":486
+  /* "lineparser.pyx":499
  *     cdef list py_handles = []
  *     cdef void **ptrs = <void**> malloc(sizeof(void*) * nfields)
  *     cdef int i = 0             # <<<<<<<<<<<<<<
@@ -6822,7 +6353,7 @@ static struct __pyx_obj_10lineparser_AllocationResult *__pyx_f_10lineparser_allo
  */
   __pyx_v_i = 0;
 
-  /* "lineparser.pyx":491
+  /* "lineparser.pyx":504
  *     cdef int32_t[:] iptr
  *     cdef Ty ty
  *     while i < nfields:             # <<<<<<<<<<<<<<
@@ -6833,7 +6364,7 @@ static struct __pyx_obj_10lineparser_AllocationResult *__pyx_f_10lineparser_allo
     __pyx_t_2 = ((__pyx_v_i < __pyx_v_nfields) != 0);
     if (!__pyx_t_2) break;
 
-    /* "lineparser.pyx":492
+    /* "lineparser.pyx":505
  *     cdef Ty ty
  *     while i < nfields:
  *         ty = fields[i].ty             # <<<<<<<<<<<<<<
@@ -6843,7 +6374,7 @@ static struct __pyx_obj_10lineparser_AllocationResult *__pyx_f_10lineparser_allo
     __pyx_t_3 = (__pyx_v_fields[__pyx_v_i]).ty;
     __pyx_v_ty = __pyx_t_3;
 
-    /* "lineparser.pyx":493
+    /* "lineparser.pyx":506
  *     while i < nfields:
  *         ty = fields[i].ty
  *         if ty == Float64:             # <<<<<<<<<<<<<<
@@ -6853,35 +6384,35 @@ static struct __pyx_obj_10lineparser_AllocationResult *__pyx_f_10lineparser_allo
     switch (__pyx_v_ty) {
       case __pyx_e_10lineparser_Float64:
 
-      /* "lineparser.pyx":494
+      /* "lineparser.pyx":507
  *         ty = fields[i].ty
  *         if ty == Float64:
  *             arr = np.zeros(nlines, dtype=np.float64)             # <<<<<<<<<<<<<<
  *             py_handles.append(arr)
  *             dptr = arr
  */
-      __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 494, __pyx_L1_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 507, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
-      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_zeros); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 494, __pyx_L1_error)
+      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_zeros); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 507, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      __pyx_t_1 = __Pyx_PyInt_From_long(__pyx_v_nlines); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 494, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyInt_From_long(__pyx_v_nlines); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 507, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
-      __pyx_t_5 = PyTuple_New(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 494, __pyx_L1_error)
+      __pyx_t_5 = PyTuple_New(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 507, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
       __Pyx_GIVEREF(__pyx_t_1);
       PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_1);
       __pyx_t_1 = 0;
-      __pyx_t_1 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 494, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 507, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
-      __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_n_s_np); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 494, __pyx_L1_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_n_s_np); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 507, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_6);
-      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_float64); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 494, __pyx_L1_error)
+      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_float64); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 507, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-      if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, __pyx_t_7) < 0) __PYX_ERR(0, 494, __pyx_L1_error)
+      if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, __pyx_t_7) < 0) __PYX_ERR(0, 507, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      __pyx_t_7 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_5, __pyx_t_1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 494, __pyx_L1_error)
+      __pyx_t_7 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_5, __pyx_t_1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 507, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
@@ -6889,29 +6420,29 @@ static struct __pyx_obj_10lineparser_AllocationResult *__pyx_f_10lineparser_allo
       __Pyx_XDECREF_SET(__pyx_v_arr, __pyx_t_7);
       __pyx_t_7 = 0;
 
-      /* "lineparser.pyx":495
+      /* "lineparser.pyx":508
  *         if ty == Float64:
  *             arr = np.zeros(nlines, dtype=np.float64)
  *             py_handles.append(arr)             # <<<<<<<<<<<<<<
  *             dptr = arr
  *             ptrs[i] = <void *> &dptr[0]
  */
-      __pyx_t_8 = __Pyx_PyList_Append(__pyx_v_py_handles, __pyx_v_arr); if (unlikely(__pyx_t_8 == ((int)-1))) __PYX_ERR(0, 495, __pyx_L1_error)
+      __pyx_t_8 = __Pyx_PyList_Append(__pyx_v_py_handles, __pyx_v_arr); if (unlikely(__pyx_t_8 == ((int)-1))) __PYX_ERR(0, 508, __pyx_L1_error)
 
-      /* "lineparser.pyx":496
+      /* "lineparser.pyx":509
  *             arr = np.zeros(nlines, dtype=np.float64)
  *             py_handles.append(arr)
  *             dptr = arr             # <<<<<<<<<<<<<<
  *             ptrs[i] = <void *> &dptr[0]
  *         elif ty == Int64:
  */
-      __pyx_t_9 = __Pyx_PyObject_to_MemoryviewSlice_ds_double(__pyx_v_arr, PyBUF_WRITABLE); if (unlikely(!__pyx_t_9.memview)) __PYX_ERR(0, 496, __pyx_L1_error)
+      __pyx_t_9 = __Pyx_PyObject_to_MemoryviewSlice_ds_double(__pyx_v_arr, PyBUF_WRITABLE); if (unlikely(!__pyx_t_9.memview)) __PYX_ERR(0, 509, __pyx_L1_error)
       __PYX_XDEC_MEMVIEW(&__pyx_v_dptr, 1);
       __pyx_v_dptr = __pyx_t_9;
       __pyx_t_9.memview = NULL;
       __pyx_t_9.data = NULL;
 
-      /* "lineparser.pyx":497
+      /* "lineparser.pyx":510
  *             py_handles.append(arr)
  *             dptr = arr
  *             ptrs[i] = <void *> &dptr[0]             # <<<<<<<<<<<<<<
@@ -6921,7 +6452,7 @@ static struct __pyx_obj_10lineparser_AllocationResult *__pyx_f_10lineparser_allo
       __pyx_t_10 = 0;
       (__pyx_v_ptrs[__pyx_v_i]) = ((void *)(&(*((double *) ( /* dim=0 */ (__pyx_v_dptr.data + __pyx_t_10 * __pyx_v_dptr.strides[0]) )))));
 
-      /* "lineparser.pyx":493
+      /* "lineparser.pyx":506
  *     while i < nfields:
  *         ty = fields[i].ty
  *         if ty == Float64:             # <<<<<<<<<<<<<<
@@ -6931,35 +6462,35 @@ static struct __pyx_obj_10lineparser_AllocationResult *__pyx_f_10lineparser_allo
       break;
       case __pyx_e_10lineparser_Int64:
 
-      /* "lineparser.pyx":499
+      /* "lineparser.pyx":512
  *             ptrs[i] = <void *> &dptr[0]
  *         elif ty == Int64:
  *             arr = np.zeros(nlines, dtype=np.int64)             # <<<<<<<<<<<<<<
  *             py_handles.append(arr)
  *             lptr = arr
  */
-      __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_np); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 499, __pyx_L1_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_np); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 512, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
-      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_zeros); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 499, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_zeros); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 512, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      __pyx_t_7 = __Pyx_PyInt_From_long(__pyx_v_nlines); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 499, __pyx_L1_error)
+      __pyx_t_7 = __Pyx_PyInt_From_long(__pyx_v_nlines); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 512, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
-      __pyx_t_5 = PyTuple_New(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 499, __pyx_L1_error)
+      __pyx_t_5 = PyTuple_New(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 512, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
       __Pyx_GIVEREF(__pyx_t_7);
       PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_7);
       __pyx_t_7 = 0;
-      __pyx_t_7 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 499, __pyx_L1_error)
+      __pyx_t_7 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 512, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
-      __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 499, __pyx_L1_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 512, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
-      __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_int64); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 499, __pyx_L1_error)
+      __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_int64); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 512, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      if (PyDict_SetItem(__pyx_t_7, __pyx_n_s_dtype, __pyx_t_6) < 0) __PYX_ERR(0, 499, __pyx_L1_error)
+      if (PyDict_SetItem(__pyx_t_7, __pyx_n_s_dtype, __pyx_t_6) < 0) __PYX_ERR(0, 512, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-      __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_5, __pyx_t_7); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 499, __pyx_L1_error)
+      __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_5, __pyx_t_7); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 512, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
@@ -6967,39 +6498,39 @@ static struct __pyx_obj_10lineparser_AllocationResult *__pyx_f_10lineparser_allo
       __Pyx_XDECREF_SET(__pyx_v_arr, __pyx_t_6);
       __pyx_t_6 = 0;
 
-      /* "lineparser.pyx":500
+      /* "lineparser.pyx":513
  *         elif ty == Int64:
  *             arr = np.zeros(nlines, dtype=np.int64)
  *             py_handles.append(arr)             # <<<<<<<<<<<<<<
  *             lptr = arr
  *             ptrs[i] = <void *> &lptr[0]
  */
-      __pyx_t_8 = __Pyx_PyList_Append(__pyx_v_py_handles, __pyx_v_arr); if (unlikely(__pyx_t_8 == ((int)-1))) __PYX_ERR(0, 500, __pyx_L1_error)
+      __pyx_t_8 = __Pyx_PyList_Append(__pyx_v_py_handles, __pyx_v_arr); if (unlikely(__pyx_t_8 == ((int)-1))) __PYX_ERR(0, 513, __pyx_L1_error)
 
-      /* "lineparser.pyx":501
+      /* "lineparser.pyx":514
  *             arr = np.zeros(nlines, dtype=np.int64)
  *             py_handles.append(arr)
  *             lptr = arr             # <<<<<<<<<<<<<<
  *             ptrs[i] = <void *> &lptr[0]
  *         elif ty == String:
  */
-      __pyx_t_11 = __Pyx_PyObject_to_MemoryviewSlice_ds_nn_int64_t(__pyx_v_arr, PyBUF_WRITABLE); if (unlikely(!__pyx_t_11.memview)) __PYX_ERR(0, 501, __pyx_L1_error)
+      __pyx_t_11 = __Pyx_PyObject_to_MemoryviewSlice_ds_nn_int64_t(__pyx_v_arr, PyBUF_WRITABLE); if (unlikely(!__pyx_t_11.memview)) __PYX_ERR(0, 514, __pyx_L1_error)
       __PYX_XDEC_MEMVIEW(&__pyx_v_lptr, 1);
       __pyx_v_lptr = __pyx_t_11;
       __pyx_t_11.memview = NULL;
       __pyx_t_11.data = NULL;
 
-      /* "lineparser.pyx":502
+      /* "lineparser.pyx":515
  *             py_handles.append(arr)
  *             lptr = arr
  *             ptrs[i] = <void *> &lptr[0]             # <<<<<<<<<<<<<<
  *         elif ty == String:
- *             arr = []
+ *             arr = list()
  */
       __pyx_t_12 = 0;
       (__pyx_v_ptrs[__pyx_v_i]) = ((void *)(&(*((int64_t *) ( /* dim=0 */ (__pyx_v_lptr.data + __pyx_t_12 * __pyx_v_lptr.strides[0]) )))));
 
-      /* "lineparser.pyx":498
+      /* "lineparser.pyx":511
  *             dptr = arr
  *             ptrs[i] = <void *> &dptr[0]
  *         elif ty == Int64:             # <<<<<<<<<<<<<<
@@ -7009,29 +6540,29 @@ static struct __pyx_obj_10lineparser_AllocationResult *__pyx_f_10lineparser_allo
       break;
       case __pyx_e_10lineparser_String:
 
-      /* "lineparser.pyx":504
+      /* "lineparser.pyx":517
  *             ptrs[i] = <void *> &lptr[0]
  *         elif ty == String:
- *             arr = []             # <<<<<<<<<<<<<<
+ *             arr = list()             # <<<<<<<<<<<<<<
  *             py_handles.append(arr)
  *             ptrs[i] = <void *> arr
  */
-      __pyx_t_6 = PyList_New(0); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 504, __pyx_L1_error)
+      __pyx_t_6 = PyList_New(0); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 517, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_XDECREF_SET(__pyx_v_arr, __pyx_t_6);
       __pyx_t_6 = 0;
 
-      /* "lineparser.pyx":505
+      /* "lineparser.pyx":518
  *         elif ty == String:
- *             arr = []
+ *             arr = list()
  *             py_handles.append(arr)             # <<<<<<<<<<<<<<
  *             ptrs[i] = <void *> arr
  *         else:
  */
-      __pyx_t_8 = __Pyx_PyList_Append(__pyx_v_py_handles, __pyx_v_arr); if (unlikely(__pyx_t_8 == ((int)-1))) __PYX_ERR(0, 505, __pyx_L1_error)
+      __pyx_t_8 = __Pyx_PyList_Append(__pyx_v_py_handles, __pyx_v_arr); if (unlikely(__pyx_t_8 == ((int)-1))) __PYX_ERR(0, 518, __pyx_L1_error)
 
-      /* "lineparser.pyx":506
- *             arr = []
+      /* "lineparser.pyx":519
+ *             arr = list()
  *             py_handles.append(arr)
  *             ptrs[i] = <void *> arr             # <<<<<<<<<<<<<<
  *         else:
@@ -7039,17 +6570,17 @@ static struct __pyx_obj_10lineparser_AllocationResult *__pyx_f_10lineparser_allo
  */
       (__pyx_v_ptrs[__pyx_v_i]) = ((void *)__pyx_v_arr);
 
-      /* "lineparser.pyx":503
+      /* "lineparser.pyx":516
  *             lptr = arr
  *             ptrs[i] = <void *> &lptr[0]
  *         elif ty == String:             # <<<<<<<<<<<<<<
- *             arr = []
+ *             arr = list()
  *             py_handles.append(arr)
  */
       break;
       default:
 
-      /* "lineparser.pyx":508
+      /* "lineparser.pyx":521
  *             ptrs[i] = <void *> arr
  *         else:
  *             free(ptrs)             # <<<<<<<<<<<<<<
@@ -7058,19 +6589,19 @@ static struct __pyx_obj_10lineparser_AllocationResult *__pyx_f_10lineparser_allo
  */
       free(__pyx_v_ptrs);
 
-      /* "lineparser.pyx":509
+      /* "lineparser.pyx":522
  *         else:
  *             free(ptrs)
  *             ar = AllocationResult()             # <<<<<<<<<<<<<<
  *             ar.ptrs = NULL
  *             ar.py_handles = None
  */
-      __pyx_t_6 = __Pyx_PyObject_CallNoArg(((PyObject *)__pyx_ptype_10lineparser_AllocationResult)); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 509, __pyx_L1_error)
+      __pyx_t_6 = __Pyx_PyObject_CallNoArg(((PyObject *)__pyx_ptype_10lineparser_AllocationResult)); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 522, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_6);
       __pyx_v_ar = ((struct __pyx_obj_10lineparser_AllocationResult *)__pyx_t_6);
       __pyx_t_6 = 0;
 
-      /* "lineparser.pyx":510
+      /* "lineparser.pyx":523
  *             free(ptrs)
  *             ar = AllocationResult()
  *             ar.ptrs = NULL             # <<<<<<<<<<<<<<
@@ -7079,7 +6610,7 @@ static struct __pyx_obj_10lineparser_AllocationResult *__pyx_f_10lineparser_allo
  */
       __pyx_v_ar->ptrs = NULL;
 
-      /* "lineparser.pyx":511
+      /* "lineparser.pyx":524
  *             ar = AllocationResult()
  *             ar.ptrs = NULL
  *             ar.py_handles = None             # <<<<<<<<<<<<<<
@@ -7092,7 +6623,7 @@ static struct __pyx_obj_10lineparser_AllocationResult *__pyx_f_10lineparser_allo
       __Pyx_DECREF(__pyx_v_ar->py_handles);
       __pyx_v_ar->py_handles = Py_None;
 
-      /* "lineparser.pyx":512
+      /* "lineparser.pyx":525
  *             ar.ptrs = NULL
  *             ar.py_handles = None
  *             return ar             # <<<<<<<<<<<<<<
@@ -7106,7 +6637,7 @@ static struct __pyx_obj_10lineparser_AllocationResult *__pyx_f_10lineparser_allo
       break;
     }
 
-    /* "lineparser.pyx":513
+    /* "lineparser.pyx":526
  *             ar.py_handles = None
  *             return ar
  *         i += 1             # <<<<<<<<<<<<<<
@@ -7116,19 +6647,19 @@ static struct __pyx_obj_10lineparser_AllocationResult *__pyx_f_10lineparser_allo
     __pyx_v_i = (__pyx_v_i + 1);
   }
 
-  /* "lineparser.pyx":515
+  /* "lineparser.pyx":528
  *         i += 1
  * 
  *     ar = AllocationResult()             # <<<<<<<<<<<<<<
  *     ar.ptrs = ptrs
  *     ar.py_handles = py_handles
  */
-  __pyx_t_6 = __Pyx_PyObject_CallNoArg(((PyObject *)__pyx_ptype_10lineparser_AllocationResult)); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 515, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyObject_CallNoArg(((PyObject *)__pyx_ptype_10lineparser_AllocationResult)); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 528, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __pyx_v_ar = ((struct __pyx_obj_10lineparser_AllocationResult *)__pyx_t_6);
   __pyx_t_6 = 0;
 
-  /* "lineparser.pyx":516
+  /* "lineparser.pyx":529
  * 
  *     ar = AllocationResult()
  *     ar.ptrs = ptrs             # <<<<<<<<<<<<<<
@@ -7137,7 +6668,7 @@ static struct __pyx_obj_10lineparser_AllocationResult *__pyx_f_10lineparser_allo
  */
   __pyx_v_ar->ptrs = __pyx_v_ptrs;
 
-  /* "lineparser.pyx":517
+  /* "lineparser.pyx":530
  *     ar = AllocationResult()
  *     ar.ptrs = ptrs
  *     ar.py_handles = py_handles             # <<<<<<<<<<<<<<
@@ -7150,7 +6681,7 @@ static struct __pyx_obj_10lineparser_AllocationResult *__pyx_f_10lineparser_allo
   __Pyx_DECREF(__pyx_v_ar->py_handles);
   __pyx_v_ar->py_handles = __pyx_v_py_handles;
 
-  /* "lineparser.pyx":519
+  /* "lineparser.pyx":532
  *     ar.py_handles = py_handles
  * 
  *     return ar             # <<<<<<<<<<<<<<
@@ -7160,7 +6691,7 @@ static struct __pyx_obj_10lineparser_AllocationResult *__pyx_f_10lineparser_allo
   __pyx_r = __pyx_v_ar;
   goto __pyx_L0;
 
-  /* "lineparser.pyx":474
+  /* "lineparser.pyx":487
  *     cdef object py_handles
  * 
  * cdef AllocationResult allocate_field_outputs(const Field *fields, int nfields, long nlines):             # <<<<<<<<<<<<<<
@@ -22464,7 +21995,6 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_kp_s_Failed_to_parse_fields, __pyx_k_Failed_to_parse_fields, sizeof(__pyx_k_Failed_to_parse_fields), 0, 0, 1, 0},
   {&__pyx_kp_u_Failed_to_read_whole_file_encoun, __pyx_k_Failed_to_read_whole_file_encoun, sizeof(__pyx_k_Failed_to_read_whole_file_encoun), 0, 1, 0, 0},
   {&__pyx_n_s_Float64, __pyx_k_Float64, sizeof(__pyx_k_Float64), 0, 0, 1, 1},
-  {&__pyx_kp_u_Got_error, __pyx_k_Got_error, sizeof(__pyx_k_Got_error), 0, 1, 0, 0},
   {&__pyx_kp_u_Got_exception, __pyx_k_Got_exception, sizeof(__pyx_k_Got_exception), 0, 1, 0, 0},
   {&__pyx_kp_s_Incompatible_checksums_s_vs_0xb0, __pyx_k_Incompatible_checksums_s_vs_0xb0, sizeof(__pyx_k_Incompatible_checksums_s_vs_0xb0), 0, 0, 1, 0},
   {&__pyx_kp_s_Incompatible_checksums_s_vs_0xd4, __pyx_k_Incompatible_checksums_s_vs_0xd4, sizeof(__pyx_k_Incompatible_checksums_s_vs_0xd4), 0, 0, 1, 0},
@@ -22479,7 +22009,6 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_kp_s_MemoryView_of_r_at_0x_x, __pyx_k_MemoryView_of_r_at_0x_x, sizeof(__pyx_k_MemoryView_of_r_at_0x_x), 0, 0, 1, 0},
   {&__pyx_kp_s_MemoryView_of_r_object, __pyx_k_MemoryView_of_r_object, sizeof(__pyx_k_MemoryView_of_r_object), 0, 0, 1, 0},
   {&__pyx_n_b_O, __pyx_k_O, sizeof(__pyx_k_O), 0, 0, 0, 1},
-  {&__pyx_kp_s_Ok, __pyx_k_Ok, sizeof(__pyx_k_Ok), 0, 0, 1, 0},
   {&__pyx_n_s_OrderedDict, __pyx_k_OrderedDict, sizeof(__pyx_k_OrderedDict), 0, 0, 1, 1},
   {&__pyx_kp_s_Out_of_bounds_on_buffer_access_a, __pyx_k_Out_of_bounds_on_buffer_access_a, sizeof(__pyx_k_Out_of_bounds_on_buffer_access_a), 0, 0, 1, 0},
   {&__pyx_n_s_PickleError, __pyx_k_PickleError, sizeof(__pyx_k_PickleError), 0, 0, 1, 1},
@@ -22538,8 +22067,6 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_linelen, __pyx_k_linelen, sizeof(__pyx_k_linelen), 0, 0, 1, 1},
   {&__pyx_n_s_lineparser, __pyx_k_lineparser, sizeof(__pyx_k_lineparser), 0, 0, 1, 1},
   {&__pyx_kp_s_lineparser_pyx, __pyx_k_lineparser_pyx, sizeof(__pyx_k_lineparser_pyx), 0, 0, 1, 0},
-  {&__pyx_n_s_lines, __pyx_k_lines, sizeof(__pyx_k_lines), 0, 0, 1, 1},
-  {&__pyx_n_s_lines_result, __pyx_k_lines_result, sizeof(__pyx_k_lines_result), 0, 0, 1, 1},
   {&__pyx_n_s_main, __pyx_k_main, sizeof(__pyx_k_main), 0, 0, 1, 1},
   {&__pyx_n_s_max_lines, __pyx_k_max_lines, sizeof(__pyx_k_max_lines), 0, 0, 1, 1},
   {&__pyx_n_s_members, __pyx_k_members, sizeof(__pyx_k_members), 0, 0, 1, 1},
@@ -22557,10 +22084,10 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_np, __pyx_k_np, sizeof(__pyx_k_np), 0, 0, 1, 1},
   {&__pyx_n_s_numpy, __pyx_k_numpy, sizeof(__pyx_k_numpy), 0, 0, 1, 1},
   {&__pyx_n_s_obj, __pyx_k_obj, sizeof(__pyx_k_obj), 0, 0, 1, 1},
-  {&__pyx_kp_u_on_line, __pyx_k_on_line, sizeof(__pyx_k_on_line), 0, 1, 0, 0},
   {&__pyx_n_s_output_obj, __pyx_k_output_obj, sizeof(__pyx_k_output_obj), 0, 0, 1, 1},
   {&__pyx_n_s_pack, __pyx_k_pack, sizeof(__pyx_k_pack), 0, 0, 1, 1},
   {&__pyx_n_s_parents, __pyx_k_parents, sizeof(__pyx_k_parents), 0, 0, 1, 1},
+  {&__pyx_n_s_parse, __pyx_k_parse, sizeof(__pyx_k_parse), 0, 0, 1, 1},
   {&__pyx_n_s_pickle, __pyx_k_pickle, sizeof(__pyx_k_pickle), 0, 0, 1, 1},
   {&__pyx_n_s_pr, __pyx_k_pr, sizeof(__pyx_k_pr), 0, 0, 1, 1},
   {&__pyx_n_s_prepare, __pyx_k_prepare, sizeof(__pyx_k_prepare), 0, 0, 1, 1},
@@ -22584,6 +22111,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_reduce_ex, __pyx_k_reduce_ex, sizeof(__pyx_k_reduce_ex), 0, 0, 1, 1},
   {&__pyx_n_s_repr, __pyx_k_repr, sizeof(__pyx_k_repr), 0, 0, 1, 1},
   {&__pyx_n_s_res, __pyx_k_res, sizeof(__pyx_k_res), 0, 0, 1, 1},
+  {&__pyx_n_s_resize, __pyx_k_resize, sizeof(__pyx_k_resize), 0, 0, 1, 1},
   {&__pyx_kp_s_s_s, __pyx_k_s_s, sizeof(__pyx_k_s_s), 0, 0, 1, 0},
   {&__pyx_kp_s_s_s_d, __pyx_k_s_s_d, sizeof(__pyx_k_s_s_d), 0, 0, 1, 0},
   {&__pyx_n_s_self, __pyx_k_self, sizeof(__pyx_k_self), 0, 0, 1, 1},
@@ -22601,9 +22129,6 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_kp_s_strided_and_indirect, __pyx_k_strided_and_indirect, sizeof(__pyx_k_strided_and_indirect), 0, 0, 1, 0},
   {&__pyx_kp_s_stringsource, __pyx_k_stringsource, sizeof(__pyx_k_stringsource), 0, 0, 1, 0},
   {&__pyx_n_s_struct, __pyx_k_struct, sizeof(__pyx_k_struct), 0, 0, 1, 1},
-  {&__pyx_n_s_t, __pyx_k_t, sizeof(__pyx_k_t), 0, 0, 1, 1},
-  {&__pyx_n_s_t2, __pyx_k_t2, sizeof(__pyx_k_t2), 0, 0, 1, 1},
-  {&__pyx_n_s_temp, __pyx_k_temp, sizeof(__pyx_k_temp), 0, 0, 1, 1},
   {&__pyx_n_s_test, __pyx_k_test, sizeof(__pyx_k_test), 0, 0, 1, 1},
   {&__pyx_kp_s_unable_to_allocate_array_data, __pyx_k_unable_to_allocate_array_data, sizeof(__pyx_k_unable_to_allocate_array_data), 0, 0, 1, 0},
   {&__pyx_kp_s_unable_to_allocate_shape_and_str, __pyx_k_unable_to_allocate_shape_and_str, sizeof(__pyx_k_unable_to_allocate_shape_and_str), 0, 0, 1, 0},
@@ -22616,7 +22141,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {0, 0, 0, 0, 0, 0, 0}
 };
 static CYTHON_SMALL_CODE int __Pyx_InitCachedBuiltins(void) {
-  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 406, __pyx_L1_error)
+  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 456, __pyx_L1_error)
   __pyx_builtin_TypeError = __Pyx_GetBuiltinName(__pyx_n_s_TypeError); if (!__pyx_builtin_TypeError) __PYX_ERR(1, 2, __pyx_L1_error)
   __pyx_builtin_ValueError = __Pyx_GetBuiltinName(__pyx_n_s_ValueError); if (!__pyx_builtin_ValueError) __PYX_ERR(1, 33, __pyx_L1_error)
   __pyx_builtin_MemoryError = __Pyx_GetBuiltinName(__pyx_n_s_MemoryError); if (!__pyx_builtin_MemoryError) __PYX_ERR(1, 148, __pyx_L1_error)
@@ -22844,29 +22369,17 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__20);
   __Pyx_GIVEREF(__pyx_tuple__20);
 
-  /* "lineparser.pyx":387
- *         return cfields, -1
+  /* "lineparser.pyx":437
+ * """
  * 
- * def t(list pyfields, bytes filename):             # <<<<<<<<<<<<<<
+ * def parse(list pyfields, bytes filename):             # <<<<<<<<<<<<<<
  *     cdef ReadWholeFileResult file_res = read_whole_file(filename)
  *     if file_res.err != 0:
  */
-  __pyx_tuple__21 = PyTuple_Pack(18, __pyx_n_s_pyfields, __pyx_n_s_filename, __pyx_n_s_file_res, __pyx_n_s_data, __pyx_n_s_data_len, __pyx_n_s_fields_res, __pyx_n_s_fields, __pyx_n_s_nfields, __pyx_n_s_linelen, __pyx_n_s_i, __pyx_n_s_lines_result, __pyx_n_s_lines, __pyx_n_s_temp, __pyx_n_s_nlines, __pyx_n_s_output_obj, __pyx_n_s_ptrs, __pyx_n_s_pr, __pyx_n_s_py_handles); if (unlikely(!__pyx_tuple__21)) __PYX_ERR(0, 387, __pyx_L1_error)
+  __pyx_tuple__21 = PyTuple_Pack(16, __pyx_n_s_pyfields, __pyx_n_s_filename, __pyx_n_s_file_res, __pyx_n_s_data, __pyx_n_s_data_len, __pyx_n_s_fields_res, __pyx_n_s_fields, __pyx_n_s_nfields, __pyx_n_s_linelen, __pyx_n_s_i, __pyx_n_s_max_lines, __pyx_n_s_output_obj, __pyx_n_s_ptrs, __pyx_n_s_pr, __pyx_n_s_py_handles, __pyx_n_s_nlines); if (unlikely(!__pyx_tuple__21)) __PYX_ERR(0, 437, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__21);
   __Pyx_GIVEREF(__pyx_tuple__21);
-  __pyx_codeobj__22 = (PyObject*)__Pyx_PyCode_New(2, 0, 18, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__21, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_lineparser_pyx, __pyx_n_s_t, 387, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__22)) __PYX_ERR(0, 387, __pyx_L1_error)
-
-  /* "lineparser.pyx":432
- *     return "Ok!"
- * 
- * def t2(list pyfields, bytes filename):             # <<<<<<<<<<<<<<
- *     cdef ReadWholeFileResult file_res = read_whole_file(filename)
- *     if file_res.err != 0:
- */
-  __pyx_tuple__23 = PyTuple_Pack(15, __pyx_n_s_pyfields, __pyx_n_s_filename, __pyx_n_s_file_res, __pyx_n_s_data, __pyx_n_s_data_len, __pyx_n_s_fields_res, __pyx_n_s_fields, __pyx_n_s_nfields, __pyx_n_s_linelen, __pyx_n_s_i, __pyx_n_s_max_lines, __pyx_n_s_output_obj, __pyx_n_s_ptrs, __pyx_n_s_pr, __pyx_n_s_py_handles); if (unlikely(!__pyx_tuple__23)) __PYX_ERR(0, 432, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__23);
-  __Pyx_GIVEREF(__pyx_tuple__23);
-  __pyx_codeobj__24 = (PyObject*)__Pyx_PyCode_New(2, 0, 15, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__23, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_lineparser_pyx, __pyx_n_s_t2, 432, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__24)) __PYX_ERR(0, 432, __pyx_L1_error)
+  __pyx_codeobj__22 = (PyObject*)__Pyx_PyCode_New(2, 0, 16, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__21, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_lineparser_pyx, __pyx_n_s_parse, 437, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__22)) __PYX_ERR(0, 437, __pyx_L1_error)
 
   /* "EnumBase":28
  * class __Pyx_EnumBase(int):
@@ -22875,13 +22388,13 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *         for v in cls:
  *             if v == value:
  */
-  __pyx_tuple__25 = PyTuple_Pack(5, __pyx_n_s_cls, __pyx_n_s_value, __pyx_n_s_name, __pyx_n_s_v, __pyx_n_s_res); if (unlikely(!__pyx_tuple__25)) __PYX_ERR(1, 28, __pyx_L1_error)
+  __pyx_tuple__23 = PyTuple_Pack(5, __pyx_n_s_cls, __pyx_n_s_value, __pyx_n_s_name, __pyx_n_s_v, __pyx_n_s_res); if (unlikely(!__pyx_tuple__23)) __PYX_ERR(1, 28, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__23);
+  __Pyx_GIVEREF(__pyx_tuple__23);
+  __pyx_codeobj__24 = (PyObject*)__Pyx_PyCode_New(3, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__23, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_stringsource, __pyx_n_s_new, 28, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__24)) __PYX_ERR(1, 28, __pyx_L1_error)
+  __pyx_tuple__25 = PyTuple_Pack(1, ((PyObject *)Py_None)); if (unlikely(!__pyx_tuple__25)) __PYX_ERR(1, 28, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__25);
   __Pyx_GIVEREF(__pyx_tuple__25);
-  __pyx_codeobj__26 = (PyObject*)__Pyx_PyCode_New(3, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__25, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_stringsource, __pyx_n_s_new, 28, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__26)) __PYX_ERR(1, 28, __pyx_L1_error)
-  __pyx_tuple__27 = PyTuple_Pack(1, ((PyObject *)Py_None)); if (unlikely(!__pyx_tuple__27)) __PYX_ERR(1, 28, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__27);
-  __Pyx_GIVEREF(__pyx_tuple__27);
 
   /* "EnumBase":39
  *         cls.__members__[name] = res
@@ -22890,10 +22403,10 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *         return "<%s.%s: %d>" % (self.__class__.__name__, self.name, self)
  *     def __str__(self):
  */
-  __pyx_tuple__28 = PyTuple_Pack(1, __pyx_n_s_self); if (unlikely(!__pyx_tuple__28)) __PYX_ERR(1, 39, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__28);
-  __Pyx_GIVEREF(__pyx_tuple__28);
-  __pyx_codeobj__29 = (PyObject*)__Pyx_PyCode_New(1, 0, 1, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__28, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_stringsource, __pyx_n_s_repr, 39, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__29)) __PYX_ERR(1, 39, __pyx_L1_error)
+  __pyx_tuple__26 = PyTuple_Pack(1, __pyx_n_s_self); if (unlikely(!__pyx_tuple__26)) __PYX_ERR(1, 39, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__26);
+  __Pyx_GIVEREF(__pyx_tuple__26);
+  __pyx_codeobj__27 = (PyObject*)__Pyx_PyCode_New(1, 0, 1, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__26, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_stringsource, __pyx_n_s_repr, 39, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__27)) __PYX_ERR(1, 39, __pyx_L1_error)
 
   /* "EnumBase":41
  *     def __repr__(self):
@@ -22902,20 +22415,20 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *         return "%s.%s" % (self.__class__.__name__, self.name)
  * 
  */
-  __pyx_tuple__30 = PyTuple_Pack(1, __pyx_n_s_self); if (unlikely(!__pyx_tuple__30)) __PYX_ERR(1, 41, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__30);
-  __Pyx_GIVEREF(__pyx_tuple__30);
-  __pyx_codeobj__31 = (PyObject*)__Pyx_PyCode_New(1, 0, 1, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__30, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_stringsource, __pyx_n_s_str, 41, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__31)) __PYX_ERR(1, 41, __pyx_L1_error)
+  __pyx_tuple__28 = PyTuple_Pack(1, __pyx_n_s_self); if (unlikely(!__pyx_tuple__28)) __PYX_ERR(1, 41, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__28);
+  __Pyx_GIVEREF(__pyx_tuple__28);
+  __pyx_codeobj__29 = (PyObject*)__Pyx_PyCode_New(1, 0, 1, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__28, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_stringsource, __pyx_n_s_str, 41, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__29)) __PYX_ERR(1, 41, __pyx_L1_error)
 
   /* "(tree fragment)":1
  * def __pyx_unpickle___Pyx_EnumMeta(__pyx_type, long __pyx_checksum, __pyx_state):             # <<<<<<<<<<<<<<
  *     cdef object __pyx_PickleError
  *     cdef object __pyx_result
  */
-  __pyx_tuple__32 = PyTuple_Pack(5, __pyx_n_s_pyx_type, __pyx_n_s_pyx_checksum, __pyx_n_s_pyx_state, __pyx_n_s_pyx_PickleError, __pyx_n_s_pyx_result); if (unlikely(!__pyx_tuple__32)) __PYX_ERR(1, 1, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__32);
-  __Pyx_GIVEREF(__pyx_tuple__32);
-  __pyx_codeobj__33 = (PyObject*)__Pyx_PyCode_New(3, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__32, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_stringsource, __pyx_n_s_pyx_unpickle___Pyx_EnumMeta, 1, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__33)) __PYX_ERR(1, 1, __pyx_L1_error)
+  __pyx_tuple__30 = PyTuple_Pack(5, __pyx_n_s_pyx_type, __pyx_n_s_pyx_checksum, __pyx_n_s_pyx_state, __pyx_n_s_pyx_PickleError, __pyx_n_s_pyx_result); if (unlikely(!__pyx_tuple__30)) __PYX_ERR(1, 1, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__30);
+  __Pyx_GIVEREF(__pyx_tuple__30);
+  __pyx_codeobj__31 = (PyObject*)__Pyx_PyCode_New(3, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__30, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_stringsource, __pyx_n_s_pyx_unpickle___Pyx_EnumMeta, 1, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__31)) __PYX_ERR(1, 1, __pyx_L1_error)
 
   /* "View.MemoryView":286
  *         return self.name
@@ -22924,9 +22437,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  * cdef strided = Enum("<strided and direct>") # default
  * cdef indirect = Enum("<strided and indirect>")
  */
-  __pyx_tuple__34 = PyTuple_Pack(1, __pyx_kp_s_strided_and_direct_or_indirect); if (unlikely(!__pyx_tuple__34)) __PYX_ERR(1, 286, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__34);
-  __Pyx_GIVEREF(__pyx_tuple__34);
+  __pyx_tuple__32 = PyTuple_Pack(1, __pyx_kp_s_strided_and_direct_or_indirect); if (unlikely(!__pyx_tuple__32)) __PYX_ERR(1, 286, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__32);
+  __Pyx_GIVEREF(__pyx_tuple__32);
 
   /* "View.MemoryView":287
  * 
@@ -22935,9 +22448,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  * cdef indirect = Enum("<strided and indirect>")
  * 
  */
-  __pyx_tuple__35 = PyTuple_Pack(1, __pyx_kp_s_strided_and_direct); if (unlikely(!__pyx_tuple__35)) __PYX_ERR(1, 287, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__35);
-  __Pyx_GIVEREF(__pyx_tuple__35);
+  __pyx_tuple__33 = PyTuple_Pack(1, __pyx_kp_s_strided_and_direct); if (unlikely(!__pyx_tuple__33)) __PYX_ERR(1, 287, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__33);
+  __Pyx_GIVEREF(__pyx_tuple__33);
 
   /* "View.MemoryView":288
  * cdef generic = Enum("<strided and direct or indirect>")
@@ -22946,9 +22459,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  * 
  * 
  */
-  __pyx_tuple__36 = PyTuple_Pack(1, __pyx_kp_s_strided_and_indirect); if (unlikely(!__pyx_tuple__36)) __PYX_ERR(1, 288, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__36);
-  __Pyx_GIVEREF(__pyx_tuple__36);
+  __pyx_tuple__34 = PyTuple_Pack(1, __pyx_kp_s_strided_and_indirect); if (unlikely(!__pyx_tuple__34)) __PYX_ERR(1, 288, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__34);
+  __Pyx_GIVEREF(__pyx_tuple__34);
 
   /* "View.MemoryView":291
  * 
@@ -22957,9 +22470,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  * cdef indirect_contiguous = Enum("<contiguous and indirect>")
  * 
  */
-  __pyx_tuple__37 = PyTuple_Pack(1, __pyx_kp_s_contiguous_and_direct); if (unlikely(!__pyx_tuple__37)) __PYX_ERR(1, 291, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__37);
-  __Pyx_GIVEREF(__pyx_tuple__37);
+  __pyx_tuple__35 = PyTuple_Pack(1, __pyx_kp_s_contiguous_and_direct); if (unlikely(!__pyx_tuple__35)) __PYX_ERR(1, 291, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__35);
+  __Pyx_GIVEREF(__pyx_tuple__35);
 
   /* "View.MemoryView":292
  * 
@@ -22968,19 +22481,19 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  * 
  * 
  */
-  __pyx_tuple__38 = PyTuple_Pack(1, __pyx_kp_s_contiguous_and_indirect); if (unlikely(!__pyx_tuple__38)) __PYX_ERR(1, 292, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__38);
-  __Pyx_GIVEREF(__pyx_tuple__38);
+  __pyx_tuple__36 = PyTuple_Pack(1, __pyx_kp_s_contiguous_and_indirect); if (unlikely(!__pyx_tuple__36)) __PYX_ERR(1, 292, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__36);
+  __Pyx_GIVEREF(__pyx_tuple__36);
 
   /* "(tree fragment)":1
  * def __pyx_unpickle_Enum(__pyx_type, long __pyx_checksum, __pyx_state):             # <<<<<<<<<<<<<<
  *     cdef object __pyx_PickleError
  *     cdef object __pyx_result
  */
-  __pyx_tuple__39 = PyTuple_Pack(5, __pyx_n_s_pyx_type, __pyx_n_s_pyx_checksum, __pyx_n_s_pyx_state, __pyx_n_s_pyx_PickleError, __pyx_n_s_pyx_result); if (unlikely(!__pyx_tuple__39)) __PYX_ERR(1, 1, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__39);
-  __Pyx_GIVEREF(__pyx_tuple__39);
-  __pyx_codeobj__40 = (PyObject*)__Pyx_PyCode_New(3, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__39, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_stringsource, __pyx_n_s_pyx_unpickle_Enum, 1, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__40)) __PYX_ERR(1, 1, __pyx_L1_error)
+  __pyx_tuple__37 = PyTuple_Pack(5, __pyx_n_s_pyx_type, __pyx_n_s_pyx_checksum, __pyx_n_s_pyx_state, __pyx_n_s_pyx_PickleError, __pyx_n_s_pyx_result); if (unlikely(!__pyx_tuple__37)) __PYX_ERR(1, 1, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__37);
+  __Pyx_GIVEREF(__pyx_tuple__37);
+  __pyx_codeobj__38 = (PyObject*)__Pyx_PyCode_New(3, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__37, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_stringsource, __pyx_n_s_pyx_unpickle_Enum, 1, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__38)) __PYX_ERR(1, 1, __pyx_L1_error)
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -23044,15 +22557,15 @@ static int __Pyx_modinit_type_init_code(void) {
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__Pyx_modinit_type_init_code", 0);
   /*--- Type init code ---*/
-  if (PyType_Ready(&__pyx_type_10lineparser_AllocationResult) < 0) __PYX_ERR(0, 469, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_10lineparser_AllocationResult) < 0) __PYX_ERR(0, 482, __pyx_L1_error)
   #if PY_VERSION_HEX < 0x030800B1
   __pyx_type_10lineparser_AllocationResult.tp_print = 0;
   #endif
   if ((CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP) && likely(!__pyx_type_10lineparser_AllocationResult.tp_dictoffset && __pyx_type_10lineparser_AllocationResult.tp_getattro == PyObject_GenericGetAttr)) {
     __pyx_type_10lineparser_AllocationResult.tp_getattro = __Pyx_PyObject_GenericGetAttr;
   }
-  if (PyObject_SetAttr(__pyx_m, __pyx_n_s_AllocationResult, (PyObject *)&__pyx_type_10lineparser_AllocationResult) < 0) __PYX_ERR(0, 469, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_10lineparser_AllocationResult) < 0) __PYX_ERR(0, 469, __pyx_L1_error)
+  if (PyObject_SetAttr(__pyx_m, __pyx_n_s_AllocationResult, (PyObject *)&__pyx_type_10lineparser_AllocationResult) < 0) __PYX_ERR(0, 482, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_10lineparser_AllocationResult) < 0) __PYX_ERR(0, 482, __pyx_L1_error)
   __pyx_ptype_10lineparser_AllocationResult = &__pyx_type_10lineparser_AllocationResult;
   __Pyx_EnumMeta.tp_base = (&PyType_Type);
   if (PyType_Ready(&__Pyx_EnumMeta) < 0) __PYX_ERR(1, 15, __pyx_L1_error)
@@ -23436,28 +22949,16 @@ if (!__Pyx_RefNanny) {
  */
   __pyx_v_10lineparser_LF = 0x0A;
 
-  /* "lineparser.pyx":387
- *         return cfields, -1
+  /* "lineparser.pyx":437
+ * """
  * 
- * def t(list pyfields, bytes filename):             # <<<<<<<<<<<<<<
+ * def parse(list pyfields, bytes filename):             # <<<<<<<<<<<<<<
  *     cdef ReadWholeFileResult file_res = read_whole_file(filename)
  *     if file_res.err != 0:
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_10lineparser_1t, NULL, __pyx_n_s_lineparser); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 387, __pyx_L1_error)
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_10lineparser_1parse, NULL, __pyx_n_s_lineparser); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 437, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_t, __pyx_t_1) < 0) __PYX_ERR(0, 387, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-  /* "lineparser.pyx":432
- *     return "Ok!"
- * 
- * def t2(list pyfields, bytes filename):             # <<<<<<<<<<<<<<
- *     cdef ReadWholeFileResult file_res = read_whole_file(filename)
- *     if file_res.err != 0:
- */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_10lineparser_3t2, NULL, __pyx_n_s_lineparser); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 432, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_t2, __pyx_t_1) < 0) __PYX_ERR(0, 432, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_parse, __pyx_t_1) < 0) __PYX_ERR(0, 437, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "lineparser.pyx":1
@@ -23562,9 +23063,9 @@ if (!__Pyx_RefNanny) {
  *         for v in cls:
  *             if v == value:
  */
-  __pyx_t_6 = __Pyx_CyFunction_NewEx(&__pyx_mdef_8EnumBase_14__Pyx_EnumBase_1__new__, __Pyx_CYFUNCTION_STATICMETHOD, __pyx_n_s_Pyx_EnumBase___new, NULL, __pyx_n_s_EnumBase, __pyx_d, ((PyObject *)__pyx_codeobj__26)); if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 28, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_CyFunction_NewEx(&__pyx_mdef_8EnumBase_14__Pyx_EnumBase_1__new__, __Pyx_CYFUNCTION_STATICMETHOD, __pyx_n_s_Pyx_EnumBase___new, NULL, __pyx_n_s_EnumBase, __pyx_d, ((PyObject *)__pyx_codeobj__24)); if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 28, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
-  __Pyx_CyFunction_SetDefaultsTuple(__pyx_t_6, __pyx_tuple__27);
+  __Pyx_CyFunction_SetDefaultsTuple(__pyx_t_6, __pyx_tuple__25);
   if (__Pyx_SetNameInClass(__pyx_t_5, __pyx_n_s_new, __pyx_t_6) < 0) __PYX_ERR(1, 28, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
 
@@ -23575,7 +23076,7 @@ if (!__Pyx_RefNanny) {
  *         return "<%s.%s: %d>" % (self.__class__.__name__, self.name, self)
  *     def __str__(self):
  */
-  __pyx_t_6 = __Pyx_CyFunction_NewEx(&__pyx_mdef_8EnumBase_14__Pyx_EnumBase_3__repr__, 0, __pyx_n_s_Pyx_EnumBase___repr, NULL, __pyx_n_s_EnumBase, __pyx_d, ((PyObject *)__pyx_codeobj__29)); if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 39, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_CyFunction_NewEx(&__pyx_mdef_8EnumBase_14__Pyx_EnumBase_3__repr__, 0, __pyx_n_s_Pyx_EnumBase___repr, NULL, __pyx_n_s_EnumBase, __pyx_d, ((PyObject *)__pyx_codeobj__27)); if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 39, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   if (__Pyx_SetNameInClass(__pyx_t_5, __pyx_n_s_repr, __pyx_t_6) < 0) __PYX_ERR(1, 39, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
@@ -23587,7 +23088,7 @@ if (!__Pyx_RefNanny) {
  *         return "%s.%s" % (self.__class__.__name__, self.name)
  * 
  */
-  __pyx_t_6 = __Pyx_CyFunction_NewEx(&__pyx_mdef_8EnumBase_14__Pyx_EnumBase_5__str__, 0, __pyx_n_s_Pyx_EnumBase___str, NULL, __pyx_n_s_EnumBase, __pyx_d, ((PyObject *)__pyx_codeobj__31)); if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 41, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_CyFunction_NewEx(&__pyx_mdef_8EnumBase_14__Pyx_EnumBase_5__str__, 0, __pyx_n_s_Pyx_EnumBase___str, NULL, __pyx_n_s_EnumBase, __pyx_d, ((PyObject *)__pyx_codeobj__29)); if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 41, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   if (__Pyx_SetNameInClass(__pyx_t_5, __pyx_n_s_str, __pyx_t_6) < 0) __PYX_ERR(1, 41, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
@@ -23681,7 +23182,7 @@ if (!__Pyx_RefNanny) {
  * cdef strided = Enum("<strided and direct>") # default
  * cdef indirect = Enum("<strided and indirect>")
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_MemviewEnum_type), __pyx_tuple__34, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 286, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_MemviewEnum_type), __pyx_tuple__32, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 286, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_XGOTREF(generic);
   __Pyx_DECREF_SET(generic, __pyx_t_1);
@@ -23695,7 +23196,7 @@ if (!__Pyx_RefNanny) {
  * cdef indirect = Enum("<strided and indirect>")
  * 
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_MemviewEnum_type), __pyx_tuple__35, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 287, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_MemviewEnum_type), __pyx_tuple__33, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 287, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_XGOTREF(strided);
   __Pyx_DECREF_SET(strided, __pyx_t_1);
@@ -23709,7 +23210,7 @@ if (!__Pyx_RefNanny) {
  * 
  * 
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_MemviewEnum_type), __pyx_tuple__36, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 288, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_MemviewEnum_type), __pyx_tuple__34, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 288, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_XGOTREF(indirect);
   __Pyx_DECREF_SET(indirect, __pyx_t_1);
@@ -23723,7 +23224,7 @@ if (!__Pyx_RefNanny) {
  * cdef indirect_contiguous = Enum("<contiguous and indirect>")
  * 
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_MemviewEnum_type), __pyx_tuple__37, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 291, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_MemviewEnum_type), __pyx_tuple__35, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 291, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_XGOTREF(contiguous);
   __Pyx_DECREF_SET(contiguous, __pyx_t_1);
@@ -23737,7 +23238,7 @@ if (!__Pyx_RefNanny) {
  * 
  * 
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_MemviewEnum_type), __pyx_tuple__38, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 292, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_MemviewEnum_type), __pyx_tuple__36, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 292, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_XGOTREF(indirect_contiguous);
   __Pyx_DECREF_SET(indirect_contiguous, __pyx_t_1);
@@ -25280,157 +24781,6 @@ static CYTHON_INLINE PyObject* __Pyx_PyUnicode_From_int(int value, Py_ssize_t wi
         return PyUnicode_FromOrdinal(*dpos);
     }
     return __Pyx_PyUnicode_BuildFromAscii(ulength, dpos, (int) length, prepend_sign, padding_char);
-}
-
-/* CIntToPyUnicode */
-#ifdef _MSC_VER
-    #ifndef _MSC_STDINT_H_
-        #if _MSC_VER < 1300
-           typedef unsigned short    uint16_t;
-        #else
-           typedef unsigned __int16  uint16_t;
-        #endif
-    #endif
-#else
-   #include <stdint.h>
-#endif
-#if defined(__GNUC__) && (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6))
-#define GCC_DIAGNOSTIC
-#endif
-static CYTHON_INLINE PyObject* __Pyx_PyUnicode_From_long(long value, Py_ssize_t width, char padding_char, char format_char) {
-    char digits[sizeof(long)*3+2];
-    char *dpos, *end = digits + sizeof(long)*3+2;
-    const char *hex_digits = DIGITS_HEX;
-    Py_ssize_t length, ulength;
-    int prepend_sign, last_one_off;
-    long remaining;
-#ifdef GCC_DIAGNOSTIC
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wconversion"
-#endif
-    const long neg_one = (long) -1, const_zero = (long) 0;
-#ifdef GCC_DIAGNOSTIC
-#pragma GCC diagnostic pop
-#endif
-    const int is_unsigned = neg_one > const_zero;
-    if (format_char == 'X') {
-        hex_digits += 16;
-        format_char = 'x';
-    }
-    remaining = value;
-    last_one_off = 0;
-    dpos = end;
-    do {
-        int digit_pos;
-        switch (format_char) {
-        case 'o':
-            digit_pos = abs((int)(remaining % (8*8)));
-            remaining = (long) (remaining / (8*8));
-            dpos -= 2;
-            *(uint16_t*)dpos = ((const uint16_t*)DIGIT_PAIRS_8)[digit_pos];
-            last_one_off = (digit_pos < 8);
-            break;
-        case 'd':
-            digit_pos = abs((int)(remaining % (10*10)));
-            remaining = (long) (remaining / (10*10));
-            dpos -= 2;
-            *(uint16_t*)dpos = ((const uint16_t*)DIGIT_PAIRS_10)[digit_pos];
-            last_one_off = (digit_pos < 10);
-            break;
-        case 'x':
-            *(--dpos) = hex_digits[abs((int)(remaining % 16))];
-            remaining = (long) (remaining / 16);
-            break;
-        default:
-            assert(0);
-            break;
-        }
-    } while (unlikely(remaining != 0));
-    if (last_one_off) {
-        assert(*dpos == '0');
-        dpos++;
-    }
-    length = end - dpos;
-    ulength = length;
-    prepend_sign = 0;
-    if (!is_unsigned && value <= neg_one) {
-        if (padding_char == ' ' || width <= length + 1) {
-            *(--dpos) = '-';
-            ++length;
-        } else {
-            prepend_sign = 1;
-        }
-        ++ulength;
-    }
-    if (width > ulength) {
-        ulength = width;
-    }
-    if (ulength == 1) {
-        return PyUnicode_FromOrdinal(*dpos);
-    }
-    return __Pyx_PyUnicode_BuildFromAscii(ulength, dpos, (int) length, prepend_sign, padding_char);
-}
-
-/* JoinPyUnicode */
-static PyObject* __Pyx_PyUnicode_Join(PyObject* value_tuple, Py_ssize_t value_count, Py_ssize_t result_ulength,
-                                      CYTHON_UNUSED Py_UCS4 max_char) {
-#if CYTHON_USE_UNICODE_INTERNALS && CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-    PyObject *result_uval;
-    int result_ukind;
-    Py_ssize_t i, char_pos;
-    void *result_udata;
-#if CYTHON_PEP393_ENABLED
-    result_uval = PyUnicode_New(result_ulength, max_char);
-    if (unlikely(!result_uval)) return NULL;
-    result_ukind = (max_char <= 255) ? PyUnicode_1BYTE_KIND : (max_char <= 65535) ? PyUnicode_2BYTE_KIND : PyUnicode_4BYTE_KIND;
-    result_udata = PyUnicode_DATA(result_uval);
-#else
-    result_uval = PyUnicode_FromUnicode(NULL, result_ulength);
-    if (unlikely(!result_uval)) return NULL;
-    result_ukind = sizeof(Py_UNICODE);
-    result_udata = PyUnicode_AS_UNICODE(result_uval);
-#endif
-    char_pos = 0;
-    for (i=0; i < value_count; i++) {
-        int ukind;
-        Py_ssize_t ulength;
-        void *udata;
-        PyObject *uval = PyTuple_GET_ITEM(value_tuple, i);
-        if (unlikely(__Pyx_PyUnicode_READY(uval)))
-            goto bad;
-        ulength = __Pyx_PyUnicode_GET_LENGTH(uval);
-        if (unlikely(!ulength))
-            continue;
-        if (unlikely(char_pos + ulength < 0))
-            goto overflow;
-        ukind = __Pyx_PyUnicode_KIND(uval);
-        udata = __Pyx_PyUnicode_DATA(uval);
-        if (!CYTHON_PEP393_ENABLED || ukind == result_ukind) {
-            memcpy((char *)result_udata + char_pos * result_ukind, udata, (size_t) (ulength * result_ukind));
-        } else {
-            #if CYTHON_COMPILING_IN_CPYTHON && PY_VERSION_HEX >= 0x030300F0 || defined(_PyUnicode_FastCopyCharacters)
-            _PyUnicode_FastCopyCharacters(result_uval, char_pos, uval, 0, ulength);
-            #else
-            Py_ssize_t j;
-            for (j=0; j < ulength; j++) {
-                Py_UCS4 uchar = __Pyx_PyUnicode_READ(ukind, udata, j);
-                __Pyx_PyUnicode_WRITE(result_ukind, result_udata, char_pos+j, uchar);
-            }
-            #endif
-        }
-        char_pos += ulength;
-    }
-    return result_uval;
-overflow:
-    PyErr_SetString(PyExc_OverflowError, "join() result is too long for a Python string");
-bad:
-    Py_DECREF(result_uval);
-    return NULL;
-#else
-    result_ulength++;
-    value_count++;
-    return PyUnicode_Join(__pyx_empty_unicode, value_tuple);
-#endif
 }
 
 /* MemviewSliceInit */

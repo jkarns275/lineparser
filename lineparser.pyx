@@ -38,7 +38,7 @@ cdef inline int parse_i64(void *output, const char *st, long line_n, int field_l
 cdef inline int parse_string(void *output, const char *str, long line_n, int field_len):
     cdef list loutput = <list> output
     cdef bytes copy = <bytes> str
-    loutput.append(copy)
+    list.append(loutput, copy)
     return 0
 
 cpdef enum Ty:
@@ -184,7 +184,7 @@ ctypedef struct ParsedResult:
     long line_n
     long field_index
 
-cdef ParsedResult parse(char **lines, long nlines, Field *fields, void **output, long nfields):
+cdef ParsedResult _parse(char **lines, long nlines, Field *fields, void **output, long nfields):
     cdef ParsedResult pr
     cdef long i = 0
     cdef int j, ty = 0, length = 0
@@ -228,7 +228,7 @@ cdef char* fast_next_line(char* current_position, char* end_position, int line_l
     
     if new_pos >= end_position:
         return NULL
-    
+
     cdef char c
 
     while True:
@@ -241,29 +241,32 @@ cdef char* fast_next_line(char* current_position, char* end_position, int line_l
         else:
             return new_pos
 
-cdef ParsedResult fast_parse(char *data, long data_len, long max_nlines, int line_len, Field *fields, void **output, int nfields):
+cdef ParsedResult _fast_parse(char *data, long data_len, long max_nlines, int line_len, Field *fields, void **output, int nfields):
     cdef long line_n = 0
     cdef char *end = data + data_len
     cdef char *line = data
-    cdef int length, j = 0
+    cdef char *t = NULL
+    cdef int length = 0, j = 0
     cdef char temp = 0
     cdef int res = 0
     cdef ParsedResult pr
 
     while line != NULL:
         j = 0
+        length = 0
         while j < nfields:
-            length = fields[j].len
+            t = &line[length]
+            length += fields[j].len
             temp = line[length]
             line[length] = 0
             ty = fields[j].ty
 
             if ty == Float64:
-                res = parse_f64(output[j], line, line_n, j)
+                res = parse_f64(output[j], t, line_n, j)
             elif ty == Int64:
-                res = parse_i64(output[j], line, line_n, j)
+                res = parse_i64(output[j], t, line_n, j)
             elif ty == String:
-                res = parse_string(output[j], line, line_n, j)
+                res = parse_string(output[j], t, line_n, j)
 
             if res != 0:
                 pr.line_n = line_n
@@ -274,8 +277,8 @@ cdef ParsedResult fast_parse(char *data, long data_len, long max_nlines, int lin
 
         line = fast_next_line(line, end, line_len)
         line_n += 1
-    
-    pr.line_n = line_n
+
+    pr.line_n = line_n - 1
     pr.field_index = -1
     return pr
 
@@ -384,6 +387,7 @@ cdef (Field *, int) make_fields(list fields):
             cfields = NULL
         return cfields, -1
 
+"""
 def t(list pyfields, bytes filename):
     cdef ReadWholeFileResult file_res = read_whole_file(filename)
     if file_res.err != 0:
@@ -419,7 +423,7 @@ def t(list pyfields, bytes filename):
     if output_obj is None:
         return "Failed to allocate output"
     cdef void **ptrs = output_obj.ptrs
-    cdef ParsedResult pr = parse(lines, nlines, fields, output_obj.ptrs, nfields) 
+    cdef ParsedResult pr = _parse(lines, nlines, fields, output_obj.ptrs, nfields) 
     if pr.line_n != -1:
         return "Failed to parse"
     cdef list py_handles = output_obj.py_handles
@@ -428,8 +432,9 @@ def t(list pyfields, bytes filename):
     free(fields)
     free(data)
     return "Ok!"
+"""
 
-def t2(list pyfields, bytes filename):
+def parse(list pyfields, bytes filename):
     cdef ReadWholeFileResult file_res = read_whole_file(filename)
     if file_res.err != 0:
         return f"Failed to read whole file, encountered error {file_res.err}"
@@ -457,14 +462,22 @@ def t2(list pyfields, bytes filename):
     if output_obj is None:
         return "Failed to allocate output"
     cdef void **ptrs = output_obj.ptrs
-    cdef ParsedResult pr = fast_parse(data, data_len, max_lines, linelen, fields, output_obj.ptrs, nfields) 
+    cdef ParsedResult pr = _fast_parse(data, data_len, max_lines, linelen, fields, output_obj.ptrs, nfields) 
     if pr.field_index != -1:
         return "Failed to parse"
     cdef list py_handles = output_obj.py_handles
 
+    nlines = pr.line_n
+    
+    for i in range(nfields):
+        if fields[i].ty in (Float64, Int64):
+            py_handles[i].resize(nlines)
+
     free(fields)
     free(data)
-    return "Ok!"
+    free(output_obj.ptrs)
+
+    return py_handles
 
 cdef class AllocationResult:
 
@@ -501,7 +514,7 @@ cdef AllocationResult allocate_field_outputs(const Field *fields, int nfields, l
             lptr = arr
             ptrs[i] = <void *> &lptr[0]
         elif ty == String:
-            arr = []
+            arr = list()
             py_handles.append(arr)
             ptrs[i] = <void *> arr
         else:
