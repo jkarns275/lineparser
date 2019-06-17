@@ -32,7 +32,7 @@ setup(  name="lineparser-jkarns",
         license='MIT',
         classifiers=[
             'Development Status :: 3 - Alpha',
-            'License :: MIT License',
+            'License :: OSI Approved :: MIT License',
             'Programming Language :: Python :: 3'
         ],
         ext_modules=extensions)
