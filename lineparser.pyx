@@ -212,11 +212,11 @@ cdef ParsedResult _parse(char **lines, long nlines, Field *fields, void **output
                 pr.line_n = i
                 pr.field_index = j
                 return pr
-
+            
             line[length] = temp
             line += length
             j += 1
-
+        
         i += 1
 
     pr.line_n = -1
@@ -260,7 +260,7 @@ cdef ParsedResult _fast_parse(char *data, long data_len, long max_nlines, int li
             temp = line[length]
             line[length] = 0
             ty = fields[j].ty
-
+            
             if ty == Float64:
                 res = parse_f64(output[j], t, line_n, j)
             elif ty == Int64:
@@ -274,6 +274,7 @@ cdef ParsedResult _fast_parse(char *data, long data_len, long max_nlines, int li
                 return pr
             
             j += 1
+            line[length] = temp
 
         line = fast_next_line(line, end, line_len)
         line_n += 1
@@ -472,7 +473,8 @@ def parse(list pyfields, bytes filename):
     for i in range(nfields):
         if fields[i].ty in (Float64, Int64):
             py_handles[i].resize(nlines)
-
+        else:
+            py_handles[i] = py_handles[i][0:nlines]
     free(fields)
     free(data)
     free(output_obj.ptrs)
