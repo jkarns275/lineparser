@@ -14,6 +14,9 @@ import lineparser
 import time
 
 """
+Every fixed-width format file consists of a series of fixed-width fields on each and every line.
+The lineparser library has you specify the format of your file by specifying which fields it has.
+
 Fields are supplied as a list of tuples, in the order they appear in the file. Each tuple is a
 pair with the type of the field first, then the number of columns that field occupies.
 In this case the first field is a Float64 and occupies 12 columns, then a Float64 that occupies
