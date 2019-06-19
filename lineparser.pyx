@@ -426,6 +426,12 @@ cdef (Field *, int) make_fields(list fields):
             if type(length) != int:
                 raise Exception("Expected type int for length, instead got {}".format(type(length)))
             if type(ty) != Ty:
+                if ty == int:
+                    ty = Int64
+                if ty == float:
+                    ty = Float64
+                if ty == str:
+                    ty = String
                 if type(ty) == int:
                     if ty > MAX_T or ty < 0:
                         raise Exception("Invalid ty id {}".format(ty))
@@ -561,12 +567,11 @@ def parse(list pyfields, filename):
     cdef int linelen = 0
     for i in range(nfields):
         linelen += fields[i].len
+        if fields[i].len == 0:
+            raise FieldException(f"fields[{i}] has a width of zero.")
+        if fields[i].len < 0:
+            raise FieldException(f"fields[{i}] has a width less than zero.")
 
-    if linelen == 0:
-        free(fields)
-        free(data)
-        raise FieldException("Cannot have zero width fields.")
-    
     cdef long max_lines = data_len / linelen
 
     cdef AllocationResult output_obj = allocate_field_outputs(fields, nfields, max_lines)
