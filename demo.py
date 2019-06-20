@@ -1,14 +1,12 @@
-import lineparser
+from lineparser import NamedField, named_parse
 import time
 
-fields = [(lineparser.Float64, 12), (lineparser.Float64, 10), (lineparser.Float64, 12), 
-        (lineparser.String, 6), (lineparser.String, 6), (lineparser.String, 14),
-        (lineparser.String, 14), (lineparser.Float64, 6)]
+fields = [NamedField("a", float, 12), NamedField("b", float, 10), NamedField("c", float, 12), 
+          NamedField("d", str, 6), NamedField("e", str, 6), NamedField("f", str, 14),
+          NamedField("g", str, 14), NamedField("h", float, 6)]
 
 start = time.time()
-result = lineparser.parse(fields, b'data/small_data.par')
+result = named_parse(fields, 'data/small_data.par')
 end = time.time()
-print(result)
-print(f"Took {end - start} seconds")
-for i in range(len(fields)):
-    print(len(result[i]))
+for k in result:
+    print(f"{k} -> {result[k]}")

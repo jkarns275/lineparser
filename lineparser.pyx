@@ -398,7 +398,7 @@ cdef CField *make_fields(list pyfields):
 def parse(list pyfields, filename):
     """
 
-    Attempts to parse the lines from `filename` using the field specfications supplied in `pyfields`.
+    Attempts to parse the lines from `filename` using the field specfications supplied in `pyfields`
 
     Parameters
     ----------
@@ -412,9 +412,9 @@ def parse(list pyfields, filename):
     Returns
     -------
     `list` of iterable
-        A list of numpy arrays and lists, where each index in the list corresponds to the field of
-        the same index in the `pyfields` list. For String fields it will be a `list` of `str`, and
-        for Float64 and Int64 it will be a numpy array.
+        A list of numpy arrays and lists, where the order matches that of the fields supplied in
+        `pyfields`. For String fields it will be a `list` of `str`, and for Float64 and Int64 it
+        will be a numpy array.
 
     Raises
     ------
@@ -441,8 +441,6 @@ def parse(list pyfields, filename):
     [array([ 15, 146]), array([255,  12]), [b'   dog', b' horse']]    
 
     """
-    # Ensure fields are properly formatted
-    
     cdef int nfields = len(pyfields)
     cdef CField *fields = make_fields(pyfields)
 
@@ -505,6 +503,101 @@ def parse(list pyfields, filename):
     free(ptrs)
 
     return py_handles
+
+class DuplicateFieldNameError(Exception):
+
+    def __init__(self, name):
+        self.name = name
+
+    def __str__(self):
+        return f"Duplicate field name '{self.name}'."
+
+
+def named_parse(list named_fields, filename):
+    """
+
+    Attempts to parse the lines from `filename` using the field specfications supplied in
+    `named_fields`. Then, a map is created where the keys are the supplied names, and the values
+    are the results of parsing.
+
+    Parameters
+    ----------
+    named_fields : `list` of NamedField
+        This list describes the fixed-width file format. The Fields in the list ought to be in the
+        same order that they appear in the file.
+    filename : `str` or `bytes`
+        The filename or path which points to the fixed-width formatted file. If filename is a `str`,
+        it must be utf-8 encoded
+
+    Returns
+    -------
+    `list` of iterable
+        A map from name to the result of parsing, where the parsing results are either a list or
+        a numpy array. For String fields it will be a `list` of `str`, and for Float64 and Int64 it
+        will be a numpy array.
+
+    Raises
+    ------
+    LineParsingError
+        If there is a bad line (wrong length), or a bad field (failed to parse)
+    OSError
+        If this function fails to open `filename`
+    FieldError
+        If there are zero fields provided, or if the provided fields are not all of type `Field`
+    MemoryError
+        If there is not enough memory to read the input file and allocate field containers.
+    DuplicateFieldNameError
+        If more than two or more of the NamedFields in `named_field` have the same name.
+
+    Examples
+    --------
+    >>> from lineparser import named_parse, NamedField
+    >>> fields = [NamedField("a", int, 3), NamedField("b", int, 4), NamedField("c", str, 6)]
+    >>> file = open("test.lines", "w")
+    >>> file.write(" 15 255   dog\n")
+    14
+    >>> file.write("146  12 horse\n")
+    14
+    >>> file.close()
+    >>> named_parse(fields, "test.lines")
+    {'a': array([ 15, 146]), 'b': array([255,  12]), 'c': [b'   dog', b' horse']}
+
+
+    """
+    names = set()
+    for field in named_fields:
+        if field.name in names:
+            raise DuplicateFieldNameError(field.name)
+        names.add(field.name)
+
+    fields = list(map(lambda named_field: named_field.field, named_fields))
+
+    parsed = parse(fields, filename)
+
+    named_result = {}
+
+    for (named_field, result) in zip(named_fields, parsed):
+        named_result[named_field.name] = result
+    
+    return named_result
+
+class NamedField:
+
+    def __init__(self, name, ty, length):
+        self.field = Field(ty, length)
+        self.name = self.__check_name(name)
+
+    def __check_name(self, name):
+        if type(name) not in (str, bytes):
+            raise TypeError(f"name should be of type str or bytes, instead got {type(name)}")
+        return name
+
+    def __str__(self):
+        return f"NamedField({ty_to_str(self.ty)}, {self.length}, {repr(self.namerepr)})"
+
+    def __repr__(self):
+        return str(self)
+
 
 
 cdef class AllocationResult:
