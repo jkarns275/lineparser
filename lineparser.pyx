@@ -204,8 +204,17 @@ cdef ReadWholeFileResult make_io_err(int io_err):
     r.io_err = io_err
     return r
 
-cdef ReadWholeFileResult read_whole_file(char *path):
+cdef ReadWholeFileResult read_whole_file(object filename):
     global errno
+
+    if type(filename) not in (str, bytes):
+        raise TypeError(f"Argument 'filename' has incorrect type (expected str or bytes, " \
+                         "got {type(filename)})")
+
+    if type(filename) == str:
+        filename = bytes(filename, encoding='utf8')
+    
+    cdef char *path = filename
     cdef int prev = errno
     cdef ReadWholeFileResult r
 
@@ -230,8 +239,8 @@ cdef ReadWholeFileResult read_whole_file(char *path):
         fclose(f)
         return r
 
-    cdef char *str = <char *> malloc(fsize + 1)
-    if str == NULL:
+    cdef char *data = <char *> malloc(fsize + 1)
+    if data == NULL:
         fclose(f)
         r.data = NULL
         r.data_len = 0
@@ -240,17 +249,17 @@ cdef ReadWholeFileResult read_whole_file(char *path):
 
     # Either premature EOF or error; almost certainly NOT EOF though since we just checked
     # the length of the file
-    if <long> fread(str, 1, fsize, f) != fsize:
-        free(str)
+    if <long> fread(data, 1, fsize, f) != fsize:
+        free(data)
         r = make_io_err(ferror(f))
         fclose(f)
         return r
 
     # Null terminate
-    str[fsize] = 0
+    data[fsize] = 0
 
     fclose(f)
-    r.data = str
+    r.data = data
     r.data_len = fsize
     r.err = 0
     return r
@@ -365,6 +374,27 @@ class Field:
     def __repr__(self):
         return str(self)
 
+cdef CField *make_fields(list pyfields):
+    if len(pyfields) == 0:
+        raise FieldError("Cannot have zero fields.")
+
+    for field in pyfields:
+        if type(field) != Field:
+            raise FieldError("Invalid fields lists. All elements of the list must be of type 'Field'.")
+
+    cdef int nfields = len(pyfields)
+    cdef CField *fields = <CField *> malloc(sizeof(CField) * nfields)
+
+    # Unlikely but theres no reason not to check
+    if fields == NULL:
+        raise MemoryError("There is not enough memory to allocate the fields.")
+
+    # Move them to C structs
+    for i in range(nfields):
+        fields[i] = pyfields[i].to_cfield()
+    
+    return fields
+
 def parse(list pyfields, filename):
     """
 
@@ -412,37 +442,17 @@ def parse(list pyfields, filename):
 
     """
     # Ensure fields are properly formatted
-    if len(pyfields) == 0:
-        raise FieldError("Cannot have zero fields.")
-
-    for field in pyfields:
-        if type(field) != Field:
-            raise FieldError("Invalid fields lists. All elements of the list must be of type 'Field'.")
-
+    
     cdef int nfields = len(pyfields)
-    cdef CField *fields = <CField *> malloc(sizeof(CField) * nfields)
-
-    # Unlikely but theres no reason not to check
-    if fields == NULL:
-        raise MemoryError("There is not enough memory to allocate the fields.")
-
-    # Move them to C structs
-    for i in range(nfields):
-        fields[i] = pyfields[i].to_cfield()
+    cdef CField *fields = make_fields(pyfields)
 
     # Calculate the length of one whole line
     cdef int linelen = 0
     for i in range(nfields):
         linelen += fields[i].len
 
-    if type(filename) not in (str, bytes):
-        raise TypeError(f"Argument 'filename' has incorrect type (expected str or bytes, got {type(filename)}")
-
-    if type(filename) == str:
-        filename = bytes(filename, encoding='utf8')
-
     cdef char *error = NULL
-    cdef ReadWholeFileResult file_res = read_whole_file(bytes(filename))
+    cdef ReadWholeFileResult file_res = read_whole_file(filename)
 
     if file_res.err != 0:
         if file_res.err == OUT_OF_MEMORY:
@@ -465,6 +475,7 @@ def parse(list pyfields, filename):
             fast_parse_internal(data, data_len, max_lines, linelen, fields, output_obj.ptrs, nfields)
 
     cdef int field_pos = -1
+    
     if pr.err != 0:
         field_ty = None
         if pr.field_index != -1:
@@ -488,16 +499,18 @@ def parse(list pyfields, filename):
             py_handles[i].resize(nlines)
         else:
             py_handles[i] = py_handles[i][0:nlines]
+    
     free(fields)
     free(data)
     free(ptrs)
 
     return py_handles
 
-cdef class AllocationResult:
 
+cdef class AllocationResult:
     cdef void **ptrs
     cdef object py_handles
+
 
 cdef AllocationResult allocate_field_outputs(const CField *fields, int nfields, long nlines):
     """
