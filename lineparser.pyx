@@ -62,6 +62,17 @@ cpdef enum Ty:
     Float64 = 0
     Int64 = 1
     String = 2
+
+def ty_to_str(ty):
+    if ty == Float64:
+        return "Float64"
+    elif ty == Int64:
+        return "Int64"
+    elif ty == String:
+        return "String"
+    else:
+        raise Exception(f"{ty} is not a valid Ty")
+
 cdef int MAX_T = 2
 
 ctypedef int (*ParseFn)(void *, const char *, long, int)
@@ -302,7 +313,16 @@ class Field:
 
     Examples
     --------
-    TODO
+    >>> import lineparser
+    >>> lineparser.Field(str, 5)
+    Field(String, 5)
+    >>> lineparser.Field(int, 10)
+    Field(Int64, 10)
+    >>> lineparser.Field(float, 6)
+    Field(Float64, 6)
+    >>> lineparser.Field(lineparser.Float64, 14)
+    Field(Float64, 14)
+
     """
 
     def __init__(self, ty, length):
@@ -340,6 +360,10 @@ class Field:
         cf.len = self.len
         return cf
 
+    def __str__(self):
+        return f"Field({ty_to_str(self.ty)}, {self.len})"
+    def __repr__(self):
+        return str(self)
 
 def parse(list pyfields, filename):
     """
@@ -372,6 +396,20 @@ def parse(list pyfields, filename):
         If there are zero fields provided, or if the provided fields are not all of type `Field`
     MemoryError
         If there is not enough memory to read the input file and allocate field containers.
+
+    Examples
+    --------
+    >>> from lineparser import parse, Field
+    >>> fields = [Field(int, 3), Field(int, 4), Field(str, 6)]
+    >>> file = open("test.lines", "w")
+    >>> file.write(" 15 255   dog\n")
+    14
+    >>> file.write("146  12 horse\n")
+    14
+    >>> file.close()
+    >>> parse(fields, "test.lines")
+    [array([ 15, 146]), array([255,  12]), [b'   dog', b' horse']]    
+
     """
     # Ensure fields are properly formatted
     if len(pyfields) == 0:
