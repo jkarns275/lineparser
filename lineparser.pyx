@@ -352,7 +352,8 @@ def parse(list pyfields, filename):
         This list describes the fixed-width file format. The Fields in the list ought to be in the
         same order that they appear in the file.
     filename : `str` or `bytes`
-        The filename or path which points to the fixed-width formatted file.
+        The filename or path which points to the fixed-width formatted file. If filename is a `str`,
+        it must be utf-8 encoded
 
     Returns
     -------
@@ -398,6 +399,9 @@ def parse(list pyfields, filename):
 
     if type(filename) not in (str, bytes):
         raise TypeError(f"Argument 'filename' has incorrect type (expected str or bytes, got {type(filename)}")
+
+    if type(filename) == str:
+        filename = bytes(filename, encoding='utf8')
 
     cdef char *error = NULL
     cdef ReadWholeFileResult file_res = read_whole_file(bytes(filename))
