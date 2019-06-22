@@ -12,11 +12,14 @@ USE_CYTHON = should_use_cython()
 
 ext = '.pyx' if USE_CYTHON else '.c'
 
-extensions = [Extension("lineparser", ["lineparser" + ext])]
+extensions = [Extension("lineparser", ["src/lineparser" + ext])]
 
 if USE_CYTHON:
     from Cython.Build import cythonize
     extensions = cythonize(extensions)
+    
+    for e in ext_modules:
+        e.cython_directives = {"embedsignature": True}
 
 with open("README.md", "r") as f:
     long_description = f.read()
