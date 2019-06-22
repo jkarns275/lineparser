@@ -2,3 +2,10 @@
 ---
 
 @import "{{ site.theme }}";
+
+.sub-view {
+    border-left: solid 2px;
+    padding-left: 7px;
+    margin-left: 7px;
+    border-color: gray;
+}

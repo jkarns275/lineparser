@@ -1,7 +1,28 @@
-# lineparser
+---
+layout: default
+title: Home
+---
+# *lineparser*
 *lineparser* is a small library with one goal: parse fixed-width formatted files extremely quickly.
 In order to achieve this, *lineparser* uses **Cython** to obtain the speed offered by good old
 **C** code and the convenience of **Python**.
+
+# Installing
+You should be able to install *lineparser* via pip if you are on a Windows or Linux 64 bit machine.
+
+```
+$ pip3 install lineparser
+```
+
+## Installing from Source
+Installing from source is also easy. You must have GCC installed on your machine, and you must have
+**Cython** installed only if you want to modify the library. Then run this command:
+
+```
+$ python3 setup.py install
+```
+
+You may need root / administrator privileges to install.
 
 # Example
 
@@ -22,13 +43,15 @@ fields = [  Field(float, 12),
 try:
     start = time.time()
     
-    result = parse(fields, b'data/small_data.par')
+    lines = parse(fields, b'data/small_data.par')
     
     end = time.time()
     
     print(f"Took {end - start} seconds to parse")
 except Exception as e:
-    print(f"Encountered the following error while trying to parse:\n {str(e)}")
+    print(f"Encountered an error:\n {str(e)}")
+
+# Use lines
 
 ```
 
@@ -41,37 +64,3 @@ except Exception as e:
 ```
 
 Running the example: `python3 demo.py`
-
-# Building
-*lineparser* is simple to build, and should only require one command:
-
-```
-$ python3 setup.py build
-```
-
-You should then be able to import it in a python interpreter (in the build directory):
-
-```
-$ python3 setup.py build
-$ python3 
-Python 3.6.7 (default, Oct 22 2018, 11:32:17)
-[GCC 8.2.0] on linux
-Type "help", "copyright", "credits" or "license" for more information.
->>> import lineparser
->>> ...
-```
-
-# Installing
-You should be able to install *lineparser* via pip if you are on a Windows or Linux 64 bit machine.
-
-```
-$ pip3 install lineparser
-```
-
-## Installing from Source
-Installing from source is also easy. You must have GCC installed on your machine, and you must have
-**Cython** installed only if you want to modify the library. Then run this command:
-
-```
-$ python3 setup.py install
-```
