@@ -18,7 +18,7 @@ if USE_CYTHON:
     from Cython.Build import cythonize
     extensions = cythonize(extensions)
     
-    for e in ext_modules:
+    for e in extensions:
         e.cython_directives = {"embedsignature": True}
 
 with open("README.md", "r") as f:
