@@ -1,1 +1,3 @@
 *.par
+*.lock
+/docs/_site/*
