@@ -25,7 +25,7 @@ with open("README.md", "r") as f:
     long_description = f.read()
 
 setup(  name="lineparser",
-        version="0.0.0.dev3",
+        version="0.0.0.dev4",
         author="Joshua Karns",
         author_email="jkarns275@gmail.com",
         description="Fast parser for fixed-column line data files",
