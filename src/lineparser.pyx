@@ -58,10 +58,21 @@ cdef inline int parse_string(void *output, const char *str, long line_n, int fie
     list.append(loutput, copy)
     return 0
 
-cpdef enum Ty:
+cdef enum CTy:
     Float64 = 0
     Int64 = 1
     String = 2
+
+from enum import IntEnum
+class Ty(IntEnum):
+    """
+    An enumeration for the valid field types. Right now there are only three, but this will
+    probably be expanded in the future.
+    
+    """
+    Float64 = 0 #: A double precision float
+    Int64 = 1   #: A 8 byte signed integer
+    String = 2  #: A string (i.e. sequence of bytes)
 
 def ty_to_str(ty):
     if ty == Float64:
@@ -80,7 +91,7 @@ ctypedef int (*ParseFn)(void *, const char *, long, int)
 cdef ParseFn* parse_fn_map = [parse_f64, parse_i64, parse_string]
 
 ctypedef struct CField:
-    Ty ty
+    CTy ty
     int len
 
 ctypedef struct NextLineResult:
@@ -265,6 +276,40 @@ cdef ReadWholeFileResult read_whole_file(object filename):
     return r
 
 class LineParsingError(BaseException):
+    """
+
+    This error occurs when something goes wrong during parsing. This includes the following:
+    - A malformed line: a line is either too long or too short.
+    - Premature end of file: the last line is shorter than expected
+    - Failure to parse Int64: an invalid Int64 string was encountered where there should have been
+    a valid Int64 string.
+    - Failure to parse Float64: an invalid was encountered where there should have been a valid
+    Float64 string.
+
+    Examples
+    --------
+    >>> from lineparser import NamedField, named_parse, \ 
+    ...                        LineParsingError
+    >>> fields = [NamedField("a", int, 3), 
+    ...           NamedField("b", int, 4), 
+    ...           NamedField("c", str, 6)]
+    >>> file = open("test.lines", "w")
+    >>> file.write(" 15 255 dog\\n") #
+    12
+    >>> file.write("146  12 horse\\n")
+    14
+    >>> file.close()
+    >>> try:
+    ...     named_parse(fields, "test.lines")
+    ... except LineParsingError as e:
+    ...     print(f"Encountered error: {e}")
+    ...
+    Encountered error: test.lines:2:0: Encountered a malformed line.
+    >>>
+
+
+    
+    """
 
     def __init__(self, errno, line_n, field_ty, field_pos, filename):
         self.errno = errno
@@ -299,6 +344,17 @@ class LineParsingError(BaseException):
             return f"error number {self.errno}"
 
 class FieldError(BaseException):
+    """
+
+    A FieldError is raised when there is something wrong with a Field or NamedField. The error
+    just contains a short description of what the problem was. Possible errors include:
+    
+    - Invalid field type.
+    - Invalid field length (length must be > 0)
+    - Passing an object that is not of type `Field` as the field lists
+    - Having zero fields
+
+    """
 
     def __init__(self, err):
         self.err = err
@@ -340,7 +396,7 @@ class Field:
 
     def __check_ty(self, ty):
         if type(ty) == Ty:
-            return ty
+            return int(ty)
 
         if type(ty) == int:
             if ty > MAX_T or ty < 0:
@@ -363,7 +419,7 @@ class Field:
             raise FieldError("Invalid field length: must be greater than 0.")
         return length
 
-    def to_cfield(self):
+    def _to_cfield(self):
         cdef CField cf
         cf.ty = self.ty
         cf.len = self.len
@@ -391,7 +447,7 @@ cdef CField *make_fields(list pyfields):
 
     # Move them to C structs
     for i in range(nfields):
-        fields[i] = pyfields[i].to_cfield()
+        fields[i] = pyfields[i]._to_cfield()
     
     return fields
 
@@ -430,15 +486,19 @@ def parse(list pyfields, filename):
     Examples
     --------
     >>> from lineparser import parse, Field
-    >>> fields = [Field(int, 3), Field(int, 4), Field(str, 6)]
+    >>> fields = [Field(int, 3), 
+    ...           Field(int, 4), 
+    ...           Field(str, 6)]
     >>> file = open("test.lines", "w")
-    >>> file.write(" 15 255   dog\n")
+    >>> file.write(" 15 255   dog\\n")
     14
-    >>> file.write("146  12 horse\n")
+    >>> file.write("146  12 horse\\n")
     14
     >>> file.close()
     >>> parse(fields, "test.lines")
-    [array([ 15, 146]), array([255,  12]), [b'   dog', b' horse']]    
+    [array([ 15, 146]), 
+     array([255,  12]), 
+     [b'   dog', b' horse']]    
 
     """
     cdef int nfields = len(pyfields)
@@ -552,15 +612,20 @@ def named_parse(list named_fields, filename):
     Examples
     --------
     >>> from lineparser import named_parse, NamedField
-    >>> fields = [NamedField("a", int, 3), NamedField("b", int, 4), NamedField("c", str, 6)]
+    >>> fields = [NamedField("a", int, 3), 
+    ...           NamedField("b", int, 4), 
+    ...           NamedField("c", str, 6)]
     >>> file = open("test.lines", "w")
-    >>> file.write(" 15 255   dog\n")
+    >>> file.write(" 15 255   dog\\n")
     14
-    >>> file.write("146  12 horse\n")
+    >>> file.write("146  12 horse\\n")
     14
     >>> file.close()
     >>> named_parse(fields, "test.lines")
-    {'a': array([ 15, 146]), 'b': array([255,  12]), 'c': [b'   dog', b' horse']}
+    { 'a': array([ 15, 146]), 
+      'b': array([255,  12]), 
+      'c': [b'   dog', b' horse']
+    }
 
 
     """
@@ -582,6 +647,39 @@ def named_parse(list named_fields, filename):
     return named_result
 
 class NamedField:
+    """
+    The NamedField class is just like the field class, except it has a name.
+
+    Parameters
+    ---------
+    name : `str`
+        The name of the field. This name should be unique.
+    ty : `Ty` or int or `type`
+        The type of the field. This can be an instance of the `Ty` enumeration, or one of the type
+        literals 'int', 'float', and 'str'.
+    length : int
+        The length of the field. This must be a positive integer.
+    
+    Examples
+    --------
+    >>> from lineparser import NamedField
+    >>> NamedField("f1", float, 10)
+    NamedField('f1', Float64, 10)
+    >>> NamedField("f2", str, 4)
+    NamedField('f2', String, 4)
+    >>> NamedField("f3", int, 8)
+    NamedField('f3', Int64, 8)
+    >>> p = NamedField("p", str, 25)
+    >>> p.field
+    Field(String, 25)
+    >>> p.name
+    'p'
+    >>> p.field.len
+    25
+    >>> p.field.ty
+    2
+
+    """
 
     def __init__(self, name, ty, length):
         self.field = Field(ty, length)
@@ -593,7 +691,7 @@ class NamedField:
         return name
 
     def __str__(self):
-        return f"NamedField({ty_to_str(self.ty)}, {self.length}, {repr(self.namerepr)})"
+        return f"NamedField({repr(self.name)}, {ty_to_str(self.field.ty)}, {self.field.len})"
 
     def __repr__(self):
         return str(self)
@@ -621,7 +719,7 @@ cdef AllocationResult allocate_field_outputs(const CField *fields, int nfields, 
     cdef double[:] dptr
     cdef int64_t[:] lptr
     cdef int32_t[:] iptr
-    cdef Ty ty
+    cdef CTy ty
     while i < nfields:
         ty = fields[i].ty
         if ty == Float64:
