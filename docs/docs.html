@@ -1,0 +1,236 @@
+---
+layout: default
+title: API Documentation
+---
+  <dl class="function">
+<dt id="lineparser.parse">
+<code class="sig-prename descclassname">lineparser.</code><code class="sig-name descname">parse</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lineparser.parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attempts to parse the lines from <cite>filename</cite> using the field specfications supplied in <cite>pyfields</cite></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pyfields</strong> (<cite>list</cite> of Field) – This list describes the fixed-width file format. The Fields in the list ought to be in the
+same order that they appear in the file.</p></li>
+<li><p><strong>filename</strong> (<cite>str</cite> or <cite>bytes</cite>) – The filename or path which points to the fixed-width formatted file. If filename is a <cite>str</cite>,
+it must be utf-8 encoded</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of numpy arrays and lists, where the order matches that of the fields supplied in
+<cite>pyfields</cite>. For String fields it will be a <cite>list</cite> of <cite>str</cite>, and for Float64 and Int64 it
+will be a numpy array.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>list</cite> of iterable</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference internal" href="#lineparser.LineParsingError" title="lineparser.LineParsingError"><strong>LineParsingError</strong></a> – If there is a bad line (wrong length), or a bad field (failed to parse)</p></li>
+<li><p><strong>OSError</strong> – If this function fails to open <cite>filename</cite></p></li>
+<li><p><a class="reference internal" href="#lineparser.FieldError" title="lineparser.FieldError"><strong>FieldError</strong></a> – If there are zero fields provided, or if the provided fields are not all of type <cite>Field</cite></p></li>
+<li><p><strong>MemoryError</strong> – If there is not enough memory to read the input file and allocate field containers.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">lineparser</span> <span class="k">import</span> <span class="n">parse</span><span class="p">,</span> <span class="n">Field</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="n">Field</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+<span class="gp">... </span>          <span class="n">Field</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
+<span class="gp">... </span>          <span class="n">Field</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="mi">6</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;test.lines&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot; 15 255   dog</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="go">14</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;146  12 horse</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="go">14</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">parse</span><span class="p">(</span><span class="n">fields</span><span class="p">,</span> <span class="s2">&quot;test.lines&quot;</span><span class="p">)</span>
+<span class="go">[array([ 15, 146]),</span>
+<span class="go"> array([255,  12]),</span>
+<span class="go"> [b&#39;   dog&#39;, b&#39; horse&#39;]]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="lineparser.named_parse">
+<code class="sig-prename descclassname">lineparser.</code><code class="sig-name descname">named_parse</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lineparser.named_parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attempts to parse the lines from <cite>filename</cite> using the field specfications supplied in
+<cite>named_fields</cite>. Then, a map is created where the keys are the supplied names, and the values
+are the results of parsing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>named_fields</strong> (<cite>list</cite> of NamedField) – This list describes the fixed-width file format. The Fields in the list ought to be in the
+same order that they appear in the file.</p></li>
+<li><p><strong>filename</strong> (<cite>str</cite> or <cite>bytes</cite>) – The filename or path which points to the fixed-width formatted file. If filename is a <cite>str</cite>,
+it must be utf-8 encoded</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A map from name to the result of parsing, where the parsing results are either a list or
+a numpy array. For String fields it will be a <cite>list</cite> of <cite>str</cite>, and for Float64 and Int64 it
+will be a numpy array.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>list</cite> of iterable</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference internal" href="#lineparser.LineParsingError" title="lineparser.LineParsingError"><strong>LineParsingError</strong></a> – If there is a bad line (wrong length), or a bad field (failed to parse)</p></li>
+<li><p><strong>OSError</strong> – If this function fails to open <cite>filename</cite></p></li>
+<li><p><a class="reference internal" href="#lineparser.FieldError" title="lineparser.FieldError"><strong>FieldError</strong></a> – If there are zero fields provided, or if the provided fields are not all of type <cite>Field</cite></p></li>
+<li><p><strong>MemoryError</strong> – If there is not enough memory to read the input file and allocate field containers.</p></li>
+<li><p><strong>DuplicateFieldNameError</strong> – If more than two or more of the NamedFields in <cite>named_field</cite> have the same name.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">lineparser</span> <span class="k">import</span> <span class="n">named_parse</span><span class="p">,</span> <span class="n">NamedField</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="n">NamedField</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+<span class="gp">... </span>          <span class="n">NamedField</span><span class="p">(</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
+<span class="gp">... </span>          <span class="n">NamedField</span><span class="p">(</span><span class="s2">&quot;c&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="mi">6</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;test.lines&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot; 15 255   dog</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="go">14</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;146  12 horse</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="go">14</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">named_parse</span><span class="p">(</span><span class="n">fields</span><span class="p">,</span> <span class="s2">&quot;test.lines&quot;</span><span class="p">)</span>
+<span class="go">{ &#39;a&#39;: array([ 15, 146]),</span>
+<span class="go">  &#39;b&#39;: array([255,  12]),</span>
+<span class="go">  &#39;c&#39;: [b&#39;   dog&#39;, b&#39; horse&#39;]</span>
+<span class="go">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="class">
+<dt id="lineparser.Ty">
+<em class="property">class </em><code class="sig-prename descclassname">lineparser.</code><code class="sig-name descname">Ty</code><a class="headerlink" href="#lineparser.Ty" title="Permalink to this definition">¶</a></dt>
+<dd><p>An enumeration for the valid field types. Right now there are only three, but this will
+probably be expanded in the future.</p>
+<dl class="attribute">
+<dt id="lineparser.Ty.Float64">
+<code class="sig-name descname">Float64</code><em class="property"> = 0</em><a class="headerlink" href="#lineparser.Ty.Float64" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="lineparser.Ty.Int64">
+<code class="sig-name descname">Int64</code><em class="property"> = 1</em><a class="headerlink" href="#lineparser.Ty.Int64" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="lineparser.Ty.String">
+<code class="sig-name descname">String</code><em class="property"> = 2</em><a class="headerlink" href="#lineparser.Ty.String" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="lineparser.Field">
+<em class="property">class </em><code class="sig-prename descclassname">lineparser.</code><code class="sig-name descname">Field</code><a class="headerlink" href="#lineparser.Field" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a new <cite>Field</cite>, and verifies that the supplied <cite>ty</cite> and <cite>length</cite> parameters are of
+of the appropriate type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ty</strong> (<cite>Ty</cite> or int or <cite>type</cite>) – The field type. Must be an integer which corresponds to Ty. You can also use the the ‘int’,
+‘float’, and ‘str’ type classes.</p></li>
+<li><p><strong>length</strong> (<em>int</em>) – The length of the field. This must be a positive integer.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">lineparser</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lineparser</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="go">Field(String, 5)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lineparser</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="go">Field(Int64, 10)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lineparser</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+<span class="go">Field(Float64, 6)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lineparser</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">lineparser</span><span class="o">.</span><span class="n">Float64</span><span class="p">,</span> <span class="mi">14</span><span class="p">)</span>
+<span class="go">Field(Float64, 14)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="class">
+<dt id="lineparser.NamedField">
+<em class="property">class </em><code class="sig-prename descclassname">lineparser.</code><code class="sig-name descname">NamedField</code><a class="headerlink" href="#lineparser.NamedField" title="Permalink to this definition">¶</a></dt>
+<dd><p>The NamedField class is just like the field class, except it has a name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<cite>str</cite>) – The name of the field. This name should be unique.</p></li>
+<li><p><strong>ty</strong> (<cite>Ty</cite> or int or <cite>type</cite>) – The type of the field. This can be an instance of the <cite>Ty</cite> enumeration, or one of the type
+literals ‘int’, ‘float’, and ‘str’.</p></li>
+<li><p><strong>length</strong> (<em>int</em>) – The length of the field. This must be a positive integer.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">lineparser</span> <span class="k">import</span> <span class="n">NamedField</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">NamedField</span><span class="p">(</span><span class="s2">&quot;f1&quot;</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="go">NamedField(&#39;f1&#39;, Float64, 10)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">NamedField</span><span class="p">(</span><span class="s2">&quot;f2&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="go">NamedField(&#39;f2&#39;, String, 4)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">NamedField</span><span class="p">(</span><span class="s2">&quot;f3&quot;</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+<span class="go">NamedField(&#39;f3&#39;, Int64, 8)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">NamedField</span><span class="p">(</span><span class="s2">&quot;p&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="mi">25</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">field</span>
+<span class="go">Field(String, 25)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">name</span>
+<span class="go">&#39;p&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">field</span><span class="o">.</span><span class="n">len</span>
+<span class="go">25</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">field</span><span class="o">.</span><span class="n">ty</span>
+<span class="go">2</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="exception">
+<dt id="lineparser.FieldError">
+<em class="property">exception </em><code class="sig-prename descclassname">lineparser.</code><code class="sig-name descname">FieldError</code><a class="headerlink" href="#lineparser.FieldError" title="Permalink to this definition">¶</a></dt>
+<dd><p>A FieldError is raised when there is something wrong with a Field or NamedField. The error
+just contains a short description of what the problem was. Possible errors include:</p>
+<ul class="simple">
+<li><p>Invalid field type.</p></li>
+<li><p>Invalid field length (length must be &gt; 0)</p></li>
+<li><p>Passing an object that is not of type <cite>Field</cite> as the field lists</p></li>
+<li><p>Having zero fields</p></li>
+</ul>
+</dd></dl>
+
+<dl class="exception">
+<dt id="lineparser.LineParsingError">
+<em class="property">exception </em><code class="sig-prename descclassname">lineparser.</code><code class="sig-name descname">LineParsingError</code><a class="headerlink" href="#lineparser.LineParsingError" title="Permalink to this definition">¶</a></dt>
+<dd><p>This error occurs when something goes wrong during parsing. This includes the following:
+- A malformed line: a line is either too long or too short.
+- Premature end of file: the last line is shorter than expected
+- Failure to parse Int64: an invalid Int64 string was encountered where there should have been
+a valid Int64 string.
+- Failure to parse Float64: an invalid was encountered where there should have been a valid
+Float64 string.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">lineparser</span> <span class="k">import</span> <span class="n">NamedField</span><span class="p">,</span> <span class="n">named_parse</span><span class="p">,</span> \
+<span class="gp">... </span>                       <span class="n">LineParsingError</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="n">NamedField</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+<span class="gp">... </span>          <span class="n">NamedField</span><span class="p">(</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
+<span class="gp">... </span>          <span class="n">NamedField</span><span class="p">(</span><span class="s2">&quot;c&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="mi">6</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;test.lines&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot; 15 255 dog</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span> <span class="c1">#</span>
+<span class="go">12</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;146  12 horse</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="go">14</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">try</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">named_parse</span><span class="p">(</span><span class="n">fields</span><span class="p">,</span> <span class="s2">&quot;test.lines&quot;</span><span class="p">)</span>
+<span class="gp">... </span><span class="k">except</span> <span class="n">LineParsingError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Encountered error: </span><span class="si">{e}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="go">Encountered error: test.lines:2:0: Encountered a malformed line.</span>
+<span class="go">&gt;&gt;&gt;</span>
+</pre></div>
+</div>
+</dd></dl>
