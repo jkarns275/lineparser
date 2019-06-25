@@ -5,6 +5,13 @@ In order to achieve this, *lineparser* uses **Cython** to obtain the speed offer
 
 Documentation can be found [here](https://jkarns275.github.io/lineparser/).
 
+# Installing
+You should be able to install *lineparser* via pip if you are on a Windows or Linux 64 bit machine.
+
+```
+$ pip3 install lineparser
+```
+
 # Example
 
 demo.py:
@@ -41,17 +48,24 @@ data/small_data.par
 
 Running the example: `python3 demo.py`
 
+# Installing from Source
+Installing from source is also easy. You must have GCC installed on your machine, and you must have
+**Cython** installed only if you want to modify the library. Then run this command:
+
+```
+$ python3 setup.py install
+```
 # Building
 *lineparser* is simple to build, and should only require one command:
 
 ```
-$ python3 setup.py build
+$ python3 setup.py build_ext --inplace
 ```
 
 You should then be able to import it in a python interpreter (in the build directory):
 
 ```
-$ python3 setup.py build
+$ python3 setup.py build_ext --inplace
 $ python3 
 Python 3.6.7 (default, Oct 22 2018, 11:32:17)
 [GCC 8.2.0] on linux
@@ -60,17 +74,3 @@ Type "help", "copyright", "credits" or "license" for more information.
 >>> ...
 ```
 
-# Installing
-You should be able to install *lineparser* via pip if you are on a Windows or Linux 64 bit machine.
-
-```
-$ pip3 install lineparser
-```
-
-## Installing from Source
-Installing from source is also easy. You must have GCC installed on your machine, and you must have
-**Cython** installed only if you want to modify the library. Then run this command:
-
-```
-$ python3 setup.py install
-```
