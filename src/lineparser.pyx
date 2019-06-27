@@ -3,6 +3,7 @@
 from libc.stdlib cimport malloc, free, strtol, strtod
 from libc.stdio cimport fseek, fopen, fclose, ferror, ftell, fread, SEEK_END, SEEK_SET, FILE, printf
 from libc.string cimport strncpy, strerror
+from libc.stdint cimport int64_t, int32_t, int16_t, int8_t
 from libc.errno cimport errno
 import numpy as np
 from libc.stdint cimport int32_t, int64_t
@@ -33,6 +34,25 @@ cdef inline int parse_f64(void *output, const char *str, long line_n, int field_
     errno = prev
     return 0
 
+cdef inline int parse_f32(void *output, const char *str, long line_n, int field_len):
+    global errno
+    cdef float *foutput = <float *> output
+    cdef int prev = errno
+    cdef char *endptr
+    cdef char c
+    errno = 0
+    foutput[line_n] = <float> strtod(str, &endptr);
+    if errno != 0:
+        errno = prev
+        return 1
+    if endptr - str < field_len:
+        c = endptr[0]
+        # If the parser ended on something other than a space, there is probably an issue
+        if c not in [b' ', b'\n', b'\r']:
+            return 1
+    errno = prev
+    return 0
+
 cdef inline int parse_i64(void *output, const char *st, long line_n, int field_len):
     global errno
     cdef int64_t *ioutput = <int64_t *> output
@@ -52,6 +72,63 @@ cdef inline int parse_i64(void *output, const char *st, long line_n, int field_l
     errno = prev
     return 0
 
+cdef inline int parse_i32(void *output, const char *st, long line_n, int field_len):
+    global errno
+    cdef int32_t *ioutput = <int32_t *> output
+    cdef int prev = errno
+    cdef char *endptr
+    cdef char c
+    errno = 0
+    ioutput[line_n] = <int32_t> strtol(st, &endptr, 10)
+    if errno != 0:
+        errno = prev
+        return 1
+    if endptr - st < field_len:
+        c = endptr[0]
+        # If the parser ended on something other than a space, there is probably an issue
+        if c not in [b' ', b'\n', b'\r']:
+            return 1
+    errno = prev
+    return 0
+
+cdef inline int parse_i16(void *output, const char *st, long line_n, int field_len):
+    global errno
+    cdef int16_t *ioutput = <int16_t *> output
+    cdef int prev = errno
+    cdef char *endptr
+    cdef char c
+    errno = 0
+    ioutput[line_n] = <int16_t> strtol(st, &endptr, 10)
+    if errno != 0:
+        errno = prev
+        return 1
+    if endptr - st < field_len:
+        c = endptr[0]
+        # If the parser ended on something other than a space, there is probably an issue
+        if c not in [b' ', b'\n', b'\r']:
+            return 1
+    errno = prev
+    return 0
+
+cdef inline int parse_i8(void *output, const char *st, long line_n, int field_len):
+    global errno
+    cdef int8_t *ioutput = <int8_t *> output
+    cdef int prev = errno
+    cdef char *endptr
+    cdef char c
+    errno = 0
+    ioutput[line_n] = <int8_t> strtol(st, &endptr, 10)
+    if errno != 0:
+        errno = prev
+        return 1
+    if endptr - st < field_len:
+        c = endptr[0]
+        # If the parser ended on something other than a space, there is probably an issue
+        if c not in [b' ', b'\n', b'\r']:
+            return 1
+    errno = prev
+    return 0
+
 cdef inline int parse_string(void *output, const char *str, long line_n, int field_len):
     cdef list loutput = <list> output
     cdef bytes copy = <bytes> str
@@ -60,35 +137,68 @@ cdef inline int parse_string(void *output, const char *str, long line_n, int fie
 
 cdef enum CTy:
     Float64 = 0
-    Int64 = 1
-    String = 2
+    Float32 = 1
+    Int64 = 2
+    Int32 = 3
+    Int16 = 4
+    Int8 = 5
+    String = 6
+    Phantom = 7
 
 from enum import IntEnum
 class Ty(IntEnum):
     """
-    An enumeration for the valid field types. Right now there are only three, but this will
-    probably be expanded in the future.
+    An enumeration for the valid field types.
+    
+    - Float types are real numbers.
+    - Int types are signed integers.
+    - The string type is a string.
+    - The phantom type is ... nothing. If there is a field in a file you don't need, instead of
+        parsing it and wasting time and memory, use the Phantom type. This will completely
+        ignore the fields contents.
+
+    When choosing a data type, it is important to ensure that the numbers you will be reading can
+    fit into the data type. For example, Int8 can hold numbers from -128 to 127. If your field has
+    numbers between -1000 and 5000, than Int8 is going to be the wrong data type. Int16, Int32, and
+    Int64 would all be acceptable choices, but Int16 may be consided optimal since it would
+    consume the least amount of ram.
+
+    For more information pertaining data type ranges / capacities, refer to the numpy data types
+    documentation.
     
     """
-    Float64 = 0 #: A double precision float
-    Int64 = 1   #: A 8 byte signed integer
-    String = 2  #: A string (i.e. sequence of bytes)
+    Float64 = 0
+    Float32 = 1
+    Int64 = 2
+    Int32 = 3
+    Int16 = 4
+    Int8 = 5
+    String = 6
+    Phantom = 7
 
 def ty_to_str(ty):
     if ty == Float64:
         return "Float64"
+    elif ty == Float32:
+        return "Float32"
     elif ty == Int64:
         return "Int64"
     elif ty == String:
         return "String"
+    elif ty == Phantom:
+        return "Phantom"
+    elif ty == Int32:
+        return "Int32"
+    elif ty == Int16:
+        return "Int16"
+    elif ty == Int8:
+        return "Int8"
     else:
         raise Exception(f"{ty} is not a valid Ty")
 
-cdef int MAX_T = 2
+cdef int MAX_T = 7
 
 ctypedef int (*ParseFn)(void *, const char *, long, int)
-
-cdef ParseFn* parse_fn_map = [parse_f64, parse_i64, parse_string]
 
 ctypedef struct CField:
     CTy ty
@@ -101,7 +211,6 @@ ctypedef struct NextLineResult:
 
 cdef char LF = 10
 cdef char CR = 13
-
 
 cdef NextLineResult fast_next_line(char* current_position, char* end_position, int line_len):
     cdef char *new_pos = current_position + line_len
@@ -173,10 +282,20 @@ cdef FastParseResult fast_parse_internal(char *data, long data_len, long max_nli
 
             if ty == Float64:
                 res = parse_f64(output[j], t, line_n, fields[j].len)
+            elif ty == Float32:
+                res = parse_f32(output[j], t, line_n, fields[j].len)
             elif ty == Int64:
                 res = parse_i64(output[j], t, line_n, fields[j].len)
+            elif ty == Int32:
+                res = parse_i32(output[j], t, line_n, fields[j].len)
+            elif ty == Int16:
+                res = parse_i16(output[j], t, line_n, fields[j].len)
+            elif ty == Int8:
+                res = parse_i8(output[j], t, line_n, fields[j].len)
             elif ty == String:
                 res = parse_string(output[j], t, line_n, fields[j].len)
+            elif ty == Phantom:
+                pass
 
             if res != 0:
                 pr.err = PARSE_ERROR
@@ -336,10 +455,7 @@ class LineParsingError(BaseException):
             return self.__err_location() + " Encountered unexpected end of file. " + \
                     "Is your last line malformed?"
         elif self.errno == PARSE_ERROR:
-            if self.field_ty == Float64:
-                return self.__err_location() + " Failed to parse Float64."
-            elif self.field_ty == Int64:
-                return self.__err_location() + " Failed to parse Int64."
+            return self.__err_location() + f" Failed to parse {ty_to_str(self.ty)}."
         else:
             return f"error number {self.errno}"
 
@@ -553,10 +669,15 @@ def parse(list pyfields, filename):
     nlines = pr.line_n
 
     for i in range(nfields):
-        if fields[i].ty in (Float64, Int64):
+        if fields[i].ty == Phantom:
+            continue
+        if fields[i].ty in (Float64, Float32, Int64, Int32, Int16, Int8):
             py_handles[i].resize(nlines)
         else:
             py_handles[i] = py_handles[i][0:nlines]
+    
+    # Remove 'Nones' from py_handles (cause by Phantom fields)
+    py_handles = list(filter(lambda p: p is not None, py_handles))
     
     free(fields)
     free(data)
@@ -641,7 +762,8 @@ def named_parse(list named_fields, filename):
 
     named_result = {}
 
-    for (named_field, result) in zip(named_fields, parsed):
+    non_phantom_fields = list(filter(lambda p: p is not None, named_fields))
+    for (named_field, result) in zip(non_phantom_fields, parsed):
         named_result[named_field.name] = result
     
     return named_result
@@ -717,8 +839,11 @@ cdef AllocationResult allocate_field_outputs(const CField *fields, int nfields, 
     cdef void **ptrs = <void**> malloc(sizeof(void*) * nfields)
     cdef int i = 0
     cdef double[:] dptr
+    cdef float[:] fptr
     cdef int64_t[:] lptr
     cdef int32_t[:] iptr
+    cdef int16_t[:] sptr
+    cdef int8_t[:] bptr
     cdef CTy ty
     while i < nfields:
         ty = fields[i].ty
@@ -727,15 +852,39 @@ cdef AllocationResult allocate_field_outputs(const CField *fields, int nfields, 
             py_handles.append(arr)
             dptr = arr
             ptrs[i] = <void *> &dptr[0]
+        elif ty == Float32:
+            arr = np.zeros(nlines, dtype=np.float32)
+            py_handles.append(arr)
+            fptr = arr
+            ptrs[i] = <void *> &fptr[0]
         elif ty == Int64:
             arr = np.zeros(nlines, dtype=np.int64)
             py_handles.append(arr)
             lptr = arr
             ptrs[i] = <void *> &lptr[0]
+        elif ty == Int32:
+            arr = np.zeros(nlines, dtype=np.int32)
+            py_handles.append(arr)
+            iptr = arr
+            ptrs[i] = <void *> &iptr[0]
+        elif ty == Int16:
+            arr = np.zeros(nlines, dtype=np.int16)
+            py_handles.append(arr)
+            sptr = arr
+            ptrs[i] = <void *> &sptr[0]
+        elif ty == Int8:
+            arr = np.zeros(nlines, dtype=np.int8)
+            py_handles.append(arr)
+            bptr = arr
+            ptrs[i] = <void *> &bptr[0]
         elif ty == String:
             arr = list()
             py_handles.append(arr)
             ptrs[i] = <void *> arr
+        elif ty == Phantom:
+            arr = None
+            py_handles.append(None)
+            ptrs[i] = NULL
         else:
             free(ptrs)
             ar = AllocationResult()
