@@ -129,11 +129,21 @@ cdef inline int parse_i8(void *output, const char *st, long line_n, int field_le
     errno = prev
     return 0
 
-cdef inline int parse_string(void *output, const char *str, long line_n, int field_len):
+cdef inline int parse_bytes(void *output, const char *str, long line_n, int field_len):
     cdef list loutput = <list> output
     cdef bytes copy = <bytes> str
     list.append(loutput, copy)
     return 0
+
+cdef inline int parse_string(void *output, const char *s, long line_n, int field_len):
+    cdef list loutput = <list> output
+    cdef str copy = s[:field_len].decode('UTF-8')
+    list.append(loutput, copy)
+    return 0
+
+cdef inline int parse_phantom(void *output, const char *s, long line_n, int field_len):
+    return 0
+
 
 cdef enum CTy:
     Float64 = 0
@@ -144,6 +154,20 @@ cdef enum CTy:
     Int8 = 5
     String = 6
     Phantom = 7
+    Bytes = 8
+
+ctypedef int (*ParseFn)(void *, const char *, long, int)
+cdef ParseFn *PARSE_FN_MAP = [
+    &parse_f64,
+    &parse_f32,
+    &parse_i64,
+    &parse_i32,
+    &parse_i16,
+    &parse_i8,
+    &parse_string,
+    &parse_phantom,
+    &parse_bytes,
+]
 
 from enum import IntEnum
 class Ty(IntEnum):
@@ -175,6 +199,9 @@ class Ty(IntEnum):
     Int8 = 5
     String = 6
     Phantom = 7
+    Bytes = 8
+
+cdef int MAX_T = 8
 
 def ty_to_str(ty):
     if ty == Float64:
@@ -193,12 +220,12 @@ def ty_to_str(ty):
         return "Int16"
     elif ty == Int8:
         return "Int8"
+    elif ty == Bytes:
+        return "Bytes"
     else:
         raise Exception(f"{ty} is not a valid Ty")
 
-cdef int MAX_T = 7
 
-ctypedef int (*ParseFn)(void *, const char *, long, int)
 
 ctypedef struct CField:
     CTy ty
@@ -279,6 +306,10 @@ cdef FastParseResult fast_parse_internal(char *data, long data_len, long max_nli
             temp = nlr.line[length]
             nlr.line[length] = 0
             ty = fields[j].ty
+            
+            # Seems like using function pointers is slower than the jump table generated
+            # by the if statement
+            # res = (PARSE_FN_MAP[<int> ty])(output[j], t, line_n, fields[j].len)
 
             if ty == Float64:
                 res = parse_f64(output[j], t, line_n, fields[j].len)
@@ -294,6 +325,8 @@ cdef FastParseResult fast_parse_internal(char *data, long data_len, long max_nli
                 res = parse_i8(output[j], t, line_n, fields[j].len)
             elif ty == String:
                 res = parse_string(output[j], t, line_n, fields[j].len)
+            elif ty == Bytes:
+                res = parse_bytes(output[j], t, line_n, fields[j].len)
             elif ty == Phantom:
                 pass
 
@@ -525,6 +558,8 @@ class Field:
             return Float64
         elif ty == str:
             return String
+        elif ty == bytes:
+            return Bytes
 
         raise FieldError(f"Invalid type specifier '{ty}'.")
 
@@ -877,7 +912,7 @@ cdef AllocationResult allocate_field_outputs(const CField *fields, int nfields, 
             py_handles.append(arr)
             bptr = arr
             ptrs[i] = <void *> &bptr[0]
-        elif ty == String:
+        elif ty in (String, Bytes):
             arr = list()
             py_handles.append(arr)
             ptrs[i] = <void *> arr
