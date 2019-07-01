@@ -34,6 +34,7 @@ cdef inline int parse_f64(void *output, const char *str, long line_n, int field_
     errno = prev
     return 0
 
+
 cdef inline int parse_f32(void *output, const char *str, long line_n, int field_len):
     global errno
     cdef float *foutput = <float *> output
@@ -157,6 +158,7 @@ cdef enum CTy:
     Bytes = 8
 
 ctypedef int (*ParseFn)(void *, const char *, long, int)
+ctypedef void (*InnerParseFn)(void *, const char *, long, int, char **)
 cdef ParseFn *PARSE_FN_MAP = [
     &parse_f64,
     &parse_f32,
