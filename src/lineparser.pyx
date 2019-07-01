@@ -15,120 +15,13 @@ cdef int IO_ERROR = 4
 cdef int PREMATURE_EOF = 5
 cdef int PARSE_ERROR = 6
 
-cdef inline int parse_f64(void *output, const char *str, long line_n, int field_len):
-    global errno
-    cdef double *doutput = <double *> output
-    cdef int prev = errno
-    cdef char *endptr
-    cdef char c
-    errno = 0
-    doutput[line_n] = strtod(str, &endptr);
-    if errno != 0:
-        errno = prev
-        return 1
-    if endptr - str < field_len:
-        c = endptr[0]
-        # If the parser ended on something other than a space, there is probably an issue
-        if c not in [b' ', b'\n', b'\r']:
-            return 1
-    errno = prev
-    return 0
-
-
-cdef inline int parse_f32(void *output, const char *str, long line_n, int field_len):
-    global errno
-    cdef float *foutput = <float *> output
-    cdef int prev = errno
-    cdef char *endptr
-    cdef char c
-    errno = 0
-    foutput[line_n] = <float> strtod(str, &endptr);
-    if errno != 0:
-        errno = prev
-        return 1
-    if endptr - str < field_len:
-        c = endptr[0]
-        # If the parser ended on something other than a space, there is probably an issue
-        if c not in [b' ', b'\n', b'\r']:
-            return 1
-    errno = prev
-    return 0
-
-cdef inline int parse_i64(void *output, const char *st, long line_n, int field_len):
-    global errno
-    cdef int64_t *ioutput = <int64_t *> output
-    cdef int prev = errno
-    cdef char *endptr
-    cdef char c
-    errno = 0
-    ioutput[line_n] = strtol(st, &endptr, 10)
-    if errno != 0:
-        errno = prev
-        return 1
-    if endptr - st < field_len:
-        c = endptr[0]
-        # If the parser ended on something other than a space, there is probably an issue
-        if c not in [b' ', b'\n', b'\r']:
-            return 1
-    errno = prev
-    return 0
-
-cdef inline int parse_i32(void *output, const char *st, long line_n, int field_len):
-    global errno
-    cdef int32_t *ioutput = <int32_t *> output
-    cdef int prev = errno
-    cdef char *endptr
-    cdef char c
-    errno = 0
-    ioutput[line_n] = <int32_t> strtol(st, &endptr, 10)
-    if errno != 0:
-        errno = prev
-        return 1
-    if endptr - st < field_len:
-        c = endptr[0]
-        # If the parser ended on something other than a space, there is probably an issue
-        if c not in [b' ', b'\n', b'\r']:
-            return 1
-    errno = prev
-    return 0
-
-cdef inline int parse_i16(void *output, const char *st, long line_n, int field_len):
-    global errno
-    cdef int16_t *ioutput = <int16_t *> output
-    cdef int prev = errno
-    cdef char *endptr
-    cdef char c
-    errno = 0
-    ioutput[line_n] = <int16_t> strtol(st, &endptr, 10)
-    if errno != 0:
-        errno = prev
-        return 1
-    if endptr - st < field_len:
-        c = endptr[0]
-        # If the parser ended on something other than a space, there is probably an issue
-        if c not in [b' ', b'\n', b'\r']:
-            return 1
-    errno = prev
-    return 0
-
-cdef inline int parse_i8(void *output, const char *st, long line_n, int field_len):
-    global errno
-    cdef int8_t *ioutput = <int8_t *> output
-    cdef int prev = errno
-    cdef char *endptr
-    cdef char c
-    errno = 0
-    ioutput[line_n] = <int8_t> strtol(st, &endptr, 10)
-    if errno != 0:
-        errno = prev
-        return 1
-    if endptr - st < field_len:
-        c = endptr[0]
-        # If the parser ended on something other than a space, there is probably an issue
-        if c not in [b' ', b'\n', b'\r']:
-            return 1
-    errno = prev
-    return 0
+cdef extern from "parsers.c":
+    cdef int parse_f64(void *output, const char *str, long line_n, int field_len)
+    cdef int parse_f32(void *output, const char *str, long line_n, int field_len)
+    cdef int parse_i64(void *output, const char *str, long line_n, int field_len)
+    cdef int parse_i32(void *output, const char *str, long line_n, int field_len)
+    cdef int parse_i16(void *output, const char *str, long line_n, int field_len)
+    cdef int parse_i8(void *output, const char *str, long line_n, int field_len)
 
 cdef inline int parse_bytes(void *output, const char *str, long line_n, int field_len):
     cdef list loutput = <list> output
@@ -158,18 +51,18 @@ cdef enum CTy:
     Bytes = 8
 
 ctypedef int (*ParseFn)(void *, const char *, long, int)
-ctypedef void (*InnerParseFn)(void *, const char *, long, int, char **)
-cdef ParseFn *PARSE_FN_MAP = [
-    &parse_f64,
-    &parse_f32,
-    &parse_i64,
-    &parse_i32,
-    &parse_i16,
-    &parse_i8,
-    &parse_string,
-    &parse_phantom,
-    &parse_bytes,
-]
+
+# cdef ParseFn *PARSE_FN_MAP = [
+#     &parse_f64,
+#     &parse_f32,
+#     &parse_i64,
+#     &parse_i32,
+#     &parse_i16,
+#     &parse_i8,
+#     &parse_string,
+#     &parse_phantom,
+#     &parse_bytes,
+# ]
 
 from enum import IntEnum
 class Ty(IntEnum):
@@ -236,7 +129,6 @@ ctypedef struct CField:
 ctypedef struct NextLineResult:
     char *line
     int err
-
 
 cdef char LF = 10
 cdef char CR = 13
