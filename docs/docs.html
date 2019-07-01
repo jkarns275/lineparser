@@ -51,6 +51,55 @@ will be a numpy array.</p>
 </div>
 </dd></dl>
 
+  <dl class="function">
+<dt id="lineparser.parse">
+<code class="sig-prename descclassname">lineparser.</code><code class="sig-name descname">parse</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lineparser.parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attempts to parse the lines from <cite>filename</cite> using the field specfications supplied in <cite>pyfields</cite></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pyfields</strong> (<cite>list</cite> of Field) – This list describes the fixed-width file format. The Fields in the list ought to be in the
+same order that they appear in the file.</p></li>
+<li><p><strong>filename</strong> (<cite>str</cite> or <cite>bytes</cite>) – The filename or path which points to the fixed-width formatted file. If filename is a <cite>str</cite>,
+it must be utf-8 encoded</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of numpy arrays and lists, where the order matches that of the fields supplied in
+<cite>pyfields</cite>. For String fields it will be a <cite>list</cite> of <cite>str</cite>, and for Float64 and Int64 it
+will be a numpy array.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>list</cite> of iterable</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference internal" href="#lineparser.LineParsingError" title="lineparser.LineParsingError"><strong>LineParsingError</strong></a> – If there is a bad line (wrong length), or a bad field (failed to parse)</p></li>
+<li><p><strong>OSError</strong> – If this function fails to open <cite>filename</cite></p></li>
+<li><p><a class="reference internal" href="#lineparser.FieldError" title="lineparser.FieldError"><strong>FieldError</strong></a> – If there are zero fields provided, or if the provided fields are not all of type <cite>Field</cite></p></li>
+<li><p><strong>MemoryError</strong> – If there is not enough memory to read the input file and allocate field containers.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">lineparser</span> <span class="k">import</span> <span class="n">parse</span><span class="p">,</span> <span class="n">Field</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="n">Field</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+<span class="gp">... </span>          <span class="n">Field</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
+<span class="gp">... </span>          <span class="n">Field</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="mi">6</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;test.lines&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot; 15 255   dog</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="go">14</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;146  12 horse</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="go">14</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">parse</span><span class="p">(</span><span class="n">fields</span><span class="p">,</span> <span class="s2">&quot;test.lines&quot;</span><span class="p">)</span>
+<span class="go">[array([ 15, 146]),</span>
+<span class="go"> array([255,  12]),</span>
+<span class="go"> [b&#39;   dog&#39;, b&#39; horse&#39;]]</span>
+</pre></div>
+</div>
+</dd></dl>
+
 <dl class="function">
 <dt id="lineparser.named_parse">
 <code class="sig-prename descclassname">lineparser.</code><code class="sig-name descname">named_parse</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lineparser.named_parse" title="Permalink to this definition">¶</a></dt>
@@ -112,13 +161,10 @@ will be a numpy array.</p>
 <li><p>Float types are real numbers.</p></li>
 <li><p>Int types are signed integers.</p></li>
 <li><p>The string type is a string.</p></li>
-<li><dl class="simple">
-<dt>The phantom type is … nothing. If there is a field in a file you don’t need, instead of</dt><dd><p>parsing it and wasting time and memory, use the Phantom type. This will completely
-ignore the fields contents.</p>
-</dd>
-</dl>
-</li>
+<li><p>The phantom type is … nothing. If there is a field in a file you don’t need, instead of</p></li>
 </ul>
+<p>parsing it and wasting time and memory, use the Phantom type. This will completely
+ignore the fields contents.</p>
 <p>When choosing a data type, it is important to ensure that the numbers you will be reading can
 fit into the data type. For example, Int8 can hold numbers from -128 to 127. If your field has
 numbers between -1000 and 5000, than Int8 is going to be the wrong data type. Int16, Int32, and
@@ -252,13 +298,13 @@ just contains a short description of what the problem was. Possible errors inclu
 <dl class="exception">
 <dt id="lineparser.LineParsingError">
 <em class="property">exception </em><code class="sig-prename descclassname">lineparser.</code><code class="sig-name descname">LineParsingError</code><a class="headerlink" href="#lineparser.LineParsingError" title="Permalink to this definition">¶</a></dt>
-<dd><p>This error occurs when something goes wrong during parsing. This includes the following:
-- A malformed line: a line is either too long or too short.
-- Premature end of file: the last line is shorter than expected
-- Failure to parse Int64: an invalid Int64 string was encountered where there should have been
-a valid Int64 string.
-- Failure to parse Float64: an invalid was encountered where there should have been a valid
-Float64 string.</p>
+<dd><p>This error occurs when something goes wrong during parsing. This includes the following:</p>
+<ul class="simple">
+<li><p>A malformed line: a line is either too long or too short.</p></li>
+<li><p>Premature end of file: the last line is shorter than expected.</p></li>
+<li><p>Failure to parse a real number.</p></li>
+<li><p>Failure to parse an integer.</p></li>
+</ul>
 <p class="rubric">Examples</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">lineparser</span> <span class="k">import</span> <span class="n">NamedField</span><span class="p">,</span> <span class="n">named_parse</span><span class="p">,</span> \
 <span class="gp">... </span>                       <span class="n">LineParsingError</span>
@@ -281,4 +327,3 @@ Float64 string.</p>
 </pre></div>
 </div>
 </dd></dl>
-
