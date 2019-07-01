@@ -107,21 +107,68 @@ will be a numpy array.</p>
 <dl class="class">
 <dt id="lineparser.Ty">
 <em class="property">class </em><code class="sig-prename descclassname">lineparser.</code><code class="sig-name descname">Ty</code><a class="headerlink" href="#lineparser.Ty" title="Permalink to this definition">¶</a></dt>
-<dd><p>An enumeration for the valid field types. Right now there are only three, but this will
-probably be expanded in the future.</p>
+<dd><p>An enumeration for the valid field types.</p>
+<ul class="simple">
+<li><p>Float types are real numbers.</p></li>
+<li><p>Int types are signed integers.</p></li>
+<li><p>The string type is a string.</p></li>
+<li><dl class="simple">
+<dt>The phantom type is … nothing. If there is a field in a file you don’t need, instead of</dt><dd><p>parsing it and wasting time and memory, use the Phantom type. This will completely
+ignore the fields contents.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>When choosing a data type, it is important to ensure that the numbers you will be reading can
+fit into the data type. For example, Int8 can hold numbers from -128 to 127. If your field has
+numbers between -1000 and 5000, than Int8 is going to be the wrong data type. Int16, Int32, and
+Int64 would all be acceptable choices, but Int16 may be consided optimal since it would
+consume the least amount of ram.</p>
+<p>For more information pertaining data type ranges / capacities, refer to the numpy data types
+documentation.</p>
+<dl class="attribute">
+<dt id="lineparser.Ty.Bytes">
+<code class="sig-name descname">Bytes</code><em class="property"> = 8</em><a class="headerlink" href="#lineparser.Ty.Bytes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="lineparser.Ty.Float32">
+<code class="sig-name descname">Float32</code><em class="property"> = 1</em><a class="headerlink" href="#lineparser.Ty.Float32" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="attribute">
 <dt id="lineparser.Ty.Float64">
 <code class="sig-name descname">Float64</code><em class="property"> = 0</em><a class="headerlink" href="#lineparser.Ty.Float64" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
+<dt id="lineparser.Ty.Int16">
+<code class="sig-name descname">Int16</code><em class="property"> = 4</em><a class="headerlink" href="#lineparser.Ty.Int16" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="lineparser.Ty.Int32">
+<code class="sig-name descname">Int32</code><em class="property"> = 3</em><a class="headerlink" href="#lineparser.Ty.Int32" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="lineparser.Ty.Int64">
-<code class="sig-name descname">Int64</code><em class="property"> = 1</em><a class="headerlink" href="#lineparser.Ty.Int64" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">Int64</code><em class="property"> = 2</em><a class="headerlink" href="#lineparser.Ty.Int64" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="lineparser.Ty.Int8">
+<code class="sig-name descname">Int8</code><em class="property"> = 5</em><a class="headerlink" href="#lineparser.Ty.Int8" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="lineparser.Ty.Phantom">
+<code class="sig-name descname">Phantom</code><em class="property"> = 7</em><a class="headerlink" href="#lineparser.Ty.Phantom" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="lineparser.Ty.String">
-<code class="sig-name descname">String</code><em class="property"> = 2</em><a class="headerlink" href="#lineparser.Ty.String" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">String</code><em class="property"> = 6</em><a class="headerlink" href="#lineparser.Ty.String" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -234,3 +281,4 @@ Float64 string.</p>
 </pre></div>
 </div>
 </dd></dl>
+
