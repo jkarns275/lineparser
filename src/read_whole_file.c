@@ -68,24 +68,30 @@ ReadWholeFileResult read_whole_file_(const char *path) {
         r.data = NULL;
         return r;
     }
-    
+
     char *data = (char *) malloc(file_size + 1);
     
-    DWORD bytes_read;
+    DWORD bytes_read = 0;
+    __int64 bytes_read_total = 0;
     while (bytes_left != 0) {
 
         // 0x7FFFFFFF is the largest positive number a 32 bit integer can represent
         DWORD bytes_to_read = (DWORD) min(0x7FFFFFFF, bytes_left);
 
-        if (ReadFile(file, data, bytes_to_read, &bytes_read, NULL) == 0) {
+        void *data_ptr = data +  bytes_read_total;
+
+        if (ReadFile(file, data_ptr, bytes_to_read, &bytes_read, NULL) == 0) {
             // handle error and return
             free(data);
             CloseHandle(file);
             return make_io_error(0);
         }
 
-        bytes_left -= bytes_read;
+        bytes_read_total += (__int64) bytes_read;
+        bytes_left -= (__int64) bytes_read;
     }
+
+    data[bytes_read_total] = 0;
 
     ReadWholeFileResult a = { .data = data, .data_len = file_size, .err = 0, .io_err = 0 };
     return a;

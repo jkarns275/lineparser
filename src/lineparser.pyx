@@ -17,14 +17,14 @@ cdef int PARSE_ERROR = 6
 cdef int FILE_NOT_FOUND = 7
 
 cdef extern from "parsers.c":
-    cdef int parse_f64(void *output, const char *str, long line_n, int field_len)
-    cdef int parse_f32(void *output, const char *str, long line_n, int field_len)
-    cdef int parse_i64(void *output, const char *str, long line_n, int field_len)
-    cdef int parse_i32(void *output, const char *str, long line_n, int field_len)
-    cdef int parse_i16(void *output, const char *str, long line_n, int field_len)
-    cdef int parse_i8(void *output, const char *str, long line_n, int field_len)
+    cdef int parse_f64(void *output, const char *str, int64_t line_n, int field_len)
+    cdef int parse_f32(void *output, const char *str, int64_t line_n, int field_len)
+    cdef int parse_i64(void *output, const char *str, int64_t line_n, int field_len)
+    cdef int parse_i32(void *output, const char *str, int64_t line_n, int field_len)
+    cdef int parse_i16(void *output, const char *str, int64_t line_n, int field_len)
+    cdef int parse_i8(void *output, const char *str, int64_t line_n, int field_len)
 
-cdef inline int parse_bytes(void *output, const char *str, long line_n, int field_len):
+cdef inline int parse_bytes(void *output, const char *str, int64_t line_n, int field_len):
     cdef list loutput = <list> output
     cdef bytes copy
     try:
@@ -36,7 +36,7 @@ cdef inline int parse_bytes(void *output, const char *str, long line_n, int fiel
         while True:
             pass
 
-cdef inline int parse_string(void *output, const char *s, long line_n, int field_len):
+cdef inline int parse_string(void *output, const char *s, int64_t line_n, int field_len):
     cdef list loutput = <list> output
     cdef str copy
     try:
@@ -48,7 +48,7 @@ cdef inline int parse_string(void *output, const char *s, long line_n, int field
         while True:
             pass
 
-cdef inline int parse_phantom(void *output, const char *s, long line_n, int field_len):
+cdef inline int parse_phantom(void *output, const char *s, int64_t line_n, int field_len):
     return 0
 
 
@@ -63,7 +63,7 @@ cdef enum CTy:
     Phantom = 7
     Bytes = 8
 
-ctypedef int (*ParseFn)(void *, const char *, long, int)
+ctypedef int (*ParseFn)(void *, const char *, int64_t, int)
 
 # cdef ParseFn *PARSE_FN_MAP = [
 #     &parse_f64,
@@ -186,14 +186,14 @@ ctypedef struct FastParseResult:
     int err
 
     # line number with the error on it (base 0, i.e. not human readable line number)
-    long line_n
+    int64_t line_n
 
     # if there was a parse error, this will have the field index of the error, otherwise -1
     int field_index
 
 
-cdef FastParseResult fast_parse_internal(char *data, long data_len, long max_nlines, int line_len, CField *fields, void **output, int nfields):
-    cdef long line_n = 0
+cdef FastParseResult fast_parse_internal(char *data, int64_t data_len, int64_t max_nlines, int line_len, CField *fields, void **output, int nfields):
+    cdef int64_t line_n = 0
     cdef char *end = data + data_len
     cdef char *t = NULL
     cdef int length = 0, j = 0
@@ -524,8 +524,10 @@ def parse(list pyfields, filename):
         raise OSError(file_res.err, str(file_res.err))
 
     cdef char *data = file_res.data
-    cdef long data_len = file_res.data_len
-    cdef long max_lines = data_len / linelen
+    cdef int64_t data_len = file_res.data_len
+    cdef int64_t max_lines = data_len / linelen
+
+    print(f"data_len: {data_len}; max_lines: {max_lines}")
 
     cdef AllocationResult output_obj = allocate_field_outputs(fields, nfields, max_lines)
 
@@ -549,8 +551,8 @@ def parse(list pyfields, filename):
         free(data)
         free(fields)
         free(ptrs)
-
-        raise LineParsingError(pr.err, pr.line_n, field_ty, field_pos, str(filename))
+        print(type(filename))
+        raise LineParsingError(pr.err, pr.line_n, field_ty, field_pos, filename)
 
     cdef list py_handles = output_obj.py_handles
 
@@ -713,7 +715,7 @@ cdef class AllocationResult:
     cdef object py_handles
 
 
-cdef AllocationResult allocate_field_outputs(const CField *fields, int nfields, long nlines):
+cdef AllocationResult allocate_field_outputs(const CField *fields, int nfields, int64_t nlines):
     """
     Allocates output based on the field specifications. The only data type that doesn't get an
     an array for output is string, since c strings don't mix with python very well; so to minimize
