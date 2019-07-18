@@ -14,6 +14,7 @@ cdef int BAD_LINE = 3
 cdef int IO_ERROR = 4
 cdef int PREMATURE_EOF = 5
 cdef int PARSE_ERROR = 6
+cdef int FILE_NOT_FOUND = 7
 
 cdef extern from "parsers.c":
     cdef int parse_f64(void *output, const char *str, long line_n, int field_len)
@@ -25,15 +26,27 @@ cdef extern from "parsers.c":
 
 cdef inline int parse_bytes(void *output, const char *str, long line_n, int field_len):
     cdef list loutput = <list> output
-    cdef bytes copy = <bytes> str
-    list.append(loutput, copy)
-    return 0
+    cdef bytes copy
+    try:
+        copy = <bytes> str
+        list.append(loutput, copy)
+        return 0
+    except MemoryError as e:
+        print(e)
+        while True:
+            pass
 
 cdef inline int parse_string(void *output, const char *s, long line_n, int field_len):
     cdef list loutput = <list> output
-    cdef str copy = s[:field_len].decode('UTF-8')
-    list.append(loutput, copy)
-    return 0
+    cdef str copy
+    try:
+        copy = s[:field_len].decode('UTF-8')
+        list.append(loutput, copy)
+        return 0
+    except MemoryError as e:
+        print(e)
+        while True:
+            pass
 
 cdef inline int parse_phantom(void *output, const char *s, long line_n, int field_len):
     return 0
@@ -247,79 +260,24 @@ cdef FastParseResult fast_parse_internal(char *data, long data_len, long max_nli
 
     return pr
 
-ctypedef struct ReadWholeFileResult:
-    long data_len
-    char *data
-    int err
-    int io_err
+cdef extern from "read_whole_file.c":
+    ctypedef struct ReadWholeFileResult:
+        int64_t data_len
+        char *data
+        int err
+        int io_err
 
-cdef ReadWholeFileResult make_io_err(int io_err):
-    cdef ReadWholeFileResult r
-    r.data_len = 0
-    r.data = NULL
-    r.err = IO_ERROR
-    r.io_err = io_err
-    return r
+    cdef ReadWholeFileResult read_whole_file_(const char *path)
 
 cdef ReadWholeFileResult read_whole_file(object filename):
-    global errno
-
-    if type(filename) not in (str, bytes):
-        raise TypeError(f"Argument 'filename' has incorrect type (expected str or bytes, " \
-                         "got {type(filename)})")
-
+    if type(filename) not in (bytes, str):
+        raise TypeError("filename must be of type str or bytes.")
     if type(filename) == str:
-        filename = bytes(filename, encoding='utf8')
-    
-    cdef char *path = filename
-    cdef int prev = errno
-    cdef ReadWholeFileResult r
-
-    cdef FILE *f = fopen(path, "rb")
-
-    # file couldnt be opened
-    if f == NULL:
-        r = make_io_err(errno)
-        errno = prev
-        return r
-
-    errno = prev
-
-    if fseek(f, 0, SEEK_END) != 0:
-        r = make_io_err(ferror(f))
-        fclose(f)
-        return r
-
-    cdef long fsize = <long> ftell(f)
-    if fseek(f, 0, SEEK_SET) != 0:
-        r = make_io_err(ferror(f))
-        fclose(f)
-        return r
-
-    cdef char *data = <char *> malloc(fsize + 1)
-    if data == NULL:
-        fclose(f)
-        r.data = NULL
-        r.data_len = 0
-        r.err = OUT_OF_MEMORY
-        return r
-
-    # Either premature EOF or error; almost certainly NOT EOF though since we just checked
-    # the length of the file
-    if <long> fread(data, 1, fsize, f) != fsize:
-        free(data)
-        r = make_io_err(ferror(f))
-        fclose(f)
-        return r
-
-    # Null terminate
-    data[fsize] = 0
-
-    fclose(f)
-    r.data = data
-    r.data_len = fsize
-    r.err = 0
-    return r
+        copy = bytes(filename, encoding="utf-8")
+    else:
+        copy = filename
+    cdef char *c_filename = copy
+    return read_whole_file_(c_filename)
 
 class LineParsingError(BaseException):
     """
@@ -560,9 +518,10 @@ def parse(list pyfields, filename):
     if file_res.err != 0:
         if file_res.err == OUT_OF_MEMORY:
             raise MemoryError("There is not enough memory to read the entire input file.")
-
-        error = strerror(file_res.err)
-        raise OSError(file_res.err, str(error))
+        if file_res.err == FILE_NOT_FOUND:
+            raise Exception(f"Failed to locate file '{filename}'.")
+        
+        raise OSError(file_res.err, str(file_res.err))
 
     cdef char *data = file_res.data
     cdef long data_len = file_res.data_len
